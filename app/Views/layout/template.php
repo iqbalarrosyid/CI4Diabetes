@@ -30,6 +30,9 @@
 </head>
 
 <body>
+    <?php if (!session()->get('logged_in')) {
+        return redirect()->to('/login');
+    } ?>
 
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -41,10 +44,10 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="/">Daftar Pasien</a>
+                        <a class="nav-link" href="/pasien">Daftar Pasien</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/pasien/create">Tambah Pasien</a>
+                        <a class="nav-link" href="/riwayat/all">Riwayat Terbaru</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/logout">Logout</a>

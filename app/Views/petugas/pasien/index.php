@@ -1,7 +1,3 @@
-<?php if (!session()->get('logged_in')) {
-    return redirect()->to('/login');
-} ?>
-
 <?= $this->extend('layout/template') ?>
 
 <?= $this->section('content') ?>

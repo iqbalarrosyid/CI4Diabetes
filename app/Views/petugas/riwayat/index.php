@@ -1,14 +1,19 @@
-<?php if (!session()->get('logged_in')) {
-    return redirect()->to('/login');
-} ?>
 <?= $this->extend('layout/template') ?>
 <?= $this->section('content') ?>
 
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-2">
         <h3>Riwayat Pasien: <?= $pasien['nama']; ?></h3>
-        <a href="/riwayat/create/<?= $pasien['id'] ?>" class="btn btn-success mb-3">+ Riwayat</a>
+        <div>
+            <!-- Tombol Atur Urutan -->
+            <a href="/riwayat/<?= $pasien['id'] ?>?sort=desc"
+                class="btn btn-primary <?= $sort === 'DESC' ? 'active' : '' ?>">Paling Akhir</a>
+            <a href="/riwayat/<?= $pasien['id'] ?>?sort=asc"
+                class="btn btn-primary <?= $sort === 'ASC' ? 'active' : '' ?>">Paling Awal</a>
+            <a href="/riwayat/create/<?= $pasien['id'] ?>" class="btn btn-success">+ Riwayat</a>
+        </div>
     </div>
+
     <?php
     // Hitung umur secara otomatis
     $tanggalLahir = new DateTime($pasien['tanggal_lahir']);
@@ -54,8 +59,8 @@
                 <?php endif; ?>
             </tbody>
         </table>
-        <a href="/pasien" class="btn btn-secondary">Kembali</a>
     </div>
+    <a href="/pasien" class="btn btn-secondary">Kembali</a>
 </div>
 
 <?= $this->endSection() ?>

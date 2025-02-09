@@ -1,6 +1,3 @@
-<?php if (!session()->get('logged_in')) {
-    return redirect()->to('/login');
-} ?>
 <?= $this->extend('layout/template') ?>
 <?= $this->section('content') ?>
 
@@ -29,6 +26,7 @@
         <!-- Tombol Prediksi & Simpan -->
         <button type="button" id="predictBtn" class="btn btn-primary">Prediksi</button>
         <button type="submit" id="saveBtn" class="btn btn-success" disabled>Simpan</button>
+        <a href="/riwayat/<?= $pasien_id ?>" class="btn btn-secondary">Kembali</a>
     </form>
 
     <!-- Hasil Prediksi -->

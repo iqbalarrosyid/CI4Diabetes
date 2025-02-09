@@ -29,12 +29,25 @@ class RiwayatController extends BaseController
             return redirect()->to('/pasien')->with('error', 'Data pasien tidak ditemukan.');
         }
 
-        // Ambil data riwayat BESERTA nama petugas sesuai pasien_id
-        $data['riwayat'] = $this->riwayatModel->getRiwayatWithPetugas($pasien_id);
-        $data['pasien'] = $pasien; // Kirim data pasien ke view
+        // Cek parameter sort (default DESC)
+        $sortOrder = $this->request->getGet('sort') === 'asc' ? 'ASC' : 'DESC';
+
+        // Ambil data riwayat BESERTA nama petugas sesuai pasien_id & urutan sort
+        $data['riwayat'] = $this->riwayatModel->getRiwayatWithPetugas($pasien_id, $sortOrder);
+        $data['pasien'] = $pasien;         // Kirim data pasien ke view
+        $data['sort'] = $sortOrder;        // Kirim data sort ke view (penting untuk tombol aktif)
 
         return view('petugas/riwayat/index', $data);
     }
+
+    public function semuaRiwayat()
+    {
+        // Ambil semua riwayat terbaru dari setiap pasien
+        $data['riwayat'] = $this->riwayatModel->getRiwayatTerbaru();
+
+        return view('petugas/riwayat/all', $data);
+    }
+
 
     // Form Tambah Prediksi
     public function create($id)

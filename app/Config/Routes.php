@@ -13,6 +13,7 @@ $routes->post('/pasien/update/(:num)', 'PasienController::update/$1');
 $routes->post('/pasien/delete/(:num)', 'PasienController::delete/$1');
 
 $routes->get('riwayat/(:num)', 'RiwayatController::index/$1');
+$routes->get('/riwayat/all', 'RiwayatController::semuaRiwayat');
 $routes->get('riwayat/create/(:num)', 'RiwayatController::create/$1');
 $routes->post('riwayat/predict', 'RiwayatController::predict');
 $routes->post('riwayat/store', 'RiwayatController::store');

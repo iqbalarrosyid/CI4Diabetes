@@ -44,8 +44,8 @@ class CreateRiwayatTable extends Migration
                 'null'       => true,
             ],
             'gdp' => [
-                'type'       => 'DECIMAL',
-                'constraint' => '5,2',
+                'type'       => 'VARCHAR',
+                'constraint' => '10',
                 'null'       => true,
             ],
             'hasil' => [
