@@ -4,13 +4,13 @@
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-2">
         <h3>Riwayat Pasien: <?= $pasien['nama']; ?></h3>
-        <div>
+        <div class="d-flex flex-sm-row flex-column gap-2">
             <!-- Tombol Atur Urutan -->
             <a href="/riwayat/<?= $pasien['id'] ?>?sort=desc"
-                class="btn btn-primary <?= $sort === 'DESC' ? 'active' : '' ?>">Paling Akhir</a>
+                class="btn btn-primary <?= $sort === 'DESC' ? 'active' : '' ?>">Akhir</a>
             <a href="/riwayat/<?= $pasien['id'] ?>?sort=asc"
-                class="btn btn-primary <?= $sort === 'ASC' ? 'active' : '' ?>">Paling Awal</a>
-            <a href="/riwayat/create/<?= $pasien['id'] ?>" class="btn btn-success">+ Riwayat</a>
+                class="btn btn-primary <?= $sort === 'ASC' ? 'active' : '' ?>">Awal</a>
+            <a href="/riwayat/create/<?= $pasien['id'] ?>" class="btn btn-success">Tambah</a>
         </div>
     </div>
 
