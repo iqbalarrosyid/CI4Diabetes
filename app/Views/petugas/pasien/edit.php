@@ -30,7 +30,7 @@
         </div>
 
         <button type="submit" class="btn btn-success">Simpan Perubahan</button>
-        <a href="/" class="btn btn-secondary">Batal</a>
+        <a href="/pasien" class="btn btn-secondary">Batal</a>
     </form>
 </div>
 <?= $this->endSection() ?>

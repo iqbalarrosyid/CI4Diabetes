@@ -70,7 +70,7 @@
                         <td><?= esc($p['jenis_kelamin']) ?></td>
                         <td><?= esc($p['alamat']) ?></td>
                         <td>
-                            <div class="d-flex flex-sm-row flex-column gap-2">
+                            <div class=" flex-column gap-2">
                                 <a href="/riwayat/<?= $p['id'] ?>" class="text-info">
                                     <i class="fas fa-clock fa-lg"></i>
                                 </a>

@@ -25,6 +25,6 @@
         <textarea class="form-control" id="alamat" name="alamat" rows="3" required></textarea>
     </div>
     <button type="submit" class="btn btn-primary">Simpan</button>
-    <a href="/" class="btn btn-secondary">Kembali</a>
+    <a href="/pasien" class="btn btn-secondary">Kembali</a>
 </form>
 <?= $this->endSection() ?>
