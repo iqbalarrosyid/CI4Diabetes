@@ -5,7 +5,7 @@ import numpy as np
 app = Flask(__name__)
 
 # Load model manual
-model_data = joblib.load('naive_bayes_model_with_data.pkl')
+model_data = joblib.load('naive_bayes_model.pkl')
 summaries = model_data['summaries']
 
 # Fungsi untuk menghitung probabilitas Gaussian (perhitungan manual)

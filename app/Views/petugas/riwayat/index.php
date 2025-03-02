@@ -56,9 +56,24 @@
             </tbody>
         </table>
     </div>
-    <a href="/pasien" class="btn btn-secondary">Kembali</a>
+
+    <!-- Tombol sejajar -->
+    <div class="d-flex gap-2">
+        <a href="/pasien" class="btn btn-secondary">Kembali</a>
+        <button class="btn btn-primary" onclick="toggleChart()">Tampilkan Grafik</button>
+    </div>
+
+    <!-- Grafik -->
+    <div id="chartContainer" class="mt-4" style="display: none;">
+        <h4>Grafik Riwayat Pasien</h4>
+        <div style="width: 100%; max-width: 800px; height: 350px;">
+            <canvas id="riwayatChart"></canvas>
+        </div>
+    </div>
 </div>
 
+<!-- JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     let sortOrder = -1; // Mulai dari DESC (terbaru ke lama)
 
@@ -83,6 +98,97 @@
 
         // Balik arah sorting untuk klik berikutnya
         sortOrder *= -1;
+    }
+
+    // Data untuk Grafik
+    let labels = [];
+    let gdpData = [];
+    let tekananDarahData = [];
+    let imtData = [];
+
+    <?php
+    // Ambil maksimal 20 data terakhir
+    $riwayatTerbatas = array_slice($riwayat, -20);
+    foreach ($riwayatTerbatas as $data) :
+    ?>
+        labels.push("<?= date('d M Y H:i', strtotime($data['created_at'])) ?>");
+        gdpData.push(<?= $data['gdp'] ?>);
+        tekananDarahData.push("<?= $data['tekanan_darah'] ?>");
+        imtData.push(<?= $data['imt'] ?>);
+    <?php endforeach; ?>
+
+    let chartInstance = null;
+
+    function toggleChart() {
+        let chartContainer = document.getElementById("chartContainer");
+        if (chartContainer.style.display === "none") {
+            chartContainer.style.display = "block";
+            renderChart();
+        } else {
+            chartContainer.style.display = "none";
+        }
+    }
+
+    function renderChart() {
+        let ctx = document.getElementById('riwayatChart').getContext('2d');
+
+        // Hapus chart lama jika ada
+        if (chartInstance) {
+            chartInstance.destroy();
+        }
+
+        chartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                        label: 'GDP',
+                        data: gdpData,
+                        borderColor: 'red',
+                        backgroundColor: 'rgba(255, 0, 0, 0.2)',
+                        fill: true
+                    },
+                    {
+                        label: 'Tekanan Darah',
+                        data: tekananDarahData,
+                        borderColor: 'blue',
+                        backgroundColor: 'rgba(0, 0, 255, 0.2)',
+                        fill: true
+                    },
+                    {
+                        label: 'IMT',
+                        data: imtData,
+                        borderColor: 'green',
+                        backgroundColor: 'rgba(0, 255, 0, 0.2)',
+                        fill: true
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    decimation: {
+                        enabled: true,
+                        algorithm: 'min-max' // Mengoptimalkan rendering data
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Waktu Pemeriksaan'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Nilai'
+                        }
+                    }
+                }
+            }
+        });
     }
 </script>
 

@@ -15,7 +15,8 @@
             flex-direction: column;
             min-height: 100vh;
             font-family: Arial, sans-serif;
-            /* Full viewport height */
+            padding-top: 56px;
+            /* Sesuaikan dengan tinggi navbar */
         }
 
         .content {
@@ -35,7 +36,7 @@
     } ?>
 
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top shadow">
         <div class="container">
             <a class="navbar-brand" href="/pasien">Aplikasi Prediksi Diabetes</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -64,7 +65,7 @@
 
     <!-- Footer -->
     <footer class="text-center py-3">
-        <p class="mb-0">© <?= date('Y') ?> Aplikasi Pasien. All rights reserved.</p>
+        <p class="mb-0">© <?= date('Y') ?> Website Prediksi Diabetes. All rights reserved.</p>
     </footer>
 
     <!-- Bootstrap JS -->
