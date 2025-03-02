@@ -1,10 +1,16 @@
 <?= $this->extend('layout/template') ?>
 <?= $this->section('content') ?>
 
+<!-- Bootstrap DataTables CSS & JS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+
 <div class="container">
-    <div class="d-flex justify-content-between align-items-center mb-2">
-        <h3>Riwayat Pasien: <?= $pasien['nama']; ?></h3>
-        <a href="/riwayat/create/<?= $pasien['id'] ?>" class="btn btn-success">Tambah</a>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Riwayat Pasien: <?= esc($pasien['nama']) ?></h2>
+        <a href="/riwayat/create/<?= esc($pasien['id']) ?>" class="btn btn-success">+ Tambah</a>
     </div>
 
     <?php
@@ -14,12 +20,17 @@
     $umur = $sekarang->diff($tanggalLahir);
     ?>
     <p>Tanggal Lahir: <?= $tanggalLahir->format('d-m-Y'); ?> / <?= $umur->y; ?> tahun</p>
-    <p>Jenis Kelamin: <?= $pasien['jenis_kelamin']; ?></p>
-    <p>Alamat: <?= $pasien['alamat']; ?></p>
+    <p>Jenis Kelamin: <?= esc($pasien['jenis_kelamin']); ?></p>
+    <p>Alamat: <?= esc($pasien['alamat']); ?></p>
+
+    <!-- Dropdown "Tampilkan _MENU_ data" sekarang ada di bawah form cari -->
+    <div class="d-flex justify-content-start mb-2">
+        <div id="riwayatTable_length"></div>
+    </div>
 
     <div class="table-responsive">
-        <table class="table table-bordered table-striped">
-            <thead>
+        <table class="table table-bordered table-striped" id="riwayatTable">
+            <thead class="table-dark">
                 <tr>
                     <th>No</th>
                     <th>GDP</th>
@@ -28,37 +39,30 @@
                     <th>Tinggi</th>
                     <th>IMT</th>
                     <th>Hasil</th>
-                    <th onclick="sortRiwayat()" style="cursor:pointer;">
-                        Waktu <i id="sortIcon" class="fas fa-sort-down"></i>
-                    </th>
+                    <th>Waktu</th>
                     <th>Petugas</th>
                 </tr>
             </thead>
-            <tbody id="riwayatBody">
-                <?php foreach ($riwayat as $index => $data): ?>
+            <tbody>
+                <?php foreach ($riwayat as $data) : ?>
                     <tr>
-                        <td><?= $index + 1 ?></td>
-                        <td><?= $data['gdp'] ?></td>
-                        <td><?= $data['tekanan_darah'] ?></td>
-                        <td><?= $data['berat'] ?> kg</td>
-                        <td><?= $data['tinggi'] ?> cm</td>
+                        <td></td>
+                        <td><?= esc($data['gdp']) ?></td>
+                        <td><?= esc($data['tekanan_darah']) ?></td>
+                        <td><?= esc($data['berat']) ?> kg</td>
+                        <td><?= esc($data['tinggi']) ?> cm</td>
                         <td><?= number_format($data['imt'], 2) ?></td>
                         <td><?= $data['hasil'] == 1 ? 'Diabetes' : 'Tidak Diabetes' ?></td>
-                        <td class="waktu"><?= $data['created_at'] ?></td>
-                        <td><?= $data['nama_petugas'] ?? 'Tidak Diketahui' ?></td>
+                        <td><?= date('d-m-Y H:i:s', strtotime($data['created_at'])) ?></td>
+                        <td><?= esc($data['nama_petugas'] ?? 'Tidak Diketahui') ?></td>
                     </tr>
                 <?php endforeach; ?>
-                <?php if (empty($riwayat)) : ?>
-                    <tr>
-                        <td colspan="9" class="text-center">Belum ada data riwayat.</td>
-                    </tr>
-                <?php endif; ?>
             </tbody>
         </table>
     </div>
 
     <!-- Tombol sejajar -->
-    <div class="d-flex gap-2">
+    <div class="d-flex gap-2 mt-2">
         <a href="/pasien" class="btn btn-secondary">Kembali</a>
         <button class="btn btn-primary" onclick="toggleChart()">Tampilkan Grafik</button>
     </div>
@@ -72,34 +76,47 @@
     </div>
 </div>
 
-<!-- JavaScript -->
+<script>
+    $(document).ready(function() {
+        let table = $('#riwayatTable').DataTable({
+            "ordering": true, // Aktifkan sorting dengan ikon sort
+            "searching": false, // Matikan pencarian
+            "paging": true, // Aktifkan pagination
+            "lengthChange": true, // Dropdown jumlah data
+            "dom": "<'d-flex justify-content-between align-items-center mb-2'l><'table-responsive't><'d-flex justify-content-end mt-2'p>",
+            "language": {
+                "lengthMenu": "Tampilkan _MENU_ data",
+                "info": "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+                "paginate": {
+                    "next": ">",
+                    "previous": "<"
+                }
+            },
+            "responsive": true,
+            "columnDefs": [{
+                "orderable": false,
+                "targets": 0 // Nomor tidak bisa diurutkan
+            }],
+            "order": [
+                [7, 'desc']
+            ], // Urutkan berdasarkan waktu (kolom ke-8)
+            "rowCallback": function(row, data, index) {
+                let api = this.api();
+                let info = api.page.info();
+                let globalIndex = index + 1 + info.start;
+                $('td:eq(0)', row).html(globalIndex); // Nomor urut otomatis
+            }
+        });
+    });
+
+    function toggleChart() {
+        $("#chartContainer").toggle();
+    }
+</script>
+
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    let sortOrder = -1; // Mulai dari DESC (terbaru ke lama)
-
-    function sortRiwayat() {
-        let tbody = document.getElementById("riwayatBody");
-        let rows = Array.from(tbody.rows);
-
-        rows.sort((rowA, rowB) => {
-            let timeA = new Date(rowA.querySelector(".waktu").textContent.trim());
-            let timeB = new Date(rowB.querySelector(".waktu").textContent.trim());
-            return (timeB - timeA) * sortOrder; // DESC saat sortOrder = -1, ASC saat sortOrder = 1
-        });
-
-        tbody.innerHTML = '';
-        rows.forEach((row, index) => {
-            row.cells[0].textContent = index + 1;
-            tbody.appendChild(row);
-        });
-
-        // Toggle ikon sorting
-        document.getElementById("sortIcon").className = sortOrder === -1 ? "fas fa-sort-up" : "fas fa-sort-down";
-
-        // Balik arah sorting untuk klik berikutnya
-        sortOrder *= -1;
-    }
-
     // Data untuk Grafik
     let labels = [];
     let gdpData = [];

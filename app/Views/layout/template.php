@@ -7,7 +7,7 @@
     <title><?= $title ?? 'Aplikasi Pasien' ?></title>
     <!-- Bootstrap 5.3 CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    
     <style>
         /* Sticky Footer CSS */
         body {
@@ -70,6 +70,7 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.21.0/bootstrap-table.min.js"></script>
     <script src="https://kit.fontawesome.com/6bb49a14fa.js" crossorigin="anonymous"></script>
 </body>
 

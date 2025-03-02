@@ -1,37 +1,12 @@
 <?= $this->extend('layout/template') ?>
 
 <?= $this->section('content') ?>
-<style>
-    .table-responsive {
-        overflow-x: auto;
-        white-space: nowrap;
-    }
 
-    /* Kunci posisi kolom No dan Nama */
-    .sticky-column {
-        position: sticky;
-        left: 0;
-        background-color: white;
-        z-index: 2;
-        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-    }
-
-    /* Kunci kolom Nama agar tetap di sebelah kanan No */
-    .sticky-column:nth-child(2) {
-        left: 35px;
-    }
-
-    /* Style untuk tombol sorting */
-    .sort-button {
-        border: none;
-        background: none;
-        cursor: pointer;
-        font-size: 16px;
-        padding: 0;
-        margin-left: 5px;
-        color: black;
-    }
-</style>
+<!-- Bootstrap DataTables CSS & JS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
 
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -39,109 +14,90 @@
         <a href="/pasien/create" class="btn btn-success">+ Pasien</a>
     </div>
 
-    <!-- Form Pencarian -->
+    <!-- Form Search -->
     <div class="mb-3">
-        <input type="text" id="searchInput" class="form-control" placeholder="Cari nama pasien..." onkeyup="searchTable()">
+        <input type="text" id="searchBox" class="form-control" placeholder="Cari">
+    </div>
+
+    <!-- Dropdown "Tampilkan _MENU_ data" sekarang ada di bawah form cari -->
+    <div class="d-flex justify-content-start mb-2">
+        <div id="pasienTable_length"></div>
     </div>
 
     <div class="table-responsive">
         <table class="table table-bordered table-striped" id="pasienTable">
-            <thead>
+            <thead class="table-dark">
                 <tr>
-                    <th class="sticky-column">No</th>
-                    <th class="sticky-column">
-                        Nama
-                        <button class="sort-button" onclick="sortTable()">
-                            <i id="sortIcon" class="fas fa-sort"></i>
-                        </button>
-                    </th>
+                    <th>No</th>
+                    <th>Nama</th>
                     <th>Umur</th>
                     <th>Jenis Kelamin</th>
                     <th>Alamat</th>
-                    <th>Aksi</th>
+                    <th class="text-start" style="width: 150px; white-space: nowrap;">Aksi</th>
                 </tr>
             </thead>
-            <tbody id="pasienBody">
-                <?php foreach ($pasien as $index => $p) : ?>
-                    <tr data-original-index="<?= $index + 1 ?>">
-                        <td class="sticky-column"><?= $index + 1 ?></td>
-                        <td class="sticky-column"><?= esc($p['nama']) ?></td>
+            <tbody>
+                <?php foreach ($pasien as $p) : ?>
+                    <tr>
+                        <td></td>
+                        <td><?= esc($p['nama']) ?></td>
                         <td><?= date_diff(date_create($p['tanggal_lahir']), date_create('today'))->y ?> tahun</td>
                         <td><?= esc($p['jenis_kelamin']) ?></td>
                         <td><?= esc($p['alamat']) ?></td>
-                        <td>
-                            <div class=" flex-column gap-2">
-                                <a href="/riwayat/<?= $p['id'] ?>" class="text-info">
-                                    <i class="fas fa-clock fa-lg"></i>
-                                </a>
-                                <a href="/pasien/edit/<?= $p['id'] ?>" class="text-warning">
-                                    <i class="fas fa-edit fa-lg"></i>
-                                </a>
-                                <form action="/pasien/delete/<?= $p['id'] ?>" method="post" onsubmit="return confirm('Yakin ingin menghapus?');" style="display: inline;">
-                                    <?= csrf_field() ?>
-                                    <button type="submit" class="border-0 bg-transparent text-danger">
-                                        <i class="fas fa-trash fa-lg"></i>
-                                    </button>
-                                </form>
-                            </div>
+                        <td class="text-start" style="white-space: nowrap;">
+                            <a href="/riwayat/<?= $p['id'] ?>" class="text-info me-2"><i class="fas fa-clock fa-lg"></i></a>
+                            <a href="/pasien/edit/<?= $p['id'] ?>" class="text-warning me-2"><i class="fas fa-edit fa-lg"></i></a>
+                            <form action="/pasien/delete/<?= $p['id'] ?>" method="post" onsubmit="return confirm('Yakin ingin menghapus?');" style="display: inline;">
+                                <?= csrf_field() ?>
+                                <button type="submit" class="border-0 bg-transparent text-danger">
+                                    <i class="fas fa-trash fa-lg"></i>
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 <?php endforeach; ?>
-                <?php if (empty($pasien)) : ?>
-                    <tr>
-                        <td colspan="6" class="text-center">Belum ada data pasien.</td>
-                    </tr>
-                <?php endif; ?>
             </tbody>
         </table>
     </div>
-
-    <script>
-        let sortOrder = 1; // 1: A-Z, -1: Z-A
-        const rowsPerPage = 10;
-        let currentPage = 1;
-
-        function sortTable() {
-            let tbody = document.getElementById("pasienBody");
-            let rows = Array.from(tbody.rows);
-
-            // Simpan urutan nomor sebelum sorting
-            let originalIndexes = rows.map(row => row.cells[0].textContent.trim());
-
-            // Sorting berdasarkan Nama
-            rows.sort((rowA, rowB) => {
-                let nameA = rowA.cells[1].textContent.trim().toLowerCase();
-                let nameB = rowB.cells[1].textContent.trim().toLowerCase();
-                return nameA.localeCompare(nameB) * sortOrder;
-            });
-
-            // Hapus semua baris dari tbody
-            tbody.innerHTML = '';
-
-            // Tambahkan kembali baris ke tbody dan atur nomor berdasarkan urutan asli
-            rows.forEach((row, index) => {
-                row.cells[0].textContent = originalIndexes[index]; // Tetapkan nomor berdasarkan urutan asli
-                tbody.appendChild(row);
-            });
-
-            // Ubah ikon sorting
-            document.getElementById("sortIcon").className = sortOrder === 1 ? "fas fa-sort-alpha-down" : "fas fa-sort-alpha-up";
-
-            // Balik arah sorting untuk klik berikutnya
-            sortOrder *= -1;
-
-        }
-
-
-        function searchTable() {
-            let input = document.getElementById("searchInput").value.toLowerCase();
-            let rows = document.getElementById("pasienBody").getElementsByTagName("tr");
-
-            for (let row of rows) {
-                let namaPasien = row.cells[1].textContent.toLowerCase();
-                row.style.display = namaPasien.includes(input) ? "" : "none";
+</div>
+<script>
+    $(document).ready(function() {
+        let table = $('#pasienTable').DataTable({
+            "ordering": true,
+            "searching": true,
+            "paging": true,
+            "lengthChange": true, // Dropdown tetap ada
+            "dom": "<'d-flex justify-content-between align-items-center mb-2'l><'table-responsive't><'d-flex justify-content-end mt-2'p>",
+            "language": {
+                "lengthMenu": "Tampilkan _MENU_ data",
+                "info": "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+                "paginate": {
+                    "next": ">",
+                    "previous": "<"
+                }
+            },
+            "responsive": true,
+            "columnDefs": [{
+                "orderable": false,
+                "targets": 0
+            }],
+            "order": [
+                [1, 'asc']
+            ],
+            "rowCallback": function(row, data, index) {
+                let api = this.api();
+                let info = api.page.info();
+                let globalIndex = index + 1 + info.start; // Urutkan tanpa lompat
+                $('td:eq(0)', row).html(globalIndex);
             }
-        }
-    </script>
+        });
 
-    <?= $this->endSection() ?>
+        // Custom search hanya di kolom Nama (kolom ke-1, indeks 1)
+        $('#searchBox').on('keyup', function() {
+            table.column(1).search(this.value).draw();
+        });
+    });
+</script>
+
+
+<?= $this->endSection() ?>

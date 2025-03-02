@@ -1,41 +1,26 @@
 <?= $this->extend('layout/template') ?>
 <?= $this->section('content') ?>
 
-<style>
-    .table-responsive {
-        overflow-x: auto;
-        white-space: nowrap;
-    }
-
-    /* Kunci posisi kolom No dan Nama */
-    .sticky-column {
-        position: sticky;
-        left: 0;
-        background-color: white;
-        z-index: 2;
-        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-    }
-
-    /* Kunci kolom Nama agar tetap di sebelah kanan No */
-    .sticky-column:nth-child(2) {
-        left: 35px;
-    }
-</style>
+<!-- Bootstrap DataTables CSS & JS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
 
 <div class="container">
     <h2 class="mb-4">Riwayat Terbaru Semua Pasien</h2>
 
     <!-- Form Search -->
     <div class="mb-3">
-        <input type="text" id="search" class="form-control" placeholder="Cari Nama Pasien...">
+        <input type="text" id="searchBox" class="form-control" placeholder="Cari">
     </div>
 
     <div class="table-responsive">
         <table class="table table-bordered table-striped" id="riwayatTable">
-            <thead>
+            <thead class="table-dark">
                 <tr>
-                    <th class="sticky-column">No</th>
-                    <th class="sortable sticky-column" data-col="1">Nama <i id="sortIconNama" class="fas fa-sort-alpha-down"></i></th>
+                    <th>No</th>
+                    <th>Nama</th>
                     <th>Umur</th>
                     <th>GDP</th>
                     <th>Tekanan Darah</th>
@@ -43,11 +28,11 @@
                     <th>Tinggi (cm)</th>
                     <th>IMT</th>
                     <th>Hasil</th>
-                    <th class="sortable" data-col="9">Waktu <i id="sortIconWaktu" class="fas fa-sort-down"></i></th>
+                    <th>Waktu</th>
                     <th>Petugas</th>
                 </tr>
             </thead>
-            <tbody id="tableBody">
+            <tbody>
                 <?php foreach ($riwayat as $index => $data): ?>
                     <?php
                     $tanggalLahir = new DateTime($data['tanggal_lahir']);
@@ -55,8 +40,8 @@
                     $umur = $sekarang->diff($tanggalLahir)->y;
                     ?>
                     <tr>
-                        <td class="sticky-column"><?= $index + 1 ?></td>
-                        <td class="sticky-column"><?= htmlspecialchars($data['nama_pasien']) ?></td>
+                        <td><?= $index + 1 ?></td>
+                        <td><?= htmlspecialchars($data['nama_pasien']) ?></td>
                         <td><?= $umur ?> tahun</td>
                         <td><?= $data['gdp'] ?></td>
                         <td><?= $data['tekanan_darah'] ?></td>
@@ -64,8 +49,8 @@
                         <td><?= $data['tinggi'] ?></td>
                         <td><?= number_format($data['imt'], 2) ?></td>
                         <td><?= $data['hasil'] == 1 ? 'Diabetes' : 'Tidak Diabetes' ?></td>
-                        <td><?= $data['created_at'] ?></td>
-                        <td><?= $data['nama_petugas'] ?? 'Tidak Diketahui' ?></td>
+                        <td><?= date('d-m-Y H:i:s', strtotime($data['created_at'])) ?></td>
+                        <td><?= $data['nama_petugas'] ?? '<span class="text-muted">Tidak Diketahui</span>' ?></td>
                     </tr>
                 <?php endforeach; ?>
                 <?php if (empty($riwayat)): ?>
@@ -80,60 +65,41 @@
     <a href="/pasien" class="btn btn-secondary">Kembali ke Dashboard</a>
 </div>
 
-<!-- JavaScript untuk Sorting & Search -->
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        let table = document.getElementById("riwayatTable");
-        let tbody = document.getElementById("tableBody");
-        let rows = Array.from(tbody.getElementsByTagName("tr"));
-        let searchInput = document.getElementById("search");
-        let sortOrder = {
-            1: 1,
-            9: 1
-        };
-
-        function sortTable(columnIndex, iconId, isAlpha) {
-            sortOrder[columnIndex] *= -1;
-            let sortedRows = rows.slice().sort((a, b) => {
-                let aText = a.cells[columnIndex].textContent.trim();
-                let bText = b.cells[columnIndex].textContent.trim();
-
-                if (columnIndex === 9) { // If column is Waktu, sort as date
-                    return sortOrder[columnIndex] * (new Date(aText) - new Date(bText));
-                } else {
-                    return sortOrder[columnIndex] * aText.localeCompare(bText);
+    $(document).ready(function() {
+        let table = $('#riwayatTable').DataTable({
+            "ordering": true,
+            "searching": true,
+            "paging": true,
+            "lengthChange": true, // Dropdown tetap ada
+            "dom": "<'d-flex justify-content-between align-items-center mb-2'l><'table-responsive't><'d-flex justify-content-end mt-2'p>",
+            "language": {
+                "lengthMenu": "Tampilkan _MENU_ data",
+                "info": "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+                "paginate": {
+                    "next": ">",
+                    "previous": "<"
                 }
-            });
-
-            tbody.innerHTML = "";
-            rows = sortedRows;
-
-            // Update row numbers
-            rows.forEach((row, index) => {
-                row.cells[0].textContent = index + 1; // Update row number
-                tbody.appendChild(row);
-            });
-
-            if (columnIndex === 9) {
-                document.getElementById(iconId).className = sortOrder[columnIndex] === -1 ? "fas fa-sort-down" : "fas fa-sort-up";
-            } else {
-                document.getElementById(iconId).className = sortOrder[columnIndex] === -1 ? "fas fa-sort-alpha-up" : "fas fa-sort-alpha-down";
+            },
+            "responsive": true,
+            "columnDefs": [{
+                "orderable": false,
+                "targets": 0
+            }],
+            "order": [
+                [1, 'asc']
+            ],
+            "rowCallback": function(row, data, index) {
+                let api = this.api();
+                let info = api.page.info();
+                let globalIndex = index + 1 + info.start; // Urutkan tanpa lompat
+                $('td:eq(0)', row).html(globalIndex);
             }
-        }
-
-        searchInput.addEventListener("input", function() {
-            let searchValue = searchInput.value.toLowerCase();
-            rows.forEach(row => {
-                let nameCell = row.cells[1].textContent.toLowerCase();
-                row.style.display = nameCell.includes(searchValue) ? "table-row" : "none";
-            });
         });
 
-        document.querySelector(".sortable[data-col='1']").addEventListener("click", function() {
-            sortTable(1, "sortIconNama", true);
-        });
-        document.querySelector(".sortable[data-col='9']").addEventListener("click", function() {
-            sortTable(9, "sortIconWaktu", false);
+        // Custom search hanya di kolom Nama (kolom ke-1, indeks 1)
+        $('#searchBox').on('keyup', function() {
+            table.column(1).search(this.value).draw();
         });
     });
 </script>
