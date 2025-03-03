@@ -41,10 +41,10 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="/petugas/pasien">Daftar Pasien</a>
+                        <a class="nav-link" href="/admin/pasien">Daftar Pasien</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/petugas/riwayat/all">Riwayat Terbaru</a>
+                        <a class="nav-link" href="/admin/petugas/">Daftar Petugas</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/logout">Logout</a>

@@ -24,6 +24,7 @@ class Filters extends BaseFilters
      * [filter_name => classname]
      * or [filter_name => [classname1, classname2, ...]]
      */
+
     public array $aliases = [
         'csrf'          => CSRF::class,
         'toolbar'       => DebugToolbar::class,
@@ -34,6 +35,7 @@ class Filters extends BaseFilters
         'forcehttps'    => ForceHTTPS::class,
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
+        'role' => \App\Filters\RoleMiddleware::class,
     ];
 
     /**
@@ -78,6 +80,7 @@ class Filters extends BaseFilters
             // 'secureheaders',
         ],
     ];
+
 
     /**
      * List of filter aliases that works on a

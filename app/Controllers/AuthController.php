@@ -16,27 +16,27 @@ class AuthController extends Controller
     public function loginProcess()
     {
         $session = session();
-        $username = $this->request->getPost('username');
-        $password = $this->request->getPost('password');
+        $request = service('request');
+        $username = $request->getPost('username');
+        $password = $request->getPost('password');
 
+        // Cek di tabel admin
         $adminModel = new AdminModel();
-        $petugasModel = new PetugasModel();
-
-        // Cek login sebagai admin
         $admin = $adminModel->where('username', $username)->first();
+
         if ($admin && password_verify($password, $admin['password'])) {
             $session->set([
-                'id' => $admin['id'],
                 'username' => $admin['username'],
-                'nama' => $admin['nama'],
                 'role' => 'admin',
                 'logged_in' => true
             ]);
-            return redirect()->to('/dashboard');
+            return redirect()->to('/admin/pasien');
         }
 
-        // Cek login sebagai petugas
+        // Cek di tabel petugas
+        $petugasModel = new PetugasModel();
         $petugas = $petugasModel->where('username', $username)->first();
+
         if ($petugas && password_verify($password, $petugas['password'])) {
             $session->set([
                 'id' => $petugas['id'],
@@ -46,10 +46,11 @@ class AuthController extends Controller
                 'role' => 'petugas',
                 'logged_in' => true
             ]);
-            return redirect()->to('/pasien');
+            return redirect()->to('/petugas/pasien');
         }
 
-        return redirect()->back()->with('error', 'Username atau password salah.');
+        $session->setFlashdata('error', 'Username atau password salah');
+        return redirect()->to('/');
     }
 
     public function register()
@@ -84,5 +85,13 @@ class AuthController extends Controller
     {
         session()->destroy();
         return redirect()->to('/');
+    }
+
+    public function checkRole($role)
+    {
+        if (!session()->get('logged_in') || session()->get('role') !== $role) {
+            session()->setFlashdata('error', 'Akses ditolak!');
+            return redirect()->to('/');
+        }
     }
 }

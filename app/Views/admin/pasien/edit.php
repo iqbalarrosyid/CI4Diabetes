@@ -1,10 +1,10 @@
-<?= $this->extend('layout/template') ?>
+<?= $this->extend('layout/templateAdmin') ?>
 
 <?= $this->section('content') ?>
 <div class="container">
     <h2><?= $title ?></h2>
 
-    <form action="/petugas/pasien/update/<?= $pasien['id'] ?>" method="post">
+    <form action="/admin/pasien/update/<?= $pasien['id'] ?>" method="post">
         <?= csrf_field() ?>
         <div class="mb-3">
             <label for="nama" class="form-label">Nama</label>
@@ -30,7 +30,7 @@
         </div>
 
         <button type="submit" class="btn btn-success">Simpan Perubahan</button>
-        <a href="/petugas/pasien" class="btn btn-secondary">Batal</a>
+        <a href="/admin/pasien" class="btn btn-secondary">Batal</a>
     </form>
 </div>
 <?= $this->endSection() ?>

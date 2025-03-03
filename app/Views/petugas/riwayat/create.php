@@ -3,7 +3,7 @@
 
 <div class="container mt-4">
     <h2>Tambah Prediksi Diabetes</h2>
-    <form id="riwayatForm" method="post" action="/riwayat/store">
+    <form id="riwayatForm" method="post" action="/petugas/riwayat/store">
         <input type="hidden" name="pasien_id" value="<?= $pasien_id ?>">
 
         <div class="mb-3">
@@ -26,7 +26,7 @@
         <!-- Tombol Prediksi & Simpan -->
         <button type="button" id="predictBtn" class="btn btn-primary">Prediksi</button>
         <button type="submit" id="saveBtn" class="btn btn-success" disabled>Simpan</button>
-        <a href="/riwayat/<?= $pasien_id ?>" class="btn btn-secondary">Kembali</a>
+        <a href="/petugas/riwayat/<?= $pasien_id ?>" class="btn btn-secondary">Kembali</a>
     </form>
 
     <!-- Hasil Prediksi -->
@@ -41,7 +41,7 @@
             data[key] = value;
         });
 
-        fetch('/riwayat/predict', {
+        fetch('/petugas/riwayat/predict', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

@@ -1,4 +1,4 @@
-<?= $this->extend('layout/template') ?>
+<?= $this->extend('layout/templateAdmin') ?>
 
 <?= $this->section('content') ?>
 
@@ -11,7 +11,7 @@
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2><?= $title ?></h2>
-        <a href="/petugas/pasien/create" class="btn btn-success">+ Pasien</a>
+        <a href="/admin/pasien/create" class="btn btn-success">+ Pasien</a>
     </div>
 
     <!-- Form Search -->
@@ -46,8 +46,8 @@
                         <td><?= esc($p['alamat']) ?></td>
                         <td class="text-start" style="white-space: nowrap;">
                             <a href="/petugas/riwayat/<?= $p['id'] ?>" class="text-info me-2"><i class="fas fa-clock fa-lg"></i></a>
-                            <a href="/petugas/pasien/edit/<?= $p['id'] ?>" class="text-warning me-2"><i class="fas fa-edit fa-lg"></i></a>
-                            <form action="/petugas/pasien/delete/<?= $p['id'] ?>" method="post" onsubmit="return confirm('Yakin ingin menghapus?');" style="display: inline;">
+                            <a href="/admin/pasien/edit/<?= $p['id'] ?>" class="text-warning me-2"><i class="fas fa-edit fa-lg"></i></a>
+                            <form action="/admin/pasien/delete/<?= $p['id'] ?>" method="post" onsubmit="return confirm('Yakin ingin menghapus?');" style="display: inline;">
                                 <?= csrf_field() ?>
                                 <button type="submit" class="border-0 bg-transparent text-danger">
                                     <i class="fas fa-trash fa-lg"></i>

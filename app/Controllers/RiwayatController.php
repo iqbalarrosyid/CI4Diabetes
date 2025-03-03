@@ -137,6 +137,6 @@ class RiwayatController extends BaseController
             'created_at'    => date('Y-m-d H:i:s')
         ]);
 
-        return redirect()->to('/riwayat/' . $pasien_id);
+        return redirect()->to('/petugas/riwayat/' . $pasien_id);
     }
 }

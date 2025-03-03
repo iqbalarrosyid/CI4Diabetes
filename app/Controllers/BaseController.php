@@ -55,4 +55,10 @@ abstract class BaseController extends Controller
 
         // E.g.: $this->session = \Config\Services::session();
     }
+    public function checkRole($role)
+    {
+        if (!session()->get('logged_in') || session()->get('role') !== $role) {
+            return redirect()->to('/')->with('error', 'Akses ditolak!');
+        }
+    }
 }

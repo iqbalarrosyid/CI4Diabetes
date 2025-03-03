@@ -1,9 +1,9 @@
-<?= $this->extend('layout/template') ?>
+<?= $this->extend('layout/templateAdmin') ?>
 
 <?= $this->section('content') ?>
 <h2>Tambah Pasien Baru</h2>
 
-<form action="/petugas/pasien/store" method="post">
+<form action="/admin/pasien/store" method="post">
     <div class="mb-3">
         <label for="nama" class="form-label">Nama</label>
         <input type="text" class="form-control" id="nama" name="nama" required>
@@ -25,6 +25,6 @@
         <textarea class="form-control" id="alamat" name="alamat" rows="3" required></textarea>
     </div>
     <button type="submit" class="btn btn-primary">Simpan</button>
-    <a href="/petugas/pasien" class="btn btn-secondary">Kembali</a>
+    <a href="/admin/pasien" class="btn btn-secondary">Kembali</a>
 </form>
 <?= $this->endSection() ?>

@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Models\PasienModel;
 
-class PasienController extends BaseController
+class AdminController extends BaseController
 {
     protected $pasienModel;
 
@@ -19,12 +19,12 @@ class PasienController extends BaseController
             'title' => 'Daftar Pasien',
             'pasien' => $this->pasienModel->findAll()
         ];
-        return view('petugas/pasien/index', $data);
+        return view('admin/pasien/index', $data);
     }
 
     public function create()
     {
-        return view('petugas/pasien/create', ['title' => 'Tambah Pasien']);
+        return view('admin/pasien/create', ['title' => 'Tambah Pasien']);
     }
 
     public function store()
@@ -36,7 +36,7 @@ class PasienController extends BaseController
             'jenis_kelamin' => $this->request->getPost('jenis_kelamin'),
         ]);
 
-        return redirect()->to('/petugas/pasien')->with('success', 'Data berhasil ditambahkan.');
+        return redirect()->to('/admin/pasien')->with('success', 'Data berhasil ditambahkan.');
     }
 
     public function edit($id)
@@ -45,7 +45,7 @@ class PasienController extends BaseController
             'title' => 'Edit Pasien',
             'pasien' => $this->pasienModel->find($id)
         ];
-        return view('petugas/pasien/edit', $data);
+        return view('admin/pasien/edit', $data);
     }
 
     public function update($id)
@@ -57,12 +57,17 @@ class PasienController extends BaseController
             'jenis_kelamin' => $this->request->getPost('jenis_kelamin'),
         ]);
 
-        return redirect()->to('/petugas/pasien')->with('success', 'Data berhasil diperbarui.');
+        return redirect()->to('/admin/pasien')->with('success', 'Data berhasil diperbarui.');
     }
 
     public function delete($id)
     {
         $this->pasienModel->delete($id);
-        return redirect()->to('/petugas/pasien')->with('success', 'Data berhasil dihapus.');
+        return redirect()->to('/admin/pasien')->with('success', 'Data berhasil dihapus.');
+    }
+
+    public function indexPetugas()
+    {
+        return view('admin/petugas/index');
     }
 }
