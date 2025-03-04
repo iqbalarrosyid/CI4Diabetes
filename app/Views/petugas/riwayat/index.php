@@ -7,10 +7,17 @@
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
 
+<style>
+    .justify-text {
+        text-align: justify;
+    }
+</style>
+
+
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Riwayat Pasien: <?= esc($pasien['nama']) ?></h2>
-        <a href="/petugas/riwayat/create/<?= esc($pasien['id']) ?>" class="btn btn-success">+ Tambah</a>
+        <a href="/petugas/riwayat/create/<?= esc($pasien['id']) ?>" class="btn btn-success"><i class="fa-solid fa-plus"></i></a>
     </div>
 
     <?php
@@ -38,7 +45,7 @@
                     <th>Berat</th>
                     <th>Tinggi</th>
                     <th>IMT</th>
-                    <th>Hasil</th>
+                    <th>Hasil*</th>
                     <th>Waktu</th>
                     <th>Petugas</th>
                 </tr>
@@ -59,12 +66,22 @@
                 <?php endforeach; ?>
             </tbody>
         </table>
+        <p class="text-muted justify-text">
+            <i>(*) Jika sebelumnya hasil prediksi menunjukan pasien Diabetes, kemudian prediksi berubah menjadi Tidak Diabetes, ini menunjukkan bahwa pasien dapat mengendalikan kadar gula darahnya. Bukan berarti sembuh dari diabetes.</i>
+        </p>
+
     </div>
 
     <!-- Tombol sejajar -->
     <div class="d-flex gap-2 mt-2">
-        <a href="/pasien" class="btn btn-secondary">Kembali</a>
-        <button class="btn btn-primary" onclick="toggleChart()">Tampilkan Grafik</button>
+        <a href="/petugas/pasien" class="btn btn-secondary">Kembali</a>
+        <button class="btn btn-primary" onclick="toggleChart()"><i class="fa-solid fa-square-poll-vertical"></i></button>
+        <a href="<?= base_url('petugas/riwayat/exportPdf/' . $pasien['id']) ?>" target="_blank" class="btn btn-danger">
+            <i class="fa-solid fa-file-pdf"></i>
+        </a>
+        <a href="<?= base_url('petugas/riwayat/exportExcel/' . $pasien['id']) ?>" class="btn btn-success">
+            <i class="fa-solid fa-file-excel"></i>
+        </a>
     </div>
 
     <!-- Grafik -->

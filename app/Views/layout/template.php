@@ -60,7 +60,7 @@
     </div>
 
     <!-- Footer -->
-    <footer class="text-center py-3">
+    <footer class="text-center py-3 mt-3">
         <p class="mb-0">© <?= date('Y') ?> Website Prediksi Diabetes. All rights reserved.</p>
     </footer>
 

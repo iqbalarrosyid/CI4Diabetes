@@ -5,6 +5,10 @@ namespace App\Controllers;
 use App\Models\RiwayatModel;
 use App\Models\PasienModel;
 use CodeIgniter\HTTP\Client;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class RiwayatController extends BaseController
 {
@@ -138,5 +142,83 @@ class RiwayatController extends BaseController
         ]);
 
         return redirect()->to('/petugas/riwayat/' . $pasien_id);
+    }
+
+    public function exportPdf($pasien_id)
+    {
+        // Ambil data pasien
+        $pasien = $this->pasienModel->find($pasien_id);
+        if (!$pasien) {
+            return redirect()->to('/petugas/pasien')->with('error', 'Data pasien tidak ditemukan.');
+        }
+
+        // Ambil riwayat pasien
+        $riwayat = $this->riwayatModel->getRiwayatWithPetugas($pasien_id, 'DESC');
+
+        // Load view ke string
+        $html = view('petugas/riwayat/pdf_template', compact('pasien', 'riwayat'));
+
+        // Konfigurasi Dompdf
+        $options = new Options();
+        $options->set('defaultFont', 'Arial');
+        $dompdf = new Dompdf($options);
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+
+        // Output ke browser
+        $dompdf->stream("Riwayat_Pasien_" . $pasien['nama'] . ".pdf", ["Attachment" => false]);
+    }
+
+    public function exportExcel($pasien_id)
+    {
+        // Ambil data pasien
+        $pasien = $this->pasienModel->find($pasien_id);
+        if (!$pasien) {
+            return redirect()->to('/petugas/pasien')->with('error', 'Data pasien tidak ditemukan.');
+        }
+
+        // Ambil riwayat pasien
+        $riwayat = $this->riwayatModel->getRiwayatWithPetugas($pasien_id, 'DESC');
+
+        // Buat file Excel
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Header Excel
+        $sheet->setCellValue('A1', 'No')
+            ->setCellValue('B1', 'GDP')
+            ->setCellValue('C1', 'Tekanan Darah')
+            ->setCellValue('D1', 'Berat')
+            ->setCellValue('E1', 'Tinggi')
+            ->setCellValue('F1', 'IMT')
+            ->setCellValue('G1', 'Hasil')
+            ->setCellValue('H1', 'Waktu')
+            ->setCellValue('I1', 'Petugas');
+
+        // Isi data
+        $row = 2;
+        $no = 1;
+        foreach ($riwayat as $data) {
+            $sheet->setCellValue('A' . $row, $no++)
+                ->setCellValue('B' . $row, $data['gdp'])
+                ->setCellValue('C' . $row, $data['tekanan_darah'])
+                ->setCellValue('D' . $row, $data['berat'])
+                ->setCellValue('E' . $row, $data['tinggi'])
+                ->setCellValue('F' . $row, number_format($data['imt'], 2))
+                ->setCellValue('G' . $row, $data['hasil'] == 1 ? 'Diabetes' : 'Tidak Diabetes')
+                ->setCellValue('H' . $row, date('d-m-Y H:i:s', strtotime($data['created_at'])))
+                ->setCellValue('I' . $row, $data['nama_petugas'] ?? 'Tidak Diketahui');
+            $row++;
+        }
+
+        // Simpan ke file
+        $filename = "Riwayat_Pasien_" . $pasien['nama'] . ".xlsx";
+        header('Content-Type: application/vnd.ms-excel');
+        header("Content-Disposition: attachment; filename=\"$filename\"");
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        exit();
     }
 }
