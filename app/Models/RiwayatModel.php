@@ -21,7 +21,7 @@ class RiwayatModel extends Model
     }
     public function getRiwayatTerbaru()
     {
-        return $this->select('riwayat.*, pasien.nama AS nama_pasien, pasien.tanggal_lahir, petugas.nama AS nama_petugas')
+        return $this->select('riwayat.*, pasien.nama AS nama_pasien, pasien.tanggal_lahir, petugas.nama AS nama_petugas, pasien.alamat')
             ->join('pasien', 'pasien.id = riwayat.pasien_id')
             ->join('petugas', 'petugas.id = riwayat.petugas_id', 'left')
             ->where('riwayat.id IN (

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <?php
 // Path ke file gambar di folder public
 $path = FCPATH . 'logo-bantul.png';
@@ -15,36 +15,10 @@ if (file_exists($path)) {
 ?>
 
 <head>
-    <meta charset="UTF-8">
-    <title>Riwayat Pasien <?= esc($pasien['nama']) ?></title>
+    <title>Riwayat Pasien</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-        }
-
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 2px solid black;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-        }
-
-        .header img {
-            width: 80px;
-            height: auto;
-        }
-
-        .kop-text {
-            text-align: center;
-            flex: 1;
-        }
-
-        .kop-text h2,
-        .kop-text h3,
-        .kop-text p {
-            margin: 2px 0;
         }
 
         table {
@@ -57,24 +31,22 @@ if (file_exists($path)) {
             border: 1px solid black;
             padding: 8px;
             text-align: left;
+            /* Ubah rata kiri */
         }
 
         th {
             background-color: #f2f2f2;
-        }
-
-        .justify-text {
-            text-align: justify;
+            text-align: left;
+            /* Ubah rata kiri */
         }
 
         p {
-            font-size: 13px;
+            font-size: 12px;
         }
     </style>
 </head>
 
 <body>
-    <!-- KOP SURAT -->
     <table width="100%" style="border-collapse: collapse;">
         <tr>
             <td width="10%" align="center" style="border: none;">
@@ -93,45 +65,53 @@ if (file_exists($path)) {
         </tr>
     </table>
     <hr>
-
-    <p><b>Riwayat Pasien: <?= esc($pasien['nama']) ?></b></p>
-    <p>Tanggal Lahir: <?= date('d-m-Y', strtotime($pasien['tanggal_lahir'])) ?></p>
-    <p>Jenis Kelamin: <?= esc($pasien['jenis_kelamin']) ?></p>
-    <p>Alamat: <?= esc($pasien['alamat']) ?></p>
-
-    <table style="font-size: 13px;">
+    <h4>Seluruh Riwayat Pasien Terbaru Tanggal <?= date('d-m-Y') ?></h4>
+    <table style="font-size: 12px;">
         <thead>
             <tr>
                 <th>No</th>
+                <th>Nama</th>
+                <th>Umur</th>
+                <th>Alamat</th>
                 <th>GDP (mg/dL)</th>
                 <th>Tekanan Darah (mmHg)</th>
                 <th>Berat (kg)</th>
                 <th>Tinggi (cm)</th>
                 <th>IMT (kg/cm2)</th>
-                <th>Hasil*</th>
+                <th>Hasil</th>
                 <th>Waktu</th>
                 <th>Petugas</th>
             </tr>
         </thead>
         <tbody>
-            <?php $no = 1;
-            foreach ($riwayat as $data): ?>
+            <?php foreach ($riwayat as $index => $data): ?>
+                <?php
+                $tanggalLahir = new DateTime($data['tanggal_lahir']);
+                $sekarang = new DateTime();
+                $umur = $sekarang->diff($tanggalLahir)->y;
+                ?>
                 <tr>
-                    <td><?= $no++ ?></td>
-                    <td><?= esc($data['gdp']) ?></td>
-                    <td><?= esc($data['tekanan_darah']) ?></td>
-                    <td><?= esc($data['berat']) ?></td>
-                    <td><?= esc($data['tinggi']) ?></td>
+                    <td><?= $index + 1 ?></td>
+                    <td><?= htmlspecialchars($data['nama_pasien']) ?></td>
+                    <td><?= $umur ?> tahun</td>
+                    <td><?= htmlspecialchars($data['alamat']) ?></td>
+                    <td><?= $data['gdp'] ?></td>
+                    <td><?= $data['tekanan_darah'] ?></td>
+                    <td><?= $data['berat'] ?></td>
+                    <td><?= $data['tinggi'] ?></td>
                     <td><?= number_format($data['imt'], 2) ?></td>
                     <td><?= $data['hasil'] == 1 ? 'Diabetes' : 'Tidak Diabetes' ?></td>
                     <td><?= date('d-m-Y H:i:s', strtotime($data['created_at'])) ?></td>
-                    <td><?= esc($data['nama_petugas'] ?? 'Tidak Diketahui') ?></td>
+                    <td><?= $data['nama_petugas'] ?? '<span class="text-muted">Tidak Diketahui</span>' ?></td>
                 </tr>
             <?php endforeach; ?>
+            <?php if (empty($riwayat)): ?>
+                <tr>
+                    <td colspan="11" class="text-center">Belum ada data riwayat.</td>
+                </tr>
+            <?php endif; ?>
         </tbody>
     </table>
-
-    <p class="text-muted justify-text"><i>(*) Jika sebelumnya hasil prediksi menunjukan pasien Diabetes, kemudian prediksi berubah menjadi Tidak Diabetes, ini menunjukkan bahwa pasien dapat mengendalikan kadar gula darahnya. Bukan berarti sembuh dari diabetes.</i></p>
     <p>Dicetak pada <?= date('d-m-Y H:i:s') ?></p>
 </body>
 

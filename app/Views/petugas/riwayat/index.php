@@ -40,11 +40,11 @@
             <thead class="table-dark">
                 <tr>
                     <th>No</th>
-                    <th>GDP</th>
-                    <th>Tekanan Darah</th>
-                    <th>Berat</th>
-                    <th>Tinggi</th>
-                    <th>IMT</th>
+                    <th>GDP (mg/dL)</th>
+                    <th>Tekanan Darah (mmHg)</th>
+                    <th>Berat (kg)</th>
+                    <th>Tinggi (cm)</th>
+                    <th>IMT (kg/cm2)</th>
                     <th>Hasil*</th>
                     <th>Waktu</th>
                     <th>Petugas</th>
@@ -56,8 +56,8 @@
                         <td></td>
                         <td><?= esc($data['gdp']) ?></td>
                         <td><?= esc($data['tekanan_darah']) ?></td>
-                        <td><?= esc($data['berat']) ?> kg</td>
-                        <td><?= esc($data['tinggi']) ?> cm</td>
+                        <td><?= esc($data['berat']) ?></td>
+                        <td><?= esc($data['tinggi']) ?></td>
                         <td><?= number_format($data['imt'], 2) ?></td>
                         <td><?= $data['hasil'] == 1 ? 'Diabetes' : 'Tidak Diabetes' ?></td>
                         <td><?= date('d-m-Y H:i:s', strtotime($data['created_at'])) ?></td>

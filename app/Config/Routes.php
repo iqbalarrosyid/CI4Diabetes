@@ -33,6 +33,8 @@ $routes->group('petugas', ['filter' => 'role:petugas'], function ($routes) {
 
     $routes->get('riwayat/exportPdf/(:num)', 'RiwayatController::exportPdf/$1');
     $routes->get('riwayat/exportExcel/(:num)', 'RiwayatController::exportExcel/$1');
+    $routes->get('riwayat/exportAllPdf', 'RiwayatController::exportAllPdf');
+    $routes->get('riwayat/exportAllExcel', 'RiwayatController::exportAllExcel');
 });
 
 // Rute khusus admin

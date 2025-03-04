@@ -22,11 +22,12 @@
                     <th>No</th>
                     <th>Nama</th>
                     <th>Umur</th>
-                    <th>GDP</th>
-                    <th>Tekanan Darah</th>
+                    <th>Alamat</th>
+                    <th>GDP (mg/dL)</th>
+                    <th>Tekanan Darah (mmHg)</th>
                     <th>Berat (kg)</th>
                     <th>Tinggi (cm)</th>
-                    <th>IMT</th>
+                    <th>IMT (kg/cm2)</th>
                     <th>Hasil</th>
                     <th>Waktu</th>
                     <th>Petugas</th>
@@ -43,6 +44,7 @@
                         <td><?= $index + 1 ?></td>
                         <td><?= htmlspecialchars($data['nama_pasien']) ?></td>
                         <td><?= $umur ?> tahun</td>
+                        <td><?= htmlspecialchars($data['alamat']) ?></td>
                         <td><?= $data['gdp'] ?></td>
                         <td><?= $data['tekanan_darah'] ?></td>
                         <td><?= $data['berat'] ?></td>
@@ -62,7 +64,15 @@
         </table>
     </div>
 
-    <a href="/pasien" class="btn btn-secondary">Kembali ke Dashboard</a>
+    <div class="d-flex gap-2 mt-2">
+        <a href="/petugas/pasien" class="btn btn-secondary">Kembali</a>
+        <a href="<?= base_url('/petugas/riwayat/exportAllPdf') ?>" target="_blank" class="btn btn-danger">
+            <i class="fa-solid fa-file-pdf"></i>
+        </a>
+        <a href="<?= base_url('/petugas/riwayat/exportAllExcel') ?>" class="btn btn-success">
+            <i class="fa-solid fa-file-excel"></i>
+        </a>
+    </div>
 </div>
 
 <script>

@@ -9,6 +9,7 @@ use Dompdf\Dompdf;
 use Dompdf\Options;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use DateTime;
 
 class RiwayatController extends BaseController
 {
@@ -214,6 +215,88 @@ class RiwayatController extends BaseController
 
         // Simpan ke file
         $filename = "Riwayat_Pasien_" . $pasien['nama'] . ".xlsx";
+        header('Content-Type: application/vnd.ms-excel');
+        header("Content-Disposition: attachment; filename=\"$filename\"");
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        exit();
+    }
+
+    public function exportAllPdf()
+    {
+        $data['riwayat'] = $this->riwayatModel->getRiwayatTerbaru();
+
+        $options = new Options();
+        $options->set('defaultFont', 'Arial');
+        $dompdf = new Dompdf($options);
+
+        $html = view('/petugas/riwayat/pdf_template_all', $data);
+
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'potrait');
+        $dompdf->render();
+        $dompdf->stream("Riwayat_Pasien.pdf", ["Attachment" => 0]);
+    }
+
+    public function exportAllExcel()
+    {
+        // Ambil riwayat terbaru
+        $riwayat = $this->riwayatModel->getRiwayatTerbaru();
+
+        if (empty($riwayat)) {
+            return redirect()->to('/petugas/riwayat')->with('error', 'Data riwayat tidak ditemukan.');
+        }
+
+        // Buat file Excel
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Header Excel
+        $sheet->setCellValue('A1', 'No')
+            ->setCellValue('B1', 'Nama Pasien')
+            ->setCellValue('C1', 'Umur')
+            ->setCellValue('D1', 'Alamat')
+            ->setCellValue('E1', 'GDP')
+            ->setCellValue('F1', 'Tekanan Darah')
+            ->setCellValue('G1', 'Berat')
+            ->setCellValue('H1', 'Tinggi')
+            ->setCellValue('I1', 'IMT')
+            ->setCellValue('J1', 'Hasil')
+            ->setCellValue('K1', 'Waktu')
+            ->setCellValue('L1', 'Petugas');
+
+        // Isi data
+        $row = 2;
+        $no = 1;
+        foreach ($riwayat as $data) {
+            // Hitung umur berdasarkan tanggal lahir
+            $umur = '-';
+            if (!empty($data['tanggal_lahir'])) {
+                $birthDate = new DateTime($data['tanggal_lahir']);
+                $today = new DateTime();
+                $umur = $today->diff($birthDate)->y . ' Tahun';
+            }
+
+            $sheet->setCellValue('A' . $row, $no++)
+                ->setCellValue('B' . $row, $data['nama_pasien'])
+                ->setCellValue('C' . $row, $umur)
+                ->setCellValue('D' . $row, $data['alamat'] ?? 'Tidak Diketahui')
+                ->setCellValue('E' . $row, $data['gdp'])
+                ->setCellValue('F' . $row, $data['tekanan_darah'])
+                ->setCellValue('G' . $row, $data['berat'])
+                ->setCellValue('H' . $row, $data['tinggi'])
+                ->setCellValue('I' . $row, number_format($data['imt'], 2))
+                ->setCellValue('J' . $row, $data['hasil'] == 1 ? 'Diabetes' : 'Tidak Diabetes')
+                ->setCellValue('K' . $row, date('d F Y H:i:s', strtotime($data['created_at'])))
+                ->setCellValue('L' . $row, $data['nama_petugas'] ?? 'Tidak Diketahui');
+            $row++;
+        }
+
+        // Nama file
+        $filename = "Riwayat_Pasien_" . date('d-m-Y') . ".xlsx";
+
+        // Atur header agar file bisa diunduh
         header('Content-Type: application/vnd.ms-excel');
         header("Content-Disposition: attachment; filename=\"$filename\"");
 
