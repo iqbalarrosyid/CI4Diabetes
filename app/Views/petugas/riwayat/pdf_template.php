@@ -93,11 +93,16 @@ if (file_exists($path)) {
         </tr>
     </table>
     <hr>
-
+    <?php
+    // Hitung umur secara otomatis
+    $tanggalLahir = new DateTime($pasien['tanggal_lahir']);
+    $sekarang = new DateTime();
+    $umur = $sekarang->diff($tanggalLahir);
+    ?>
     <p><b>Riwayat Pasien: <?= esc($pasien['nama']) ?></b></p>
-    <p>Tanggal Lahir: <?= date('d-m-Y', strtotime($pasien['tanggal_lahir'])) ?></p>
-    <p>Jenis Kelamin: <?= esc($pasien['jenis_kelamin']) ?></p>
-    <p>Alamat: <?= esc($pasien['alamat']) ?></p>
+    <p>Tanggal Lahir : <?= date('d-m-Y', strtotime($pasien['tanggal_lahir'])) ?> / <?= $umur->y; ?> tahun</p>
+    <p>Jenis Kelamin : <?= esc($pasien['jenis_kelamin']) ?></p>
+    <p>Alamat : <?= esc($pasien['alamat']) ?></p>
 
     <table style="font-size: 13px;">
         <thead>

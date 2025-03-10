@@ -16,7 +16,16 @@ class App extends BaseConfig
      *
      * E.g., http://example.com/
      */
-    public string $baseURL = 'http://192.168.1.103:8080/';
+    public string $baseURL = '';
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        // Ambil baseURL dari .env atau otomatis dari $_SERVER['HTTP_HOST']
+        $this->baseURL = getenv('app.baseURL') ?: 'http://' . $_SERVER['HTTP_HOST'] . '/';
+    }
+
 
     /**
      * Allowed Hostnames in the Site URL other than the hostname in the baseURL.
