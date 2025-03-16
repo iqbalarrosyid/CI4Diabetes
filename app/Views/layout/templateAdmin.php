@@ -24,6 +24,7 @@
         }
 
         .navbar {
+            transition: all 0.3s;
             background: linear-gradient(45deg, #007bff, #6610f2);
         }
 
@@ -31,18 +32,25 @@
             font-weight: 600;
         }
 
-        .nav-link {
+        .navbar-nav .nav-item .nav-link {
             color: white;
-            transition: 0.3s;
+            font-weight: 500;
+            transition: color 0.3s ease-in-out;
         }
 
-        .nav-link:hover {
-            color: #ffd700 !important;
+        .navbar-nav .nav-item .nav-link:hover {
+            color: #ffdd57;
         }
 
         footer {
             background-color: #343a40;
             color: white;
+        }
+
+        a:hover i,
+        button:hover i {
+            transform: scale(1.2);
+            transition: transform 0.2s ease-in-out;
         }
     </style>
 </head>
@@ -64,7 +72,7 @@
                         <a class="nav-link" href="/admin/petugas/"><i class="fas fa-user-md"></i> Daftar Petugas</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        <a class="nav-link" href="/logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
                     </li>
                 </ul>
             </div>

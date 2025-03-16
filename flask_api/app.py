@@ -4,16 +4,14 @@ import numpy as np
 
 app = Flask(__name__)
 
-# Load model manual
-model_data = joblib.load('naive_bayes_model.pkl')
+model_data = joblib.load('naive_bayes_modelGG.pkl')
 summaries = model_data['summaries']
 
-# Fungsi untuk menghitung probabilitas Gaussian (perhitungan manual)
+
 def calculate_probability(x, mean, std):
     exponent = np.exp(-((x - mean) ** 2) / (2 * std ** 2))
     return (1 / (np.sqrt(2 * np.pi) * std)) * exponent
 
-# Fungsi untuk menghitung probabilitas tiap kelas
 def calculate_class_probabilities(summaries, input_data):
     probabilities = {}
     for class_value, class_summaries in summaries.items():
@@ -24,7 +22,6 @@ def calculate_class_probabilities(summaries, input_data):
             probabilities[class_value] *= calculate_probability(input_data[i], mean, std)
     return probabilities
 
-# Fungsi prediksi
 def predict(summaries, input_data):
     probabilities = calculate_class_probabilities(summaries, input_data)
     return max(probabilities, key=probabilities.get)

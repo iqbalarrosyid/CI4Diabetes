@@ -96,7 +96,7 @@
                     <!-- Form Login -->
                     <div class="col-md-6 d-flex align-items-center">
                         <div class="card-body p-4 ">
-                            <h3 class="mb-3 text-center">🔐 <b>Login</b></h3>
+                            <h3 class="mb-3 text-center"><i class="fa-solid fa-arrow-right-to-bracket"></i> <b>Login</b></h3>
                             <p class="text-center">Silakan login untuk masuk ke <b>Sistem Prediksi Diabetes</b>.</p>
 
                             <!-- Notifikasi Error -->

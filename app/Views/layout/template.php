@@ -24,6 +24,7 @@
 
         .navbar {
             transition: all 0.3s;
+            background: linear-gradient(45deg, #007bff, #6610f2);
         }
 
         .navbar-brand {
@@ -43,6 +44,12 @@
         footer {
             background-color: #343a40;
             color: white;
+        }
+
+        a:hover i,
+        button:hover i {
+            transform: scale(1.2);
+            transition: transform 0.2s ease-in-out;
         }
     </style>
 </head>
@@ -64,7 +71,7 @@
                         <a class="nav-link" href="/petugas/riwayat/all"><i class="fas fa-history"></i> Riwayat</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        <a class="nav-link" href="/logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
                     </li>
                 </ul>
             </div>
