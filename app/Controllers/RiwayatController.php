@@ -288,7 +288,7 @@ class RiwayatController extends BaseController
                 ->setCellValue('H' . $row, $data['tinggi'])
                 ->setCellValue('I' . $row, number_format($data['imt'], 2))
                 ->setCellValue('J' . $row, $data['hasil'] == 1 ? 'Diabetes' : 'Tidak Diabetes')
-                ->setCellValue('K' . $row, date('d F Y H:i:s', strtotime($data['created_at'])))
+                ->setCellValue('K' . $row, date('d-m-Y H:i:s', strtotime($data['created_at'])))
                 ->setCellValue('L' . $row, $data['nama_petugas'] ?? 'Tidak Diketahui');
             $row++;
         }
@@ -304,4 +304,5 @@ class RiwayatController extends BaseController
         $writer->save('php://output');
         exit();
     }
+
 }
