@@ -57,7 +57,8 @@ class PasienController extends BaseController
             'jenis_kelamin' => $this->request->getPost('jenis_kelamin'),
         ]);
 
-        return redirect()->to('/petugas/pasien')->with('success', 'Data berhasil diperbarui.');
+        session()->setFlashdata('success', 'Profil berhasil diperbarui.');
+        return redirect()->back();
     }
 
     public function delete($id)

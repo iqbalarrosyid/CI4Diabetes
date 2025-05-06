@@ -61,7 +61,8 @@ class AdminController extends BaseController
             'jenis_kelamin' => $this->request->getPost('jenis_kelamin'),
         ]);
 
-        return redirect()->to('/admin/pasien')->with('success', 'Data berhasil diperbarui.');
+        session()->setFlashdata('success', 'Profil berhasil diperbarui.');
+        return redirect()->back();
     }
 
     public function delete($id)
@@ -120,7 +121,8 @@ class AdminController extends BaseController
 
         $this->petugasModel->update($id, $data);
 
-        return redirect()->to('/admin/petugas')->with('success', 'Data berhasil diperbarui.');
+        session()->setFlashdata('success', 'Profil berhasil diperbarui.');
+        return redirect()->back();
     }
 
     public function deletePetugas($id)

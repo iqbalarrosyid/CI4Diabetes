@@ -12,6 +12,11 @@ $routes->post('/login', 'AuthController::loginProcess');
 $routes->get('/register', 'AuthController::register');
 $routes->post('/register', 'AuthController::registerProcess');
 $routes->get('/logout', 'AuthController::logout');
+// Rute edit profile (berlaku untuk semua yang sudah login)
+$routes->get('profile/edit', 'ProfileController::edit', ['filter' => 'auth']);
+$routes->post('profile/update', 'ProfileController::update', ['filter' => 'auth']);
+
+
 
 // Rute khusus petugas
 $routes->group('petugas', ['filter' => 'role:petugas'], function ($routes) {

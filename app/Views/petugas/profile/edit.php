@@ -1,4 +1,4 @@
-<?= $this->extend('layout/templateAdmin') ?>
+<?= $this->extend('layout/template') ?>
 
 <?= $this->section('content') ?>
 <div class="container">
@@ -15,18 +15,19 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     <?php endif; ?>
-    <h2><?= $title ?></h2>
 
-    <form action="/admin/petugas/update/<?= $petugas['id'] ?>" method="post">
+    <h2>Edit Profil</h2>
+
+    <form method="post" action="<?= site_url('profile/update') ?>">
         <?= csrf_field() ?>
         <div class="mb-3">
             <label for="nama" class="form-label">Nama</label>
-            <input type="text" class="form-control" name="nama" value="<?= esc($petugas['nama']) ?>" required>
+            <input type="text" class="form-control" name="nama" value="<?= esc($user['nama']) ?>" required>
         </div>
 
         <div class="mb-3">
             <label for="alamat" class="form-label">Username</label>
-            <input type="text" class="form-control" name="username" value="<?= esc($petugas['username']) ?>" required>
+            <input type="text" class="form-control" name="username" value="<?= esc($user['username']) ?>" required>
         </div>
 
         <div class="mb-3">
@@ -36,7 +37,7 @@
 
 
         <button type="submit" class="btn btn-success">Simpan Perubahan</button>
-        <a href="/admin/petugas" class="btn btn-secondary">Kembali</a>
+        <a href="/petugas/pasien" class="btn btn-secondary">Kembali</a>
     </form>
 </div>
 <?= $this->endSection() ?>

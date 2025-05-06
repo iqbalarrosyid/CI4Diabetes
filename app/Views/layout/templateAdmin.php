@@ -72,6 +72,9 @@
                         <a class="nav-link" href="/admin/petugas/"><i class="fas fa-user-md"></i> Daftar Petugas</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="/profile/edit"><i class="fa-solid fa-user"></i> Profile</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="/logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
                     </li>
                 </ul>

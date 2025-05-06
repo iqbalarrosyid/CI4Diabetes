@@ -2,6 +2,19 @@
 
 <?= $this->section('content') ?>
 <div class="container">
+    <?php if (session()->getFlashdata('success')): ?>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <?= session()->getFlashdata('success') ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php endif; ?>
+
+    <?php if (session()->getFlashdata('error')): ?>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <?= session()->getFlashdata('error') ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php endif; ?>
     <h2><?= $title ?></h2>
 
     <form action="/admin/pasien/update/<?= $pasien['id'] ?>" method="post">
@@ -30,7 +43,7 @@
         </div>
 
         <button type="submit" class="btn btn-success">Simpan Perubahan</button>
-        <a href="/admin/pasien" class="btn btn-secondary">Batal</a>
+        <a href="/admin/pasien" class="btn btn-secondary">Kembali</a>
     </form>
 </div>
 <?= $this->endSection() ?>

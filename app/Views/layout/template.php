@@ -71,6 +71,9 @@
                         <a class="nav-link" href="/petugas/riwayat/all"><i class="fas fa-history"></i> Riwayat</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="/profile/edit"><i class="fa-solid fa-user"></i> Profile</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="/logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
                     </li>
                 </ul>

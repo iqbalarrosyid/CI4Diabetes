@@ -26,7 +26,10 @@ class AuthController extends Controller
 
         if ($admin && password_verify($password, $admin['password'])) {
             $session->set([
+                'id' => $admin['id'],
+                'admin_id' => $admin['id'], // Tambahkan ini
                 'username' => $admin['username'],
+                'nama' => $admin['nama'],
                 'role' => 'admin',
                 'logged_in' => true
             ]);
