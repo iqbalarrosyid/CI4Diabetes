@@ -8,19 +8,16 @@
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
 
-
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2><?= $title ?></h2>
         <a href="/petugas/pasien/create" class="btn btn-success"><i class="fa-solid fa-user-plus"></i></a>
     </div>
 
-    <!-- Form Search -->
     <div class="mb-3">
         <input type="text" id="searchBox" class="form-control" placeholder="Cari">
     </div>
 
-    <!-- Dropdown "Tampilkan _MENU_ data" sekarang ada di bawah form cari -->
     <div class="d-flex justify-content-start mb-2">
         <div id="pasienTable_length"></div>
     </div>
@@ -48,9 +45,9 @@
                         <td class="text-start" style="white-space: nowrap;">
                             <a href="/petugas/riwayat/<?= $p['id'] ?>" class="text-info me-2"><i class="fas fa-clock fa-lg"></i></a>
                             <a href="/petugas/pasien/edit/<?= $p['id'] ?>" class="text-warning me-2"><i class="fas fa-edit fa-lg"></i></a>
-                            <form action="/petugas/pasien/delete/<?= $p['id'] ?>" method="post" onsubmit="return confirm('Yakin ingin menghapus?');" style="display: inline;">
+                            <form action="/petugas/pasien/delete/<?= $p['id'] ?>" method="post" class="delete-form" style="display: inline;">
                                 <?= csrf_field() ?>
-                                <button type="submit" class="border-0 bg-transparent text-danger">
+                                <button type="button" class="border-0 bg-transparent text-danger btn-delete">
                                     <i class="fas fa-trash fa-lg"></i>
                                 </button>
                             </form>
@@ -61,13 +58,30 @@
         </table>
     </div>
 </div>
+
+<!-- Modal Konfirmasi Delete -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center p-4">
+            <div class="mx-auto mb-3" style="font-size: 40px; color: #dc3545;">
+                <i class="fa-solid fa-trash fa-beat"></i>
+            </div>
+            <h5 class="modal-title mb-2" id="deleteModalLabel">Konfirmasi Penghapusan</h5>
+            <p>Apakah Anda yakin ingin menghapus data ini?</p>
+            <button type="button" class="btn btn-secondary mt-2" data-bs-dismiss="modal">Batal</button>
+            <button type="button" class="btn btn-danger mt-2" id="confirmDelete">Hapus</button>
+        </div>
+    </div>
+</div>
+
 <script>
     $(document).ready(function() {
+        // Inisialisasi DataTable
         let table = $('#pasienTable').DataTable({
             "ordering": true,
             "searching": true,
             "paging": true,
-            "lengthChange": true, // Dropdown tetap ada
+            "lengthChange": true,
             "dom": "<'d-flex justify-content-between align-items-center mb-2'l><'table-responsive't><'d-flex justify-content-end mt-2'p>",
             "language": {
                 "lengthMenu": "Tampilkan _MENU_ data",
@@ -88,17 +102,31 @@
             "rowCallback": function(row, data, index) {
                 let api = this.api();
                 let info = api.page.info();
-                let globalIndex = index + 1 + info.start; // Urutkan tanpa lompat
+                let globalIndex = index + 1 + info.start;
                 $('td:eq(0)', row).html(globalIndex);
             }
         });
 
-        // Custom search hanya di kolom Nama (kolom ke-1, indeks 1)
+        // Filter hanya kolom Nama
         $('#searchBox').on('keyup', function() {
             table.column(1).search(this.value).draw();
         });
+
+        // Modal delete
+        let formToSubmit = null;
+
+        $(document).on('click', '.btn-delete', function(e) {
+            e.preventDefault();
+            formToSubmit = $(this).closest('form');
+            $('#deleteModal').modal('show');
+        });
+
+        $('#confirmDelete').on('click', function() {
+            if (formToSubmit) {
+                formToSubmit.submit();
+            }
+        });
     });
 </script>
-
 
 <?= $this->endSection() ?>

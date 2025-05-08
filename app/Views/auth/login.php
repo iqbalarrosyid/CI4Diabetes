@@ -98,12 +98,6 @@
                         <div class="card-body p-4 ">
                             <h3 class="mb-3 text-center"><i class="fa-solid fa-arrow-right-to-bracket"></i> <b>Login</b></h3>
                             <p class="text-center">Silakan login untuk masuk ke <b>Sistem Prediksi Diabetes</b>.</p>
-
-                            <!-- Notifikasi Error -->
-                            <?php if (session()->getFlashdata('error')): ?>
-                                <div class="alert alert-danger"><?= session()->getFlashdata('error') ?></div>
-                            <?php endif; ?>
-
                             <form action="/login" method="POST">
                                 <div class="mb-3">
                                     <label class="form-label">Username</label>
@@ -127,12 +121,29 @@
                         </div>
                     </div>
 
+                    <!-- Modal Gagal Login -->
+                    <div class="modal fade" id="loginErrorModal" tabindex="-1" aria-labelledby="loginErrorModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content text-center p-4">
+                                <div class="mx-auto mb-3" style="font-size: 40px; color: #dc3545;">
+                                    <i class="fa-solid fa-circle-xmark fa-beat"></i>
+                                </div>
+                                <h5 class="modal-title mb-2" id="loginErrorModalLabel">Login Gagal</h5>
+                                <p>Username atau password salah. Silakan coba lagi.</p>
+                                <button type="button" class="btn btn-danger mt-2" data-bs-dismiss="modal">Tutup</button>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Script untuk Toggle Password -->
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Toggle Password -->
     <script>
         function togglePassword() {
             var passwordField = document.getElementById("password");
@@ -150,7 +161,16 @@
         }
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Show Modal if Error -->
+    <?php if (session()->getFlashdata('error')): ?>
+        <script>
+            window.addEventListener('DOMContentLoaded', () => {
+                const loginErrorModal = new bootstrap.Modal(document.getElementById('loginErrorModal'));
+                loginErrorModal.show();
+            });
+        </script>
+    <?php endif; ?>
+
 </body>
 
 </html>

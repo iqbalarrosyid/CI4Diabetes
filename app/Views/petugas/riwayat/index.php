@@ -66,7 +66,7 @@
                 <?php endforeach; ?>
             </tbody>
         </table>
-        <p class="text-muted justify-text">
+        <p class="text-muted justify-text px-2">
             <i>(*) Jika sebelumnya hasil prediksi menunjukan pasien Diabetes, kemudian prediksi berubah menjadi Tidak Diabetes, ini menunjukkan bahwa pasien dapat mengendalikan kadar gula darahnya. Bukan berarti sembuh dari diabetes.</i>
         </p>
 

@@ -44,9 +44,9 @@
                         <td>••••••</td>
                         <td class="text-start" style="white-space: nowrap;">
                             <a href="/admin/petugas/edit/<?= $p['id'] ?>" class="text-warning me-2"><i class="fas fa-edit fa-lg"></i></a>
-                            <form action="/admin/petugas/delete/<?= $p['id'] ?>" method="post" onsubmit="return confirm('Yakin ingin menghapus?');" style="display: inline;">
+                            <form action="/admin/petugas/delete/<?= $p['id'] ?>" method="post" class="delete-form" style="display: inline;">
                                 <?= csrf_field() ?>
-                                <button type="submit" class="border-0 bg-transparent text-danger">
+                                <button type="button" class="border-0 bg-transparent text-danger btn-delete">
                                     <i class="fas fa-trash fa-lg"></i>
                                 </button>
                             </form>
@@ -57,6 +57,22 @@
         </table>
     </div>
 </div>
+
+<!-- Modal Konfirmasi Delete -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center p-4">
+            <div class="mx-auto mb-3" style="font-size: 40px; color: #dc3545;">
+                <i class="fa-solid fa-trash fa-beat"></i>
+            </div>
+            <h5 class="modal-title mb-2" id="deleteModalLabel">Konfirmasi Penghapusan</h5>
+            <p>Apakah Anda yakin ingin menghapus data ini?</p>
+            <button type="button" class="btn btn-secondary mt-2" data-bs-dismiss="modal">Batal</button>
+            <button type="button" class="btn btn-danger mt-2" id="confirmDelete">Hapus</button>
+        </div>
+    </div>
+</div>
+
 <script>
     $(document).ready(function() {
         let table = $('#petugasTable').DataTable({
@@ -92,6 +108,21 @@
         // Custom search hanya di kolom Nama (kolom ke-1, indeks 1)
         $('#searchBox').on('keyup', function() {
             table.column(1).search(this.value).draw();
+        });
+
+        // Modal delete
+        let formToSubmit = null;
+
+        $(document).on('click', '.btn-delete', function(e) {
+            e.preventDefault();
+            formToSubmit = $(this).closest('form');
+            $('#deleteModal').modal('show');
+        });
+
+        $('#confirmDelete').on('click', function() {
+            if (formToSubmit) {
+                formToSubmit.submit();
+            }
         });
     });
 </script>
