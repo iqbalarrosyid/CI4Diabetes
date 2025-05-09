@@ -33,6 +33,7 @@ class AuthController extends Controller
                 'role' => 'admin',
                 'logged_in' => true
             ]);
+            $session->setFlashdata('successLogin', 'Login berhasil, Selamat datang ' . $admin['nama']);
             return redirect()->to('/admin/pasien');
         }
 
@@ -49,10 +50,11 @@ class AuthController extends Controller
                 'role' => 'petugas',
                 'logged_in' => true
             ]);
+            $session->setFlashdata('successLogin', 'Login berhasil, Selamat datang ' . $petugas['nama']);
             return redirect()->to('/petugas/pasien');
         }
 
-        $session->setFlashdata('error', 'Username atau password salah');
+        $session->setFlashdata('errorLogin', 'Username atau password salah');
         return redirect()->to('/');
     }
 

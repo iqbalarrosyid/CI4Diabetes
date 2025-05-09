@@ -162,7 +162,7 @@
     </script>
 
     <!-- Show Modal if Error -->
-    <?php if (session()->getFlashdata('error')): ?>
+    <?php if (session()->getFlashdata('errorLogin')): ?>
         <script>
             window.addEventListener('DOMContentLoaded', () => {
                 const loginErrorModal = new bootstrap.Modal(document.getElementById('loginErrorModal'));

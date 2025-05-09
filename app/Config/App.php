@@ -24,6 +24,7 @@ class App extends BaseConfig
 
         // Ambil baseURL dari .env atau otomatis dari $_SERVER['HTTP_HOST']
         $this->baseURL = getenv('app.baseURL') ?: 'http://' . $_SERVER['HTTP_HOST'] . '/';
+        // $this->baseURL = getenv('app.baseURL') ?: (php_sapi_name() === 'cli' ? 'http://localhost/' : 'http://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . '/');
     }
 
 

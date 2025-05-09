@@ -9,48 +9,41 @@ class CreateRiwayatTable extends Migration
     public function up()
     {
         $this->forge->addField([
-            'id' => [
+            'id'              => [
                 'type'           => 'INT',
-                'constraint'     => 11,
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],
-            'pasien_id' => [
-                'type'       => 'INT',
-                'constraint' => 11,
-                'unsigned'   => true,
+            'pasien_id'       => [
+                'type'     => 'INT',
+                'unsigned' => true,
             ],
-            'petugas_id' => [
-                'type'       => 'INT',
-                'constraint' => 11,
-                'unsigned'   => true,
+            'petugas_id'      => [
+                'type'     => 'INT',
+                'unsigned' => true,
             ],
-            'tinggi' => [
-                'type'       => 'DECIMAL',
-                'constraint' => '5,2',
-            ],
-            'berat' => [
-                'type'       => 'DECIMAL',
-                'constraint' => '5,2',
-            ],
-            'imt' => [
-                'type'       => 'DECIMAL',
-                'constraint' => '5,2',
-                'null'       => true,
-            ],
-            'tekanan_darah' => [
+            'nama_petugas'    => [
                 'type'       => 'VARCHAR',
-                'constraint' => '10',
-                'null'       => true,
+                'constraint' => 100,
             ],
-            'gdp' => [
+            'tinggi'          => [
+                'type'       => 'FLOAT',
+            ],
+            'berat'           => [
+                'type'       => 'FLOAT',
+            ],
+            'imt'             => [
+                'type'       => 'FLOAT',
+            ],
+            'tekanan_darah'   => [
                 'type'       => 'VARCHAR',
-                'constraint' => '10',
-                'null'       => true,
+                'constraint' => 10,
             ],
-            'hasil' => [
-                'type'       => 'TINYINT',
-                'constraint' => 1,
+            'gdp'             => [
+                'type'       => 'FLOAT',
+            ],
+            'hasil'           => [
+                'type'       => 'TEXT',
             ],
             'created_at' => [
                 'type'    => 'DATETIME',
@@ -58,9 +51,10 @@ class CreateRiwayatTable extends Migration
                 'default' => null,
             ],
         ]);
+
         $this->forge->addKey('id', true);
         $this->forge->addForeignKey('pasien_id', 'pasien', 'id', 'CASCADE', 'CASCADE');
-        $this->forge->addForeignKey('petugas_id', 'petugas', 'id', 'CASCADE', 'CASCADE');
+        // petugas_id TIDAK menggunakan foreign key agar tidak hapus otomatis
         $this->forge->createTable('riwayat');
     }
 

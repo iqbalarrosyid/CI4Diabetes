@@ -133,6 +133,7 @@ class RiwayatController extends BaseController
         $this->riwayatModel->save([
             'pasien_id'     => $pasien_id,
             'petugas_id'    => session()->get('petugas_id'),
+            'nama_petugas'  => session()->get('nama'),
             'tinggi'        => $tinggi,
             'berat'         => $berat,
             'imt'           => $imt,
