@@ -93,6 +93,18 @@
     </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center p-4">
+            <div class="mx-auto mb-3" style="font-size: 40px; color: #198754;">
+                <i class="fa-solid fa-check-circle fa-beat"></i>
+            </div>
+            <h5 class="modal-title mb-2" id="successModalLabel">Data prediksi berhasil disimpan.</h5>
+        </div>
+    </div>
+</div>
+
 <script>
     $(document).ready(function() {
         let table = $('#riwayatTable').DataTable({
@@ -129,6 +141,15 @@
     function toggleChart() {
         $("#chartContainer").toggle();
     }
+
+    $(document).ready(function() {
+        <?php if (session()->getFlashdata('success')): ?>
+            $('#successModal').modal('show');
+            setTimeout(() => {
+                $('#successModal').modal('hide');
+            }, 3000); // hilang dalam 3 detik
+        <?php endif; ?>
+    });
 </script>
 
 

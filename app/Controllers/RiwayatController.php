@@ -142,7 +142,7 @@ class RiwayatController extends BaseController
             'created_at'    => date('Y-m-d H:i:s')
         ]);
 
-        return redirect()->to('/petugas/riwayat/' . $pasien_id);
+        return redirect()->to('/petugas/riwayat/' . $pasien_id)->with('success', 'Data prediksi berhasil disimpan.');
     }
 
     public function exportPdf($pasien_id)
@@ -304,5 +304,4 @@ class RiwayatController extends BaseController
         $writer->save('php://output');
         exit();
     }
-
 }

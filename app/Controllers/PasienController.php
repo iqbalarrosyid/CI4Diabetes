@@ -36,7 +36,7 @@ class PasienController extends BaseController
             'jenis_kelamin' => $this->request->getPost('jenis_kelamin'),
         ]);
 
-        return redirect()->to('/petugas/pasien')->with('success', 'Data berhasil ditambahkan.');
+        return redirect()->to('/petugas/pasien')->with('success', 'Data pasien berhasil ditambahkan.');
     }
 
     public function edit($id)
@@ -57,13 +57,14 @@ class PasienController extends BaseController
             'jenis_kelamin' => $this->request->getPost('jenis_kelamin'),
         ]);
 
-        session()->setFlashdata('success', 'Profil berhasil diperbarui.');
-        return redirect()->back();
+        session()->setFlashdata('success', 'Data pasien berhasil diperbarui.');
+        return redirect()->to("/petugas/pasien/edit/$id");
     }
 
     public function delete($id)
     {
         $this->pasienModel->delete($id);
-        return redirect()->to('/petugas/pasien')->with('success', 'Data berhasil dihapus.');
+        session()->setFlashdata('success', 'Data pasien berhasil dihapus.');
+        return redirect()->to('/petugas/pasien');
     }
 }

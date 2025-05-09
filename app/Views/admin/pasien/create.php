@@ -27,4 +27,29 @@
     <button type="submit" class="btn btn-primary">Simpan</button>
     <a href="/admin/pasien" class="btn btn-secondary">Kembali</a>
 </form>
+
+<?php if (session()->getFlashdata('success')) : ?>
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content text-center p-4">
+                <div class="mx-auto mb-3" style="font-size: 40px; color: #198754;">
+                    <i class="fa-solid fa-check-circle fa-beat"></i>
+                </div>
+                <h5 class="modal-title mb-2" id="successModalLabel"><?= session()->getFlashdata('success') ?></h5>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
+
+<script>
+    $(document).ready(function() {
+        <?php if (session()->getFlashdata('success')) : ?>
+            $('#successModal').modal('show');
+            setTimeout(() => {
+                $('#successModal').modal('hide');
+            }, 3000); // hilang dalam 3 detik
+        <?php endif; ?>
+    });
+</script>
+
 <?= $this->endSection() ?>

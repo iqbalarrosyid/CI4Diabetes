@@ -40,7 +40,8 @@ class AdminController extends BaseController
             'jenis_kelamin' => $this->request->getPost('jenis_kelamin'),
         ]);
 
-        return redirect()->to('/admin/pasien')->with('success', 'Data berhasil ditambahkan.');
+        session()->setFlashdata('success', 'Data pasien berhasil ditambahkan.');
+        return redirect()->to('/admin/pasien');
     }
 
     public function edit($id)
@@ -61,14 +62,15 @@ class AdminController extends BaseController
             'jenis_kelamin' => $this->request->getPost('jenis_kelamin'),
         ]);
 
-        session()->setFlashdata('success', 'Profil berhasil diperbarui.');
-        return redirect()->back();
+        session()->setFlashdata('success', 'Data pasien berhasil diperbarui.');
+        return redirect()->to("/admin/pasien/edit/$id");
     }
 
     public function delete($id)
     {
         $this->pasienModel->delete($id);
-        return redirect()->to('/admin/pasien')->with('success', 'Data berhasil dihapus.');
+        session()->setFlashdata('success', 'Data pasien berhasil dihapus.');
+        return redirect()->to('/admin/pasien');
     }
 
     // ========== CRUD PETUGAS ==========
@@ -95,7 +97,8 @@ class AdminController extends BaseController
             'role' => 'petugas'
         ]);
 
-        return redirect()->to('/admin/petugas')->with('success', 'Petugas berhasil ditambahkan.');
+        session()->setFlashdata('success', 'Petugas berhasil ditambahkan.');
+        return redirect()->to('/admin/petugas');
     }
 
     public function editPetugas($id)
@@ -121,13 +124,14 @@ class AdminController extends BaseController
 
         $this->petugasModel->update($id, $data);
 
-        session()->setFlashdata('success', 'Profil berhasil diperbarui.');
-        return redirect()->back();
+        session()->setFlashdata('success', 'Data petugas berhasil diperbarui.');
+        return redirect()->to("/admin/petugas/edit/$id");
     }
 
     public function deletePetugas($id)
     {
         $this->petugasModel->delete($id);
-        return redirect()->to('/admin/petugas')->with('success', 'Petugas berhasil dihapus.');
+        session()->setFlashdata('success', 'Data petugas berhasil dihapus.');
+        return redirect()->to('/admin/petugas');
     }
 }
