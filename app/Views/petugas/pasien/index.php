@@ -11,8 +11,37 @@
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2><?= $title ?></h2>
-        <a href="/petugas/pasien/create" class="btn btn-success"><i class="fa-solid fa-user-plus"></i></a>
+        <div>
+            <a href="/petugas/pasien/create" class="btn btn-success me-2">
+                <i class="fa-solid fa-user-plus"></i>
+            </a>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importModal">
+                <i class="fa-solid fa-file-import"></i>
+            </button>
+        </div>
     </div>
+
+    <!-- Import Section -->
+    <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="importModalLabel">Import Data Pasien</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="/petugas/import/upload" method="post" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="excel" class="form-label">Pilih File Excel (.xlsx, .xls)</label>
+                            <input type="file" name="excel" accept=".xlsx,.xls" required class="form-control" id="excel">
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100"><i class="fa-solid fa-upload"></i> Upload</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <div class="mb-3">
         <input type="text" id="searchBox" class="form-control" placeholder="Cari">

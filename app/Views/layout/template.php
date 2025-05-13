@@ -67,7 +67,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg fixed-top shadow-sm">
         <div class="container">
-            <a class="navbar-brand" href="/petugas/pasien"><i class="fas fa-heartbeat"></i> Prediksi Diabetes</a>
+            <a class="navbar-brand" href="/petugas/pasien"><i class="fas fa-heartbeat"></i> Prediksi Diabetes MT 2</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -106,7 +106,7 @@
 
     <!-- Footer -->
     <footer class="text-center py-3 mt-4">
-        <p class="mb-0">© <?= date('Y') ?> Petugas Panel - Website Prediksi Diabetes. All rights reserved.</p>
+        <p class="mb-0">© <?= date('Y') ?> Petugas Panel - Website Prediksi Diabetes MT 2. All rights reserved.</p>
     </footer>
     <!-- Logout Confirmation Modal -->
     <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">

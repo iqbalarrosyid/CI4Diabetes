@@ -16,6 +16,7 @@ $routes->get('profile/edit', 'AuthController::editProfile', ['filter' => 'auth']
 $routes->post('profile/update', 'AuthController::updateProfile', ['filter' => 'auth']);
 
 
+
 // Rute khusus petugas
 $routes->group('petugas', ['filter' => 'role:petugas'], function ($routes) {
     $routes->get('pasien', 'PasienController::index');
@@ -38,6 +39,9 @@ $routes->group('petugas', ['filter' => 'role:petugas'], function ($routes) {
     $routes->get('riwayat/exportExcel/(:num)', 'RiwayatController::exportExcel/$1');
     $routes->get('riwayat/exportAllPdf', 'RiwayatController::exportAllPdf');
     $routes->get('riwayat/exportAllExcel', 'RiwayatController::exportAllExcel');
+
+    $routes->get('import', 'PasienController::import');
+    $routes->post('import/upload', 'PasienController::upload');
 });
 
 // Rute khusus admin
@@ -55,4 +59,7 @@ $routes->group('admin', ['filter' => 'role:admin'], function ($routes) {
     $routes->get('petugas/edit/(:num)', 'AdminController::editPetugas/$1');
     $routes->post('petugas/update/(:num)', 'AdminController::updatePetugas/$1');
     $routes->post('petugas/delete/(:num)', 'AdminController::deletePetugas/$1');
+
+    $routes->get('import', 'AdminController::import');
+    $routes->post('import/upload', 'AdminController::upload');
 });
