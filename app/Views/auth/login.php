@@ -135,6 +135,20 @@
                         </div>
                     </div>
 
+                    <!-- Modal Error -->
+                    <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content text-center p-4">
+                                <div class="mx-auto mb-3" style="font-size: 40px; color: #dc3545;">
+                                    <i class="fa-solid fa-circle-xmark fa-beat"></i>
+                                </div>
+                                <h5 class="modal-title mb-2" id="errorModalLabel">Error</h5>
+                                <p><?= session()->getFlashdata('error') ?></p>
+                                <button type="button" class="btn btn-danger mt-2" data-bs-dismiss="modal">Tutup</button>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -167,6 +181,16 @@
             window.addEventListener('DOMContentLoaded', () => {
                 const loginErrorModal = new bootstrap.Modal(document.getElementById('loginErrorModal'));
                 loginErrorModal.show();
+            });
+        </script>
+    <?php endif; ?>
+
+    <!-- Show Modal if Error -->
+    <?php if (session()->getFlashdata('error')): ?>
+        <script>
+            window.addEventListener('DOMContentLoaded', () => {
+                const errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+                errorModal.show();
             });
         </script>
     <?php endif; ?>

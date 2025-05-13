@@ -14,12 +14,14 @@ class RoleMiddleware implements FilterInterface
 
         // Cek apakah user sudah login
         if (!$session->get('logged_in')) {
-            return redirect()->to('/')->with('error', 'Silakan login terlebih dahulu');
+            session()->setFlashdata('error', 'Silakan login terlebih dahulu');
+            return redirect()->to('/');
         }
 
         // Cek apakah ada role yang harus dicek
         if (!empty($arguments) && !in_array($session->get('role'), $arguments)) {
-            return redirect()->to('/')->with('error', 'Akses ditolak!');
+            session()->setFlashdata('error', 'Akses ditolak! Silahkan login dengan role yang sesuai');
+            return redirect()->to('/');
         }
     }
 

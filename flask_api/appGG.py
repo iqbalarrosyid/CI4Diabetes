@@ -82,6 +82,39 @@ if uploaded_file is not None:
     # Split data untuk training dan testing
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
+    # Evaluasi model dengan 10 kali random split
+    st.write("### 📉 Grafik Akurasi Training dan Testing (10x Evaluasi)")
+
+    train_accuracies = []
+    test_accuracies = []
+
+    for i in range(10):
+        X_train_cv, X_test_cv, y_train_cv, y_test_cv = train_test_split(X, y, test_size=0.2, random_state=i)
+        summaries_cv = summarize_by_class(X_train_cv, y_train_cv)
+
+        # Training accuracy
+        y_train_pred = [predict(summaries_cv, row.values) for _, row in X_train_cv.iterrows()]
+        acc_train = accuracy_score(y_train_cv, y_train_pred)
+        train_accuracies.append(acc_train)
+
+        # Testing accuracy
+        y_test_pred = [predict(summaries_cv, row.values) for _, row in X_test_cv.iterrows()]
+        acc_test = accuracy_score(y_test_cv, y_test_pred)
+        test_accuracies.append(acc_test)
+
+
+    # Plot akurasi
+    fig_acc, ax_acc = plt.subplots()
+    ax_acc.plot(range(1, 11), train_accuracies, marker='o', label='Training Accuracy')
+    ax_acc.plot(range(1, 11), test_accuracies, marker='s', label='Testing Accuracy')
+    ax_acc.set_title("Training vs Testing Accuracy (10x split)")
+    ax_acc.set_xlabel("Percobaan ke-")
+    ax_acc.set_ylabel("Akurasi")
+    ax_acc.set_ylim(0, 1)
+    ax_acc.legend()
+    st.pyplot(fig_acc)
+
+
     # Ringkasan statistik berdasarkan kelas
     summaries = summarize_by_class(X_train, y_train)
 
