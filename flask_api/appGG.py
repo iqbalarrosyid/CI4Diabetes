@@ -7,36 +7,39 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score, classification_report, roc_auc_score
 import joblib
 
-# Fungsi untuk menghitung mean dan standar deviasi setiap fitur berdasarkan kelas
+# Fungsi untuk menghitung distribusi normal (likelihood)
+def calculate_probability(x, mean, std):
+    if std == 0:
+        std = 1e-6  # Hindari pembagian dengan nol
+    exponent = np.exp(-((x - mean) ** 2) / (2 * std ** 2))
+    return (1 / (np.sqrt(2 * np.pi) * std)) * exponent
+
+# Fungsi untuk menghitung mean dan std untuk setiap kelas
 def summarize_by_class(X, y):
     summaries = {}
+    total_samples = len(y)
     for class_value in np.unique(y):
         class_data = X[y == class_value]
         summaries[class_value] = {
             'mean': class_data.mean(axis=0),
-            'std': class_data.std(axis=0)
+            'std': class_data.std(axis=0),
+            'prior': len(class_data) / total_samples  # Probabilitas prior
         }
     return summaries
 
-# Fungsi untuk menghitung probabilitas Gaussian dengan handling zero std
-def calculate_probability(x, mean, std):
-    if std == 0:
-        std = 1e-6
-    exponent = np.exp(-((x - mean) ** 2) / (2 * std ** 2))
-    return (1 / (np.sqrt(2 * np.pi) * std)) * exponent
-
-# Fungsi untuk menghitung probabilitas tiap kelas
+# Fungsi menghitung probabilitas untuk setiap kelas
 def calculate_class_probabilities(summaries, input_data):
     probabilities = {}
     for class_value, class_summaries in summaries.items():
-        probabilities[class_value] = 1
+        # Mulai dengan probabilitas prior
+        probabilities[class_value] = class_summaries['prior']
         for i in range(len(input_data)):
             mean = class_summaries['mean'].values[i]
             std = class_summaries['std'].values[i]
             probabilities[class_value] *= calculate_probability(input_data[i], mean, std)
     return probabilities
 
-# Fungsi prediksi
+# Fungsi prediksi untuk satu data
 def predict(summaries, input_data):
     probabilities = calculate_class_probabilities(summaries, input_data)
     return max(probabilities, key=probabilities.get)
