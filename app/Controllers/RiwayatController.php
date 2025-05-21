@@ -78,7 +78,7 @@ class RiwayatController extends BaseController
 
         try {
             $client = \Config\Services::curlrequest();
-            $response = $client->post('http://localhost:5000/predict', [
+            $response = $client->post('https://iqbalarrosyid.pythonanywhere.com/predict', [
                 'json' => [
                     'imt' => $imt,
                     'umur' => $umur,
@@ -117,8 +117,9 @@ class RiwayatController extends BaseController
         $umur = date_diff(date_create($pasien['tanggal_lahir']), date_create('today'))->y;
 
         // Kirim Data ke Flask untuk Prediksi
+        // http://localhost:5000/predict
         $client = \Config\Services::curlrequest();
-        $response = $client->post('http://localhost:5000/predict', [
+        $response = $client->post('https://iqbalarrosyid.pythonanywhere.com/predict', [
             'json' => [
                 'imt' => $imt,
                 'umur' => $umur,
