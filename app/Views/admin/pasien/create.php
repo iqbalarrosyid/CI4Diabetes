@@ -24,7 +24,7 @@
         <label for="alamat" class="form-label">Alamat</label>
         <textarea class="form-control" id="alamat" name="alamat" rows="3" required></textarea>
     </div>
-    <button type="submit" class="btn btn-primary">Simpan</button>
+    <button type="submit" class="btn btn-success">Simpan</button>
     <a href="/admin/pasien" class="btn btn-secondary">Kembali</a>
 </form>
 

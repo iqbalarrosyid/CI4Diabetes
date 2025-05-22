@@ -16,7 +16,7 @@
         <label for="nama" class="form-label">Password</label>
         <input type="password" class="form-control" id="password" name="password" required>
     </div>
-    <button type="submit" class="btn btn-primary">Simpan</button>
+    <button type="submit" class="btn btn-success">Simpan</button>
     <a href="/admin/petugas" class="btn btn-secondary">Kembali</a>
 </form>
 

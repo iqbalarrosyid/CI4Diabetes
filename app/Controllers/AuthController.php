@@ -54,7 +54,7 @@ class AuthController extends Controller
             return redirect()->to('/petugas/pasien');
         }
 
-        $session->setFlashdata('errorLogin', 'Username atau password salah');
+        $session->setFlashdata('error', 'Username atau password yang anda masukkan salah');
         return redirect()->to('/');
     }
 
