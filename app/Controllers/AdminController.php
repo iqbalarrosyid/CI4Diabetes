@@ -153,7 +153,7 @@ class AdminController extends BaseController
             $riwayatModel = new RiwayatModel();
 
             for ($i = 1; $i < count($data); $i++) {
-                [$nama, $tanggal_lahir, $alamat, $jenis_kelamin, $tekanan_darah, $berat, $tinggi, $gdp, $hasil, $tanggal] = $data[$i];
+                [$nama, $tanggal_lahir, $alamat, $jenis_kelamin, $tekanan_darah, $berat, $tinggi, $gdp, $hasil, $tanggal, $nama_petugas] = $data[$i];
 
                 // Validasi tanggal
                 if (!strtotime($tanggal_lahir) || !strtotime($tanggal)) {
@@ -191,7 +191,7 @@ class AdminController extends BaseController
                     'imt' => round($imt, 2),
                     'hasil' => strtolower($hasil) === 'diabetes' ? 1 : 0,
                     'created_at' => date('Y-m-d', strtotime($tanggal)),
-                    'nama_petugas' => session()->get('nama'),
+                    'nama_petugas' => $nama_petugas,
                 ]);
             }
 
