@@ -16,47 +16,80 @@ class AuthController extends Controller
     public function loginProcess()
     {
         $session = session();
-        $request = service('request');
+        $request = service('request'); 
         $username = $request->getPost('username');
         $password = $request->getPost('password');
 
-        // Cek di tabel admin
-        $adminModel = new AdminModel();
+        // 1. Cek jika ada form yang tidak diisi
+        if (empty($username) || empty($password)) {
+            $errorMessage = '';
+            if (empty($username) && empty($password)) {
+                $errorMessage = 'Harap isi Username dan Password';
+            } elseif (empty($username)) {
+                $errorMessage = 'Harap isi Username';
+            } else { // empty($password)
+                $errorMessage = 'Harap isi Password';
+            }
+            $session->setFlashdata('error', $errorMessage);
+            return redirect()->to('/'); 
+        }
+
+        // 2. Cek di tabel admin
+        $adminModel = new \App\Models\AdminModel(); 
         $admin = $adminModel->where('username', $username)->first();
 
-        if ($admin && password_verify($password, $admin['password'])) {
-            $session->set([
-                'id' => $admin['id'],
-                'admin_id' => $admin['id'], // Tambahkan ini
-                'username' => $admin['username'],
-                'nama' => $admin['nama'],
-                'role' => 'admin',
-                'logged_in' => true
-            ]);
-            $session->setFlashdata('successLogin', 'Login berhasil, Selamat datang ' . $admin['nama']);
-            return redirect()->to('/admin/pasien');
+        if ($admin) {
+            // Username admin ditemukan
+            if (password_verify($password, $admin['password'])) {
+                // Password benar
+                $session->set([
+                    'id' => $admin['id'],
+                    'admin_id' => $admin['id'], 
+                    'username' => $admin['username'],
+                    'nama' => $admin['nama'],
+                    'role' => 'admin',
+                    'logged_in' => true
+                ]);
+                $session->setFlashdata('successLogin', 'Login berhasil, Selamat datang ' . $admin['nama']);
+                return redirect()->to('/admin/pasien'); 
+            } else {
+                // Password salah untuk admin
+                $session->setFlashdata('error', 'Password yang anda masukkan salah');
+                return redirect()->to('/');
+            }
         }
 
-        // Cek di tabel petugas
-        $petugasModel = new PetugasModel();
+        // 3. Jika bukan admin (username admin tidak ditemukan), cek di tabel petugas
+        $petugasModel = new \App\Models\PetugasModel();
         $petugas = $petugasModel->where('username', $username)->first();
 
-        if ($petugas && password_verify($password, $petugas['password'])) {
-            $session->set([
-                'id' => $petugas['id'],
-                'petugas_id' => $petugas['id'], // Tambahkan ini
-                'username' => $petugas['username'],
-                'nama' => $petugas['nama'],
-                'role' => 'petugas',
-                'logged_in' => true
-            ]);
-            $session->setFlashdata('successLogin', 'Login berhasil, Selamat datang ' . $petugas['nama']);
-            return redirect()->to('/petugas/pasien');
+        if ($petugas) {
+            // Username petugas ditemukan
+            if (password_verify($password, $petugas['password'])) {
+                // Password benar
+                $session->set([
+                    'id' => $petugas['id'],
+                    'petugas_id' => $petugas['id'], 
+                    'username' => $petugas['username'],
+                    'nama' => $petugas['nama'],
+                    'role' => 'petugas',
+                    'logged_in' => true
+                ]);
+                $session->setFlashdata('successLogin', 'Login berhasil, Selamat datang ' . $petugas['nama']);
+                return redirect()->to('/petugas/pasien'); 
+            } else {
+                // Password salah untuk petugas
+                $session->setFlashdata('error', 'Password yang anda masukkan salah');
+                return redirect()->to('/');
+            }
         }
 
-        $session->setFlashdata('error', 'Username atau password yang anda masukkan salah');
+        // 4. Jika username tidak ditemukan di kedua tabel (admin dan petugas)
+        // Kondisi ini tercapai jika $admin NULL dan $petugas NULL
+        $session->setFlashdata('error', 'Username tidak ditemukan');
         return redirect()->to('/');
     }
+
 
     public function register()
     {
@@ -65,7 +98,7 @@ class AuthController extends Controller
 
     public function registerProcess()
     {
-        $role = $this->request->getPost('role'); // admin atau petugas
+        $role = $this->request->getPost('role'); 
         $nama = $this->request->getPost('nama');
         $username = $this->request->getPost('username');
         $password = password_hash($this->request->getPost('password'), PASSWORD_DEFAULT);
