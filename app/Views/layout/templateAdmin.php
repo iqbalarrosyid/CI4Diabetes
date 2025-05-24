@@ -291,7 +291,7 @@
                 <h5 class="modal-title mb-2" id="logoutModalLabel">Konfirmasi Logout</h5>
                 <p>Apakah Anda yakin ingin logout?</p>
                 <div class="modal-footer border-0 justify-content-center">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kembali</button>
                     <a href="/logout" class="btn btn-danger">Logout</a>
                 </div>
             </div>

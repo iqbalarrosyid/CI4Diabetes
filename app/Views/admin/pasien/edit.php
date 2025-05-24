@@ -2,60 +2,111 @@
 
 <?= $this->section('content') ?>
 <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0"><?= esc($title) ?></h2>
+    </div>
 
-    <h2><?= $title ?></h2>
-
-    <form action="/admin/pasien/update/<?= $pasien['id'] ?>" method="post">
+    <form action="/admin/pasien/update/<?= esc($pasien['id'], 'attr') ?>" method="post">
         <?= csrf_field() ?>
-        <div class="mb-3">
-            <label for="nama" class="form-label">Nama</label>
-            <input type="text" class="form-control" name="nama" value="<?= esc($pasien['nama']) ?>" required>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="nama" class="form-label">Nama Lengkap</label>
+                    <input type="text" class="form-control <?= (session('errors.nama')) ? 'is-invalid' : '' ?>" id="nama" name="nama" value="<?= old('nama', esc($pasien['nama'])) ?>" required>
+                    <?php if (session('errors.nama')) : ?>
+                        <div class="invalid-feedback">
+                            <?= session('errors.nama') ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="tanggal_lahir" class="form-label">Tanggal Lahir</label>
+                    <input type="date" class="form-control <?= (session('errors.tanggal_lahir')) ? 'is-invalid' : '' ?>" id="tanggal_lahir" name="tanggal_lahir" value="<?= old('tanggal_lahir', esc($pasien['tanggal_lahir'])) ?>" required>
+                    <?php if (session('errors.tanggal_lahir')) : ?>
+                        <div class="invalid-feedback">
+                            <?= session('errors.tanggal_lahir') ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
         </div>
 
         <div class="mb-3">
             <label for="alamat" class="form-label">Alamat</label>
-            <input type="text" class="form-control" name="alamat" value="<?= esc($pasien['alamat']) ?>" required>
-        </div>
-
-        <div class="mb-3">
-            <label for="tanggal_lahir" class="form-label">Tanggal Lahir</label>
-            <input type="date" class="form-control" name="tanggal_lahir" value="<?= esc($pasien['tanggal_lahir']) ?>" required>
-        </div>
-
-        <div class="mb-3">
-            <label for="jenis_kelamin" class="form-label">Jenis Kelamin</label>
-            <select name="jenis_kelamin" class="form-select" required>
-                <option value="Laki-laki" <?= $pasien['jenis_kelamin'] == 'Laki-laki' ? 'selected' : '' ?>>Laki-laki</option>
-                <option value="Perempuan" <?= $pasien['jenis_kelamin'] == 'Perempuan' ? 'selected' : '' ?>>Perempuan</option>
-            </select>
-        </div>
-
-        <button type="submit" class="btn btn-success">Simpan Perubahan</button>
-        <a href="/admin/pasien" class="btn btn-secondary">Kembali</a>
-    </form>
-
-    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content text-center p-4">
-                <div class="mx-auto mb-3" style="font-size: 40px; color: #198754;">
-                    <i class="fa-solid fa-check-circle fa-beat"></i>
+            <textarea class="form-control <?= (session('errors.alamat')) ? 'is-invalid' : '' ?>" id="alamat" name="alamat" rows="3" required><?= old('alamat', esc($pasien['alamat'])) ?></textarea>
+            <?php if (session('errors.alamat')) : ?>
+                <div class="invalid-feedback">
+                    <?= session('errors.alamat') ?>
                 </div>
-                <h5 class="modal-title mb-2" id="successModalLabel">Data pasien berhasil diperbarui.</h5>
+            <?php endif; ?>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="jenis_kelamin" class="form-label">Jenis Kelamin</label>
+                    <select name="jenis_kelamin" id="jenis_kelamin" class="form-select <?= (session('errors.jenis_kelamin')) ? 'is-invalid' : '' ?>" required>
+                        <option value="" disabled <?= empty(old('jenis_kelamin', $pasien['jenis_kelamin'])) ? 'selected' : '' ?>>-- Pilih Jenis Kelamin --</option>
+                        <option value="Laki-laki" <?= (old('jenis_kelamin', $pasien['jenis_kelamin']) == 'Laki-laki') ? 'selected' : '' ?>>Laki-laki</option>
+                        <option value="Perempuan" <?= (old('jenis_kelamin', $pasien['jenis_kelamin']) == 'Perempuan') ? 'selected' : '' ?>>Perempuan</option>
+                    </select>
+                    <?php if (session('errors.jenis_kelamin')) : ?>
+                        <div class="invalid-feedback">
+                            <?= session('errors.jenis_kelamin') ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <div class="col-md-6">
             </div>
         </div>
-    </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <hr class="my-4">
 
-    <script>
-        $(document).ready(function() {
-            <?php if (session()->getFlashdata('success')): ?>
-                $('#successModal').modal('show');
-                setTimeout(() => {
-                    $('#successModal').modal('hide');
-                }, 3000); // hilang dalam 3 detik
-            <?php endif; ?>
-        });
-    </script>
+        <div class="d-flex justify-content-end">
+            <a href="/admin/pasien" class="btn btn-outline-secondary me-2">
+                <i class="fas fa-arrow-left me-2"></i>Kembali
+            </a>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save me-2"></i>Simpan
+            </button>
+        </div>
+    </form>
+
+    <?php if (session()->getFlashdata('success')) : ?>
+        <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content text-center p-4">
+                    <div class="mx-auto mb-3" style="font-size: 40px; color: #198754;">
+                        <i class="fa-solid fa-check-circle fa-beat"></i>
+                    </div>
+                    <h5 class="modal-title mb-2" id="successModalLabel"><?= session()->getFlashdata('success') ?></h5>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
+
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Logika untuk menampilkan modal sukses dari Bootstrap 5
+        <?php if (session()->getFlashdata('success')) : ?>
+            var successModalElement = document.getElementById('successModal');
+            if (successModalElement) {
+                var successModal = new bootstrap.Modal(successModalElement);
+                successModal.show();
+                setTimeout(function() {
+                    // Pastikan modal masih ada sebelum mencoba menyembunyikannya
+                    if (bootstrap.Modal.getInstance(successModalElement)) {
+                        successModal.hide();
+                    }
+                }, 3000); // Hilang setelah 3 detik
+            }
+        <?php endif; ?>
+    });
+</script>
+
 <?= $this->endSection() ?>

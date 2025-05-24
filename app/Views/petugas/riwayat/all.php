@@ -50,7 +50,14 @@
                         <td><?= $data['berat'] ?></td>
                         <td><?= $data['tinggi'] ?></td>
                         <td><?= number_format($data['imt'], 2) ?></td>
-                        <td><?= $data['hasil'] == 1 ? 'Diabetes' : 'Tidak Diabetes' ?></td>
+                        <td><?php if ($data['hasil'] == 1): ?>
+                                <span class="badge bg-danger">Diabetes</span>
+                            <?php elseif ($data['hasil'] == 0 && $data['hasil'] !== null && $data['hasil'] !== ''): ?>
+                                <span class="badge bg-success">Tidak Diabetes</span>
+                            <?php else: ?>
+                                <span class="badge bg-secondary">N/A</span>
+                            <?php endif; ?>
+                        </td>
                         <td><?= date('d-m-Y H:i:s', strtotime($data['created_at'])) ?></td>
                         <td><?= $data['nama_petugas'] ?? '<span class="text-muted">Tidak Diketahui</span>' ?></td>
                     </tr>
@@ -64,12 +71,12 @@
         </table>
     </div>
 
-    <div class="d-flex gap-2 mt-2">
-        <a href="/petugas/pasien" class="btn btn-secondary">Kembali</a>
-        <a href="<?= base_url('/petugas/riwayat/exportAllPdf') ?>" target="_blank" class="btn btn-danger">
+    <div class="d-flex justify-content-end mt-2">
+        <a href="/petugas/pasien" class="btn btn-outline-secondary me-2">Kembali</a>
+        <a href="<?= base_url('/petugas/riwayat/exportAllPdf') ?>" target="_blank" class="btn btn-danger me-2">
             <i class="fa-solid fa-file-pdf"></i>
         </a>
-        <a href="<?= base_url('/petugas/riwayat/exportAllExcel') ?>" class="btn btn-success">
+        <a href="<?= base_url('/petugas/riwayat/exportAllExcel') ?>" class="btn btn-success me-2">
             <i class="fa-solid fa-file-excel"></i>
         </a>
     </div>

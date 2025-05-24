@@ -68,7 +68,7 @@
             <h5 class="modal-title mb-2" id="deleteModalLabel">Konfirmasi Penghapusan</h5>
             <p>Apakah Anda yakin ingin menghapus data ini?</p>
             <div class="modal-footer border-0 justify-content-center">
-                <button type="button" class="btn btn-secondary mt-2" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-secondary mt-2" data-bs-dismiss="modal">Kembali</button>
                 <button type="button" class="btn btn-danger mt-2" id="confirmDelete">Hapus</button>
             </div>
         </div>

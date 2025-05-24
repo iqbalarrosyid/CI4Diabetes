@@ -11,206 +11,178 @@
     <script src="https://kit.fontawesome.com/6bb49a14fa.js" crossorigin="anonymous"></script>
 
     <style>
+        :root {
+            --primary-color: #007bff;
+            --primary-hover-color: #0056b3;
+            --light-gray-bg: #f4f7f6;
+            --text-color: #333;
+            --text-muted-color: #666;
+            --border-color: #ddd;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --card-border-radius: 20px;
+        }
+
         body {
-            background-color: #f4f7f6;
-            /* Latar belakang lebih lembut */
+            background-color: var(--light-gray-bg);
             font-family: 'Poppins', sans-serif;
-            color: #333;
+            color: var(--text-color);
             min-height: 100vh;
-            /* Menggunakan min-height untuk fleksibilitas */
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 1rem;
-            /* Padding untuk layar kecil */
+            padding: 1.5rem;
+        }
+
+        .login-card-wrapper {
+            width: 100%;
+            max-width: 950px;
         }
 
         .login-card {
-            max-width: 950px;
-            /* Sedikit lebih lebar untuk keseimbangan */
             background: #ffffff;
-            border-radius: 15px;
-            /* Border radius lebih besar */
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            /* Shadow lebih soft */
+            border-radius: var(--card-border-radius);
+            box-shadow: var(--card-shadow);
             overflow: hidden;
-            display: flex;
-            /* Menggunakan flex untuk kolom */
+            width: 100%;
+        }
+
+        .login-image-side {
+            background: url('https://images.pexels.com/photos/6941879/pexels-photo-6941879.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') no-repeat center center;
+            background-size: cover;
         }
 
         .login-form-container {
-            flex: 1;
-            padding: 2.5rem 3rem;
-            /* Padding lebih besar */
+            padding: 3rem;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            background: linear-gradient(to right, #ffffff, #f9f9f9);
-            /* Gradient halus */
+            min-height: 100%;
+        }
+
+        .login-form-container .brand-logo {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
         }
 
         .login-form-container h3 {
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-            /* Penyesuaian margin */
-            color: #333;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+            font-size: 1.75rem;
         }
 
         .login-form-container .sub-text {
-            /* Kelas baru untuk sub-teks */
             font-size: 0.9rem;
-            color: #666;
-            margin-bottom: 2rem;
+            color: var(--text-muted-color);
+            margin-bottom: 2.5rem;
         }
 
         .form-label {
             font-weight: 500;
-            /* Label sedikit lebih tebal */
-            margin-bottom: 0.3rem;
-            /* Margin lebih kecil */
-            font-size: 0.85rem;
-            color: #555;
+            margin-bottom: 0.4rem;
+            font-size: 0.875rem;
+            color: #495057;
         }
 
         .form-control {
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            /* Border lebih soft */
-            padding: 12px 15px;
-            /* Padding disesuaikan */
-            transition: all 0.3s ease-in-out;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            padding: 0.8rem 1rem;
+            transition: all 0.2s ease-in-out;
             font-size: 0.9rem;
             background-color: #fdfdfd;
-            /* Sedikit off-white */
         }
 
         .form-control:focus {
             box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.15);
-            /* Shadow lebih halus */
-            border-color: #007bff;
+            border-color: var(--primary-color);
             background-color: #fff;
         }
 
         .input-group .form-control {
-            /* Pastikan input dalam group tidak punya border radius kanan */
             border-top-right-radius: 0;
             border-bottom-right-radius: 0;
         }
 
-        .input-group .btn {
-            /* Pastikan tombol dalam group tidak punya border radius kiri */
+        .input-group .btn-toggle-password {
             border-top-left-radius: 0;
             border-bottom-left-radius: 0;
             border-left: 0;
-            /* Hilangkan border kiri tombol */
-            border-color: #ddd;
-            /* Sesuaikan border color */
+            border-color: var(--border-color);
+            background-color: #fff;
+            color: var(--text-muted-color);
         }
 
-        .input-group .btn:hover,
-        .input-group .btn:focus {
+        .input-group .btn-toggle-password:hover,
+        .input-group .btn-toggle-password:focus {
             background-color: #e9ecef;
-            /* Hover effect untuk tombol mata */
+            border-color: var(--border-color);
+            box-shadow: none;
+        }
+
+        .input-group .btn-toggle-password i {
+            transition: color 0.2s ease-in-out;
         }
 
 
         .btn-primary {
-            background-color: #007bff;
+            background-color: var(--primary-color);
             border: none;
-            padding: 12px;
-            /* Padding disesuaikan */
-            border-radius: 8px;
+            padding: 0.8rem;
+            border-radius: 10px;
             font-weight: 600;
-            /* Font weight lebih tebal */
-            transition: all 0.3s ease-in-out;
+            transition: all 0.2s ease-in-out;
             text-transform: uppercase;
-            /* Kapital untuk teks tombol */
             letter-spacing: 0.5px;
-            /* Sedikit spasi antar huruf */
-            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.25);
         }
 
         .btn-primary:hover {
-            background-color: #0056b3;
-            box-shadow: 0 6px 15px rgba(0, 86, 179, 0.3);
+            background-color: var(--primary-hover-color);
+            box-shadow: 0 6px 15px rgba(0, 86, 179, 0.35);
             transform: translateY(-2px);
-            /* Efek hover naik sedikit */
         }
 
-        .register-link {
-            /* Jika Anda ingin menambahkan link registrasi nanti */
-            font-size: 0.85rem;
-            margin-top: 1.5rem;
-            color: #555;
-        }
-
-        .register-link a {
-            color: #007bff;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .register-link a:hover {
-            text-decoration: underline;
-        }
-
-        /* Styling untuk Modal Error */
         .modal-content {
-            border-radius: 10px;
+            border-radius: var(--card-border-radius);
             border: none;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
         }
 
-        .modal-header {
-            /* Jika menggunakan modal header */
+        .modal-header.error-modal-header {
             border-bottom: none;
             padding-bottom: 0;
+            justify-content: center;
         }
 
-        .modal-title {
+        .modal-title.error-modal-title {
             font-weight: 600;
+            font-size: 1.25rem;
         }
 
-        .modal-body p {
-            font-size: 0.95rem;
-            color: #555;
-        }
-
-        .modal-footer {
-            /* Jika menggunakan modal footer */
-            border-top: none;
+        .modal-body.error-modal-body p {
+            font-size: 1rem;
+            color: var(--text-muted-color);
         }
 
         .modal-dialog-centered .fa-circle-xmark {
-            font-size: 3.5rem;
-            /* Ukuran ikon disesuaikan */
+            font-size: 4rem;
             color: #dc3545;
         }
 
-        .modal-content .btn-danger {
-            font-weight: 500;
-            padding: 8px 20px;
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .login-card {
-                flex-direction: column;
-                /* Stack kolom pada layar kecil */
-                max-width: 450px;
-                /* Lebar maksimal untuk form saja */
-            }
-
+        @media (max-width: 767.98px) {
             .login-form-container {
-                border-radius: 15px;
-                /* Tambahkan border radius karena gambar hilang */
-                padding: 2rem;
-                /* Padding disesuaikan */
+                padding: 2rem 1.5rem;
+                background: #ffffff;
             }
 
             .login-form-container h3 {
                 font-size: 1.5rem;
-                /* Ukuran font judul disesuaikan */
+            }
+
+            .login-form-container .sub-text {
+                margin-bottom: 1.5rem;
             }
         }
     </style>
@@ -218,28 +190,31 @@
 
 <body>
 
-    <div class="container-fluid px-0">
-        <div class="row justify-content-center align-items-center min-vh-100 m-0">
-            <div class="col-11 col-md-10 col-lg-8 px-0">
-                <div class="card login-card">
+    <div class="login-card-wrapper">
+        <div class="card login-card">
+            <div class="row g-0">
+                <div class="col-md-5 d-none d-md-block login-image-side">
+                </div>
 
+                <div class="col-md-7">
                     <div class="login-form-container">
                         <div class="text-center mb-4">
-                            <i class="fa-solid fa-shield-heart fa-2x mb-2" style="color: #007bff;"></i>
-                            <h3 class="mb-2"><b>Login Akun</b></h3>
-                            <p class="sub-text">Selamat datang! Masuk untuk mengakses Sistem Prediksi Diabetes Melitus Tipe 2.</p>
+                            <i class="fa-solid fa-shield-heart brand-logo"></i>
+                            <h3>Login Akun</h3>
+                            <p class="sub-text mt-3">Selamat datang! Masuk untuk mengakses Sistem Prediksi Diabetes Melitus Tipe 2.</p>
                         </div>
 
                         <form action="/login" method="POST">
-                            <div class="mb-3">
+                            <?= csrf_field() ?> <div class="mb-3">
                                 <label for="username" class="form-label">Username</label>
-                                <input type="text" id="username" name="username" class="form-control" placeholder="Masukkan username Anda" required>
+                                <input type="text" id="username" name="username" class="form-control" placeholder="Masukkan username Anda" required value="<?= old('username') ?>">
                             </div>
 
-                            <div class="mb-4"> <label for="password" class="form-label">Password</label>
+                            <div class="mb-4">
+                                <label for="password" class="form-label">Password</label>
                                 <div class="input-group">
                                     <input type="password" id="password" name="password" class="form-control" placeholder="Masukkan password Anda" required>
-                                    <button type="button" class="btn btn-outline-secondary" onclick="togglePassword()" aria-label="Toggle Password Visibility">
+                                    <button type="button" class="btn btn-toggle-password" onclick="togglePassword()" aria-label="Tampilkan atau sembunyikan password">
                                         <i id="toggleIcon" class="fa-solid fa-eye-slash"></i>
                                     </button>
                                 </div>
@@ -247,7 +222,6 @@
 
                             <button type="submit" class="btn btn-primary w-100 mt-3 py-2">Login</button>
                         </form>
-                        <!-- <p class="text-center mt-4 register-link">Belum punya akun? <a href="/register">Daftar di sini</a></p> -->
                     </div>
                 </div>
             </div>
@@ -260,9 +234,13 @@
                 <div class="mx-auto mb-3">
                     <i class="fa-solid fa-circle-xmark fa-beat"></i>
                 </div>
-                <h5 class="modal-title mb-2" id="errorModalLabel">Login Gagal</h5>
-                <p class="mb-3"><?= session()->getFlashdata('error') ?? 'Terjadi kesalahan. Silakan coba lagi.' ?></p>
-                <button type="button" class="btn btn-danger mt-2" data-bs-dismiss="modal">Tutup</button>
+                <h5 class="modal-title error-modal-title mb-2" id="errorModalLabel">Login Gagal</h5>
+                <div class="modal-body error-modal-body py-0">
+                    <p class="mb-3"><?= session()->getFlashdata('error') ?? 'Username atau password salah. Silakan coba lagi.' ?></p>
+                </div>
+                <div class="modal-footer border-0 justify-content-center">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Tutup</button>
+                </div>
             </div>
         </div>
     </div>
@@ -282,16 +260,18 @@
                 toggleIcon.classList.replace("fa-eye", "fa-eye-slash");
             }
         }
-    </script>
 
-    <?php if (session()->getFlashdata('error')): ?>
-        <script>
+        // Script untuk menampilkan error modal jika ada flashdata
+        <?php if (session()->getFlashdata('error')): ?>
             window.addEventListener('DOMContentLoaded', () => {
-                const errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
-                errorModal.show();
+                const errorModalElement = document.getElementById('errorModal');
+                if (errorModalElement) {
+                    const errorModal = new bootstrap.Modal(errorModalElement);
+                    errorModal.show();
+                }
             });
-        </script>
-    <?php endif; ?>
+        <?php endif; ?>
+    </script>
 
 </body>
 
