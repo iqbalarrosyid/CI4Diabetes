@@ -73,12 +73,16 @@
 
     <div class="d-flex justify-content-end mt-2">
         <a href="/petugas/pasien" class="btn btn-outline-secondary me-2">Kembali</a>
-        <a href="<?= base_url('/petugas/riwayat/exportAllPdf') ?>" target="_blank" class="btn btn-danger me-2">
-            <i class="fa-solid fa-file-pdf"></i>
-        </a>
-        <a href="<?= base_url('/petugas/riwayat/exportAllExcel') ?>" class="btn btn-success me-2">
-            <i class="fa-solid fa-file-excel"></i>
-        </a>
+        <span data-bs-toggle="tooltip" data-bs-placement="top" title="Export PDF">
+            <a href="<?= base_url('/petugas/riwayat/exportAllPdf') ?>" target="_blank" class="btn btn-danger me-2">
+                <i class="fa-solid fa-file-pdf"></i>
+            </a>
+        </span>
+        <span data-bs-toggle="tooltip" data-bs-placement="top" title="Export Excel">
+            <a href="<?= base_url('/petugas/riwayat/exportAllExcel') ?>" class="btn btn-success me-2">
+                <i class="fa-solid fa-file-excel"></i>
+            </a>
+        </span>
     </div>
 </div>
 

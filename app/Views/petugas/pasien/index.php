@@ -12,12 +12,14 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2><?= $title ?></h2>
         <div>
-            <a href="/petugas/pasien/create" class="btn btn-success me-2">
+            <a href="/petugas/pasien/create" class="btn btn-success me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Tambah Data Pasien">
                 <i class="fa-solid fa-user-plus"></i>
             </a>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importModal">
-                <i class="fa-solid fa-file-import"></i>
-            </button>
+            <span data-bs-toggle="tooltip" data-bs-placement="top" title="Import Data Excel">
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importModal">
+                    <i class="fa-solid fa-file-import"></i>
+                </button>
+            </span>
         </div>
     </div>
 
@@ -72,11 +74,15 @@
                         <td><?= esc($p['jenis_kelamin']) ?></td>
                         <td><?= esc($p['alamat']) ?></td>
                         <td class="text-start" style="white-space: nowrap;">
-                            <a href="/petugas/riwayat/<?= $p['id'] ?>" class="text-info me-2"><i class="fas fa-clock fa-lg"></i></a>
-                            <a href="/petugas/pasien/edit/<?= $p['id'] ?>" class="text-warning me-2"><i class="fas fa-edit fa-lg"></i></a>
+                            <span data-bs-toggle="tooltip" data-bs-placement="top" title="Lihat Riwayat">
+                                <a href="/petugas/riwayat/<?= $p['id'] ?>" class="text-info me-2"><i class="fas fa-clock fa-lg"></i></a>
+                            </span>
+                            <span data-bs-toggle="tooltip" data-bs-placement="top" title="Ubah Data">
+                                <a href="/petugas/pasien/edit/<?= $p['id'] ?>" class="text-warning me-2"><i class="fas fa-edit fa-lg"></i></a>
+                            </span>
                             <form action="/petugas/pasien/delete/<?= $p['id'] ?>" method="post" class="delete-form" style="display: inline;">
                                 <?= csrf_field() ?>
-                                <button type="button" class="border-0 bg-transparent text-danger btn-delete">
+                                <button type="button" class="border-0 bg-transparent text-danger btn-delete" data-bs-toggle="tooltip" data-bs-placement="top" title="Hapus Data">
                                     <i class="fas fa-trash fa-lg"></i>
                                 </button>
                             </form>

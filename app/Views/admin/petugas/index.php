@@ -11,7 +11,9 @@
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2><?= $title ?></h2>
-        <a href="/admin/petugas/create" class="btn btn-success"><i class="fa-solid fa-user-plus"></i></a>
+        <span data-bs-toggle="tooltip" data-bs-placement="top" title="Tambah Data Petugas">
+            <a href="/admin/petugas/create" class="btn btn-success me-2"><i class="fa-solid fa-user-plus"></i></a>
+        </span>
     </div>
 
     <!-- Form Search -->
@@ -43,10 +45,12 @@
                         <td><?= esc($p['username']) ?></td>
                         <td>••••••</td>
                         <td class="text-start" style="white-space: nowrap;">
-                            <a href="/admin/petugas/edit/<?= $p['id'] ?>" class="text-warning me-2"><i class="fas fa-edit fa-lg"></i></a>
+                            <span data-bs-toggle="tooltip" data-bs-placement="top" title="Ubah Data">
+                                <a href="/admin/petugas/edit/<?= $p['id'] ?>" class="text-warning me-2"><i class="fas fa-edit fa-lg"></i></a>
+                            </span>
                             <form action="/admin/petugas/delete/<?= $p['id'] ?>" method="post" class="delete-form" style="display: inline;">
                                 <?= csrf_field() ?>
-                                <button type="button" class="border-0 bg-transparent text-danger btn-delete">
+                                <button type="button" class="border-0 bg-transparent text-danger btn-delete" data-bs-toggle="tooltip" data-bs-placement="top" title="Hapus Data">
                                     <i class="fas fa-trash fa-lg"></i>
                                 </button>
                             </form>
