@@ -73,16 +73,41 @@
 
     <div class="d-flex justify-content-end mt-2">
         <a href="/petugas/pasien" class="btn btn-outline-secondary me-2">Kembali</a>
-        <span data-bs-toggle="tooltip" data-bs-placement="top" title="Export PDF">
-            <a href="<?= base_url('/petugas/riwayat/exportAllPdf') ?>" target="_blank" class="btn btn-danger me-2">
+        <div class="btn-group me-2">
+            <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" title="Pilih Jenis Export PDF">
                 <i class="fa-solid fa-file-pdf"></i>
-            </a>
-        </span>
-        <span data-bs-toggle="tooltip" data-bs-placement="top" title="Export Excel">
-            <a href="<?= base_url('/petugas/riwayat/exportAllExcel') ?>" class="btn btn-success me-2">
+            </button>
+            <ul class="dropdown-menu">
+                <li>
+                    <a class="dropdown-item" href="<?= base_url('/petugas/riwayat-terbaru/all/pdf') ?>" target="_blank">
+                        Riwayat Terbaru Saja
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="<?= base_url('/petugas/riwayat-historis/all/pdf') ?>" target="_blank">
+                        Seluruh Riwayat (Semua Pasien)
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="btn-group me-2">
+            <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" title="Pilih Jenis Export Excel">
                 <i class="fa-solid fa-file-excel"></i>
-            </a>
-        </span>
+            </button>
+            <ul class="dropdown-menu">
+                <li>
+                    <a class="dropdown-item" href="<?= base_url('/petugas/riwayat-terbaru/all/excel') ?>" target="_blank">
+                        Riwayat Terbaru Saja
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="<?= base_url('/petugas/riwayat-historis/all/excel') ?>" target="_blank">
+                        Seluruh Riwayat (Semua Pasien)
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
 </div>
 

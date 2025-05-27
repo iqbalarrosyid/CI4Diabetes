@@ -35,10 +35,16 @@ $routes->group('petugas', ['filter' => 'role:petugas'], function ($routes) {
     $routes->post('riwayat/update/(:num)', 'RiwayatController::update/$1');
     $routes->post('riwayat/delete/(:num)', 'RiwayatController::delete/$1');
 
-    $routes->get('riwayat/exportPdf/(:num)', 'RiwayatController::exportPdf/$1');
-    $routes->get('riwayat/exportExcel/(:num)', 'RiwayatController::exportExcel/$1');
-    $routes->get('riwayat/exportAllPdf', 'RiwayatController::exportAllPdf');
-    $routes->get('riwayat/exportAllExcel', 'RiwayatController::exportAllExcel');
+    $routes->get('riwayat/pdf/(:num)', 'ExportController::exportPasienRiwayatToPdf/$1');
+    $routes->get('riwayat/excel/(:num)', 'ExportController::exportPasienRiwayatToExcel/$1');
+
+    // Riwayat terbaru semua pasien
+    $routes->get('riwayat-terbaru/all/pdf', 'ExportController::exportLatestRiwayatAllPasienToPdf');
+    $routes->get('riwayat-terbaru/all/excel', 'ExportController::exportLatestRiwayatAllPasienToExcel');
+
+    // SEMUA riwayat SEMUA pasien (historis)
+    $routes->get('riwayat-historis/all/pdf', 'ExportController::exportAllHistoricalRiwayatToPdf');
+    $routes->get('riwayat-historis/all/excel', 'ExportController::exportAllHistoricalRiwayatToExcel');
 
     $routes->get('import', 'PasienController::import');
     $routes->post('import/upload', 'PasienController::upload');
