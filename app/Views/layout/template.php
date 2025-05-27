@@ -244,7 +244,7 @@
 
 <body>
     <nav class="navbar navbar-expand-lg fixed-top">
-        <div class="container"> <a class="navbar-brand" href="/petugas/pasien">
+        <div class="container"> <a class="navbar-brand" href="/petugas/">
                 <i class="fas fa-heart-pulse"></i> Prediksi Diabetes T2 </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

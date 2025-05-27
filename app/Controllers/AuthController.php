@@ -16,7 +16,7 @@ class AuthController extends Controller
     public function loginProcess()
     {
         $session = session();
-        $request = service('request'); 
+        $request = service('request');
         $username = $request->getPost('username');
         $password = $request->getPost('password');
 
@@ -31,11 +31,11 @@ class AuthController extends Controller
                 $errorMessage = 'Harap isi Password';
             }
             $session->setFlashdata('error', $errorMessage);
-            return redirect()->to('/'); 
+            return redirect()->to('/');
         }
 
         // 2. Cek di tabel admin
-        $adminModel = new \App\Models\AdminModel(); 
+        $adminModel = new \App\Models\AdminModel();
         $admin = $adminModel->where('username', $username)->first();
 
         if ($admin) {
@@ -44,14 +44,14 @@ class AuthController extends Controller
                 // Password benar
                 $session->set([
                     'id' => $admin['id'],
-                    'admin_id' => $admin['id'], 
+                    'admin_id' => $admin['id'],
                     'username' => $admin['username'],
                     'nama' => $admin['nama'],
                     'role' => 'admin',
                     'logged_in' => true
                 ]);
                 $session->setFlashdata('successLogin', 'Login berhasil, Selamat datang ' . $admin['nama']);
-                return redirect()->to('/admin/pasien'); 
+                return redirect()->to('/admin/');
             } else {
                 // Password salah untuk admin
                 $session->setFlashdata('error', 'Password yang anda masukkan salah');
@@ -69,14 +69,14 @@ class AuthController extends Controller
                 // Password benar
                 $session->set([
                     'id' => $petugas['id'],
-                    'petugas_id' => $petugas['id'], 
+                    'petugas_id' => $petugas['id'],
                     'username' => $petugas['username'],
                     'nama' => $petugas['nama'],
                     'role' => 'petugas',
                     'logged_in' => true
                 ]);
                 $session->setFlashdata('successLogin', 'Login berhasil, Selamat datang ' . $petugas['nama']);
-                return redirect()->to('/petugas/pasien'); 
+                return redirect()->to('/petugas/');
             } else {
                 // Password salah untuk petugas
                 $session->setFlashdata('error', 'Password yang anda masukkan salah');
@@ -98,7 +98,7 @@ class AuthController extends Controller
 
     public function registerProcess()
     {
-        $role = $this->request->getPost('role'); 
+        $role = $this->request->getPost('role');
         $nama = $this->request->getPost('nama');
         $username = $this->request->getPost('username');
         $password = password_hash($this->request->getPost('password'), PASSWORD_DEFAULT);

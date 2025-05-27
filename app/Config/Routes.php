@@ -19,6 +19,9 @@ $routes->post('profile/update', 'AuthController::updateProfile', ['filter' => 'a
 
 // Rute khusus petugas
 $routes->group('petugas', ['filter' => 'role:petugas'], function ($routes) {
+    $routes->get('/', 'DashboardController::index'); // Menjadikan dashboard sebagai halaman default petugas
+    $routes->get('dashboard', 'DashboardController::index');
+
     $routes->get('pasien', 'PasienController::index');
     $routes->get('pasien/create', 'PasienController::create');
     $routes->post('pasien/store', 'PasienController::store');
@@ -52,6 +55,9 @@ $routes->group('petugas', ['filter' => 'role:petugas'], function ($routes) {
 
 // Rute khusus admin
 $routes->group('admin', ['filter' => 'role:admin'], function ($routes) {
+    $routes->get('/', 'AdminController::dashboard'); // Menjadikan dashboard sebagai halaman default petugas
+    $routes->get('dashboard', 'AdminController::dashboard');
+
     $routes->get('pasien', 'AdminController::index');
     $routes->get('pasien/create', 'AdminController::create');
     $routes->post('pasien/store', 'AdminController::store');

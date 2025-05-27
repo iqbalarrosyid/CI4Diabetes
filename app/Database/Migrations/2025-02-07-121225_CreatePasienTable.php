@@ -22,14 +22,29 @@ class CreatePasienTable extends Migration
             'alamat' => [
                 'type'       => 'VARCHAR',
                 'constraint' => '255',
+                'null'       => true, // Alamat bisa jadi opsional
             ],
             'tanggal_lahir' => [
-                'type'       => 'DATE',
+                'type' => 'DATE',
+                'null' => true, // Tanggal lahir bisa jadi opsional
             ],
             'jenis_kelamin' => [
                 'type'       => 'ENUM',
                 'constraint' => ['Laki-laki', 'Perempuan'],
-                'default'    => 'Laki-laki',
+                'default'    => 'Laki-laki', // Atau null jika lebih sesuai
+                'null'       => true,
+            ],
+            'created_at' => [ // Kolom baru
+                'type' => 'DATETIME',
+                'null' => true, // Atau false jika Anda selalu ingin ada nilainya
+            ],
+            'updated_at' => [ // Kolom baru
+                'type' => 'DATETIME',
+                'null' => true, // Atau false
+            ],
+            'deleted_at' => [ // Opsional, untuk soft delete
+                'type' => 'DATETIME',
+                'null' => true,
             ],
         ]);
         $this->forge->addKey('id', true);

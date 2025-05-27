@@ -8,5 +8,5 @@ class PetugasModel extends Model
 {
     protected $table      = 'petugas';
     protected $primaryKey = 'id';
-    protected $allowedFields = ['nama', 'username', 'password', 'created_at'];
+    protected $allowedFields = ['nama', 'username', 'password', 'created_at', 'updated_at'];
 }

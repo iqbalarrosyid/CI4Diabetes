@@ -11,11 +11,34 @@ class AdminController extends BaseController
 {
     protected $pasienModel;
     protected $petugasModel;
+    protected $riwayatModel;
 
     public function __construct()
     {
         $this->pasienModel = new PasienModel();
         $this->petugasModel = new PetugasModel();
+        $this->riwayatModel = new RiwayatModel();
+    }
+
+    public function dashboard()
+    {
+        $totalPasien = $this->pasienModel->countAllResults();
+        $totalPetugas = $this->petugasModel->countAllResults();
+
+        // Data untuk Daftar Aktivitas Terbaru
+        // Diasumsikan tabel petugas dan pasien memiliki kolom 'created_at'
+        $petugasBaru = $this->petugasModel->orderBy('created_at', 'DESC')->findAll(5);
+        $pasienBaru = $this->pasienModel->orderBy('created_at', 'DESC')->findAll(5);
+
+        $data = [
+            'title'         => 'Dashboard Admin',
+            'totalPasien'   => $totalPasien,
+            'totalPetugas'  => $totalPetugas,
+            'petugasBaru'   => $petugasBaru,
+            'pasienBaru'    => $pasienBaru,
+        ];
+
+        return view('admin/dashboard', $data); // Path ke view dashboard admin
     }
 
     // ========== CRUD PASIEN ==========
@@ -40,6 +63,7 @@ class AdminController extends BaseController
             'alamat' => $this->request->getPost('alamat'),
             'tanggal_lahir' => $this->request->getPost('tanggal_lahir'),
             'jenis_kelamin' => $this->request->getPost('jenis_kelamin'),
+            'created_at' => date('Y-m-d H:i:s'),
         ]);
 
         session()->setFlashdata('success', 'Data pasien berhasil ditambahkan.');
@@ -62,6 +86,7 @@ class AdminController extends BaseController
             'alamat' => $this->request->getPost('alamat'),
             'tanggal_lahir' => $this->request->getPost('tanggal_lahir'),
             'jenis_kelamin' => $this->request->getPost('jenis_kelamin'),
+            'updated_at' => date('Y-m-d H:i:s'),
         ]);
 
         session()->setFlashdata('success', 'Data pasien berhasil diperbarui.');
@@ -96,7 +121,9 @@ class AdminController extends BaseController
             'nama' => $this->request->getPost('nama'),
             'username' => $this->request->getPost('username'),
             'password' => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT),
-            'role' => 'petugas'
+            'role' => 'petugas',
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
         ]);
 
         session()->setFlashdata('success', 'Petugas berhasil ditambahkan.');
@@ -117,6 +144,7 @@ class AdminController extends BaseController
         $data = [
             'nama' => $this->request->getPost('nama'),
             'username' => $this->request->getPost('username'),
+            'updated_at' => date('Y-m-d H:i:s'),
         ];
 
         // Jika password diisi, update dengan hash baru
@@ -172,6 +200,8 @@ class AdminController extends BaseController
                         'tanggal_lahir' => $tanggal_lahir,
                         'alamat' => $alamat,
                         'jenis_kelamin' => $jenis_kelamin,
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'updated_at' => date('Y-m-d H:i:s'),
                     ], true);
                 } else {
                     $pasienId = $pasien['id'];

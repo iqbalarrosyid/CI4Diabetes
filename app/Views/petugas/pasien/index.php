@@ -39,6 +39,15 @@
                         </div>
                         <button type="submit" class="btn btn-primary w-100"><i class="fa-solid fa-upload"></i> Upload</button>
                     </form>
+                    <hr>
+                    <p class="text-muted small">
+                        Pastikan format file Excel Anda sesuai dengan template yang dibutuhkan.
+                        Kolom yang diharapkan: <strong>Nama</strong>, <strong>Alamat</strong>, <strong>Tanggal Lahir (YYYY-MM-DD)</strong>, <strong>Jenis Kelamin (Laki-laki/Perempuan)</strong>.
+                        Baris pertama (header) akan diabaikan.
+                    </p>
+                    <a href="<?= base_url('template/template_import_pasien.xlsx') ?>" class="btn btn-sm btn-outline-secondary" download>
+                        <i class="fas fa-file-excel me-1"></i> Unduh Template Excel
+                    </a>
                 </div>
             </div>
         </div>

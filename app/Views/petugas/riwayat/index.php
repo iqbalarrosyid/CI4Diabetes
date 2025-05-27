@@ -160,7 +160,7 @@
         <a href="<?= base_url('petugas/riwayat/pdf/' . esc($pasien['id'], 'attr')) ?>" target="_blank" class="btn btn-danger me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Export PDF">
             <i class="fa-solid fa-file-pdf"></i>
         </a>
-        <a href="<?= base_url('petugas/riwayat/excel/' . esc($pasien['id'], 'attr')) ?>" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Export Excel">
+        <a href="<?= base_url('petugas/riwayat/exportExcel/' . esc($pasien['id'], 'attr')) ?>" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Export Excel">
             <i class="fa-solid fa-file-excel"></i>
         </a>
     </div>

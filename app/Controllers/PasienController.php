@@ -36,6 +36,8 @@ class PasienController extends BaseController
             'alamat' => $this->request->getPost('alamat'),
             'tanggal_lahir' => $this->request->getPost('tanggal_lahir'),
             'jenis_kelamin' => $this->request->getPost('jenis_kelamin'),
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
         ]);
 
         return redirect()->to('/petugas/pasien')->with('success', 'Data pasien berhasil ditambahkan.');
@@ -57,6 +59,7 @@ class PasienController extends BaseController
             'alamat' => $this->request->getPost('alamat'),
             'tanggal_lahir' => $this->request->getPost('tanggal_lahir'),
             'jenis_kelamin' => $this->request->getPost('jenis_kelamin'),
+            'updated_at' => date('Y-m-d H:i:s'),
         ]);
 
         session()->setFlashdata('success', 'Data pasien berhasil diperbarui.');
@@ -105,6 +108,8 @@ class PasienController extends BaseController
                         'tanggal_lahir' => $tanggal_lahir,
                         'alamat' => $alamat,
                         'jenis_kelamin' => $jenis_kelamin,
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'updated_at' => date('Y-m-d H:i:s'),
                     ], true);
                 } else {
                     $pasienId = $pasien['id'];
