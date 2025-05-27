@@ -58,7 +58,7 @@
 
     <div class="row mb-4">
         <div class="col-xl-3 col-md-6 mb-3">
-            <div class="card dashboard-card text-white bg-info h-100">
+            <div class="card dashboard-card h-100 border-0 shadow">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
@@ -68,14 +68,14 @@
                         <i class="fas fa-users card-icon"></i>
                     </div>
                 </div>
-                <a href="<?= base_url('petugas/pasien') ?>" class="card-footer text-white text-decoration-none d-flex justify-content-between">
+                <a href="<?= base_url('petugas/pasien') ?>" class="card-footer text-decoration-none d-flex justify-content-between border-0">
                     <span>Lihat Detail</span>
                     <i class="fas fa-arrow-circle-right"></i>
                 </a>
             </div>
         </div>
         <div class="col-xl-3 col-md-6 mb-3">
-            <div class="card dashboard-card text-white bg-success h-100">
+            <div class="card dashboard-card h-100 border-0 shadow">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
@@ -85,14 +85,14 @@
                         <i class="fas fa-file-medical-alt card-icon"></i>
                     </div>
                 </div>
-                <a href="<?= base_url('petugas/riwayat/all') ?>" class="card-footer text-white text-decoration-none d-flex justify-content-between">
+                <a href="<?= base_url('petugas/riwayat/all') ?>" class="card-footer text-decoration-none d-flex justify-content-between border-0">
                     <span>Lihat Detail</span>
                     <i class="fas fa-arrow-circle-right"></i>
                 </a>
             </div>
         </div>
         <div class="col-xl-3 col-md-6 mb-3">
-            <div class="card dashboard-card text-white bg-danger h-100">
+            <div class="card dashboard-card h-100 border-0 shadow">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
@@ -102,14 +102,14 @@
                         <i class="fas fa-procedures card-icon"></i>
                     </div>
                 </div>
-                <a href="<?= base_url('petugas/riwayat/all?status=diabetes') ?>" class="card-footer text-white text-decoration-none d-flex justify-content-between">
+                <a href="<?= base_url('petugas/riwayat/all?status=diabetes') ?>" class="card-footer text-decoration-none d-flex justify-content-between border-0">
                     <span>Lihat Detail</span>
                     <i class="fas fa-arrow-circle-right"></i>
                 </a>
             </div>
         </div>
         <div class="col-xl-3 col-md-6 mb-3">
-            <div class="card dashboard-card text-white bg-warning h-100">
+            <div class="card dashboard-card h-100 border-0 shadow">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
@@ -119,7 +119,7 @@
                         <i class="fas fa-heartbeat card-icon"></i>
                     </div>
                 </div>
-                <a href="<?= base_url('petugas/riwayat/all?status=non-diabetes') ?>" class="card-footer text-white text-decoration-none d-flex justify-content-between">
+                <a href="<?= base_url('petugas/riwayat/all?status=non-diabetes') ?>" class="card-footer text-decoration-none d-flex justify-content-between border-0">
                     <span>Lihat Detail</span>
                     <i class="fas fa-arrow-circle-right"></i>
                 </a>
@@ -129,8 +129,8 @@
 
     <div class="row mb-4">
         <div class="col-lg-4 mb-3">
-            <div class="card dashboard-card quick-link-card">
-                <div class="card-header bg-light">
+            <div class="card dashboard-card quick-link-card border-0 shadow">
+                <div class="card-header bg-dark text-white">
                     <i class="fas fa-bolt me-1"></i>
                     Akses Cepat
                 </div>
@@ -145,10 +145,10 @@
             </div>
         </div>
         <div class="col-lg-4 mb-3">
-            <div class="card dashboard-card h-100">
-                <div class="card-header bg-light">
+            <div class="card dashboard-card quick-link-card border-0 shadow">
+                <div class="card-header bg-dark text-white">
                     <i class="fas fa-user-clock me-1"></i>
-                    Pasien Baru Ditambahkan (Max. 8)
+                    Pasien Baru Ditambahkan
                 </div>
                 <div class="list-group list-group-flush" id="listPasienBaru">
                     <?php if (!empty($pasienBaru) && is_array($pasienBaru)): ?>
@@ -171,10 +171,10 @@
             </div>
         </div>
         <div class="col-lg-4 mb-3">
-            <div class="card dashboard-card h-100">
-                <div class="card-header bg-light">
+            <div class="card dashboard-card quick-link-card border-0 shadow">
+                <div class="card-header bg-dark text-white">
                     <i class="fas fa-file-signature me-1"></i>
-                    Prediksi Terbaru Dilakukan (Max. 5)
+                    Prediksi Terbaru Dilakukan
                 </div>
                 <div class="list-group list-group-flush" id="listPrediksiTerbaru">
                     <?php if (!empty($prediksiTerbaru) && is_array($prediksiTerbaru)): ?>

@@ -89,9 +89,9 @@
         <span class="text-muted" id="currentDateTimeAdmin"></span>
     </div>
 
-    <div class="row">
+    <div class="row mb-4">
         <div class="col-lg-6 col-md-6 mb-3">
-            <div class="card dashboard-card text-white bg-primary h-100">
+            <div class="card dashboard-card border-0 shadow">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
@@ -101,14 +101,14 @@
                         <i class="fas fa-user-shield card-icon"></i>
                     </div>
                 </div>
-                <a href="<?= base_url('admin/petugas') ?>" class="card-footer text-white text-decoration-none d-flex justify-content-between">
+                <a href="<?= base_url('admin/petugas') ?>" class="card-footer text-decoration-none border-0 d-flex justify-content-between">
                     <span>Lihat Detail</span>
                     <i class="fas fa-arrow-circle-right"></i>
                 </a>
             </div>
         </div>
         <div class="col-lg-6 col-md-6 mb-3">
-            <div class="card dashboard-card text-white bg-info h-100">
+            <div class="card dashboard-card border-0 shadow">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
@@ -118,7 +118,7 @@
                         <i class="fas fa-users card-icon"></i>
                     </div>
                 </div>
-                <a href="<?= base_url('admin/pasien') ?>" class="card-footer text-white text-decoration-none d-flex justify-content-between">
+                <a href="<?= base_url('admin/pasien') ?>" class="card-footer text-decoration-none border-0 d-flex justify-content-between">
                     <span>Lihat Detail</span>
                     <i class="fas fa-arrow-circle-right"></i>
                 </a>
@@ -128,8 +128,8 @@
 
     <div class="row">
         <div class="col-lg-4 mb-3">
-            <div class="card dashboard-card quick-link-card">
-                <div class="card-header">
+            <div class="card dashboard-card quick-link-card border-0 shadow">
+                <div class="card-header bg-dark text-white">
                     <i class="fas fa-cogs me-1"></i>
                     Manajemen Sistem
                 </div>
@@ -147,10 +147,10 @@
             </div>
         </div>
         <div class="col-lg-4 mb-3">
-            <div class="card dashboard-card h-100">
-                <div class="card-header">
+            <div class="card dashboard-card quick-link-card border-0 shadow">
+                <div class="card-header bg-dark text-white">
                     <i class="fas fa-user-plus me-1"></i>
-                    Petugas Baru Ditambahkan (Max. 5)
+                    Petugas Baru Ditambahkan
                 </div>
                 <div class="list-group list-group-flush" id="listPetugasBaru">
                     <?php if (!empty($petugasBaru) && is_array($petugasBaru)): ?>
@@ -171,10 +171,10 @@
             </div>
         </div>
         <div class="col-lg-4 mb-3">
-            <div class="card dashboard-card h-100">
-                <div class="card-header">
+            <div class="card dashboard-card quick-link-card border-0 shadow">
+                <div class="card-header bg-dark text-white">
                     <i class="fas fa-user-clock me-1"></i>
-                    Pasien Baru Ditambahkan (Max. 8)
+                    Pasien Baru Ditambahkan
                 </div>
                 <div class="list-group list-group-flush" id="listPasienBaruAdmin">
                     <?php if (!empty($pasienBaru) && is_array($pasienBaru)): ?>
@@ -184,7 +184,7 @@
                                     <div class="fw-bold"><?= esc($pasien['nama']) ?></div>
                                     <small class="text-muted">Ditambahkan: <?= esc(date('d M Y', strtotime($pasien['created_at']))) ?></small>
                                 </div>
-                                <span class="badge bg-info rounded-pill">Baru</span>
+                                <span class="badge bg-primary rounded-pill">Baru</span>
                             </a>
                         <?php endforeach; ?>
                     <?php else: ?>
