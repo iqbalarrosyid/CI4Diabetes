@@ -65,7 +65,7 @@ if (file_exists($path)) {
         </tr>
     </table>
     <hr>
-    <h4>Seluruh Riwayat Pasien Terbaru Tanggal <?= date('d-m-Y') ?></h4>
+    <h4>Seluruh Riwayat Pasien Tanggal <?= date('d-m-Y') ?></h4>
     <table style="font-size: 12px;">
         <thead>
             <tr>

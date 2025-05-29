@@ -83,13 +83,20 @@
                         <td><?= esc($p['jenis_kelamin']) ?></td>
                         <td><?= esc($p['alamat']) ?></td>
                         <td class="text-start" style="white-space: nowrap;">
-                            <span data-bs-toggle="tooltip" data-bs-placement="top" title="Lihat Riwayat">
-                                <a href="/petugas/riwayat/<?= $p['id'] ?>" class="text-info me-2"><i class="fas fa-clock fa-lg"></i></a>
-                            </span>
+                            <?php if (isset($p['jumlah_riwayat']) && $p['jumlah_riwayat'] > 0): ?>
+                                <span data-bs-toggle="tooltip" data-bs-placement="top" title="Lihat Riwayat (<?= esc($p['jumlah_riwayat']) ?> data)">
+                                    <a href="<?= base_url('petugas/riwayat/' . $p['id']) ?>" class="text-info me-2"><i class="fas fa-history fa-lg"></i></a>
+                                </span>
+                            <?php else: ?>
+                                <span data-bs-toggle="tooltip" data-bs-placement="top" title="Belum Ada Riwayat (Klik untuk tambah/lihat)">
+                                    <a href="<?= base_url('petugas/riwayat/' . $p['id']) ?>" class="text-secondary me-2 text-muted-icon"><i class="far fa-clock fa-lg"></i></a>
+                                </span>
+                            <?php endif; ?>
+
                             <span data-bs-toggle="tooltip" data-bs-placement="top" title="Ubah Data">
-                                <a href="/petugas/pasien/edit/<?= $p['id'] ?>" class="text-warning me-2"><i class="fas fa-edit fa-lg"></i></a>
+                                <a href="<?= base_url('petugas/pasien/edit/' . $p['id']) ?>" class="text-warning me-2"><i class="fas fa-edit fa-lg"></i></a>
                             </span>
-                            <form action="/petugas/pasien/delete/<?= $p['id'] ?>" method="post" class="delete-form" style="display: inline;">
+                            <form action="<?= base_url('petugas/pasien/delete/' . $p['id']) ?>" method="post" class="delete-form" style="display: inline;">
                                 <?= csrf_field() ?>
                                 <button type="button" class="border-0 bg-transparent text-danger btn-delete" data-bs-toggle="tooltip" data-bs-placement="top" title="Hapus Data">
                                     <i class="fas fa-trash fa-lg"></i>

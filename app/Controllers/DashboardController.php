@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 use App\Models\PasienModel;
 use App\Models\RiwayatModel;
+// Pastikan use DateTime, DateInterval, DatePeriod jika masih ada fungsi helper yang memakainya
+// Untuk dashboard yang disederhanakan ini, sepertinya tidak lagi dibutuhkan.
 
 class DashboardController extends BaseController
 {
@@ -20,50 +22,50 @@ class DashboardController extends BaseController
     {
         // Data untuk Kartu Statistik Ringkas
         $totalPasien = $this->pasienModel->countAllResults();
-        $totalPrediksi = $this->riwayatModel->countAllResults();
+        // $totalPrediksi = $this->riwayatModel->countAllResults(); // Ini tidak akan ditampilkan lagi di kartu
 
-        // Data untuk status diabetes (berdasarkan riwayat terbaru per pasien)
-        // Ini memerlukan logika/fungsi khusus di model untuk efisiensi
-        // Untuk sementara, kita bisa membuat placeholder atau query sederhana
-        // $statusCounts = $this->riwayatModel->getPatientStatusCounts(); // Fungsi ideal di RiwayatModel
-        // Placeholder sederhana (perlu disempurnakan dengan query yang benar di model):
-        $latestRiwayatPerPasien = $this->riwayatModel->getLatestRiwayatPerPasienWithDetails(); // Menggunakan fungsi yang sudah ada
+        $latestRiwayatPerPasien = $this->riwayatModel->getLatestRiwayatPerPasienWithDetails();
 
         $pasienDiabetesCount = 0;
         $pasienNonDiabetesCount = 0;
-        $uniquePasienWithRiwayat = [];
+        $uniquePasienWithRiwayat = []; // Array untuk menyimpan ID pasien yang sudah punya riwayat
 
         foreach ($latestRiwayatPerPasien as $riwayat) {
+            // Memastikan setiap pasien hanya dihitung sekali untuk status diabetes/non-diabetes
             if (!in_array($riwayat['pasien_id'], $uniquePasienWithRiwayat)) {
                 $uniquePasienWithRiwayat[] = $riwayat['pasien_id'];
                 if ($riwayat['hasil'] == 1 || strtolower($riwayat['hasil']) === 'diabetes') {
                     $pasienDiabetesCount++;
-                } else {
+                } else if (($riwayat['hasil'] == 0 || strtolower($riwayat['hasil']) === 'tidak diabetes') && $riwayat['hasil'] !== null && $riwayat['hasil'] !== '') {
+                    // Hanya hitung sebagai non-diabetes jika hasilnya eksplisit 0 atau 'tidak diabetes'
                     $pasienNonDiabetesCount++;
                 }
             }
         }
-        $pasienBelumPrediksiCount = $totalPasien - count($uniquePasienWithRiwayat);
+
+        // Menghitung pasien yang belum memiliki riwayat sama sekali
+        $pasienBelumAdaRiwayatCount = $totalPasien - count($uniquePasienWithRiwayat);
 
 
         // Data untuk Daftar Aktivitas Terbaru
         $pasienBaru = $this->pasienModel->orderBy('created_at', 'DESC')->findAll(8);
         $prediksiTerbaru = $this->riwayatModel
-            ->select('riwayat.*, pasien.nama as nama_pasien, riwayat.nama_petugas as nama_petugas_pemeriksa') // Ambil nama pasien dan nama petugas dari riwayat
+            ->select('riwayat.*, pasien.nama as nama_pasien, riwayat.nama_petugas as nama_petugas_pemeriksa')
             ->join('pasien', 'pasien.id = riwayat.pasien_id', 'left')
             ->orderBy('riwayat.created_at', 'DESC')
             ->findAll(5);
 
         $data = [
-            'title'                 => 'Dashboard Petugas',
-            'totalPasien'           => $totalPasien,
-            'totalPrediksi'         => $totalPrediksi,
-            'pasienDiabetes'        => $pasienDiabetesCount,
-            'pasienNonDiabetes'     => $pasienNonDiabetesCount,
-            'pasienBaru'            => $pasienBaru,
-            'prediksiTerbaru'       => $prediksiTerbaru,
+            'title'                   => 'Dashboard Petugas',
+            'totalPasien'             => $totalPasien,
+            // 'totalPrediksi'           => $totalPrediksi, // Dihapus dari data yang dikirim ke view kartu ini
+            'pasienDiabetes'          => $pasienDiabetesCount,
+            'pasienNonDiabetes'       => $pasienNonDiabetesCount,
+            'pasienBelumAdaRiwayat'   => $pasienBelumAdaRiwayatCount, // Data baru untuk kartu
+            'pasienBaru'              => $pasienBaru,
+            'prediksiTerbaru'         => $prediksiTerbaru,
         ];
 
-        return view('petugas/dashboard', $data); // Sesuaikan path jika nama file view berbeda
+        return view('petugas/dashboard', $data);
     }
 }

@@ -17,9 +17,16 @@ class PasienController extends BaseController
 
     public function index()
     {
+        $pasienData = $this->pasienModel
+            ->select('pasien.*, COUNT(riwayat.id) as jumlah_riwayat')
+            ->join('riwayat', 'riwayat.pasien_id = pasien.id', 'left')
+            ->groupBy('pasien.id')
+            ->orderBy('pasien.nama', 'ASC')
+            ->findAll();
+
         $data = [
-            'title' => 'Daftar Pasien',
-            'pasien' => $this->pasienModel->findAll()
+            'title'  => 'Daftar Pasien',
+            'pasien' => $pasienData,
         ];
         return view('petugas/pasien/index', $data);
     }

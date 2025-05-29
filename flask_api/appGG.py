@@ -6,7 +6,7 @@ import seaborn as sns
 from sklearn.model_selection import train_test_split, StratifiedKFold
 from sklearn.metrics import (
     confusion_matrix, accuracy_score, precision_score,
-    recall_score, f1_score
+    recall_score, f1_score, roc_auc_score, roc_curve # Ditambahkan roc_auc_score, roc_curve
 )
 import joblib
 
@@ -18,6 +18,8 @@ def calculate_probability(x, mean, std):
 
 def summarize_by_class(X, y):
     summaries = {}
+    if not isinstance(X, pd.DataFrame):
+        pass
     for class_value in np.unique(y):
         class_data = X[y == class_value]
         summaries[class_value] = {
@@ -42,6 +44,20 @@ def predict(summaries, input_data):
     probabilities = calculate_class_probabilities(summaries, input_data)
     return max(probabilities, key=probabilities.get)
 
+# Fungsi baru untuk mendapatkan probabilitas kelas positif (misal kelas 1)
+# Fungsi yang sudah ada: calculate_class_probabilities(summaries, input_data)
+# Mengembalikan dictionary seperti: {0: P(X|C=0)P(C=0), 1: P(X|C=1)P(C=1)}
+
+def predict_proba(summaries, input_data, positive_class_label=1):
+    class_likelihood_times_priors = calculate_class_probabilities(summaries, input_data)
+    prob_positive_numerator = class_likelihood_times_priors.get(positive_class_label, 0.0)
+    evidence_px = sum(class_likelihood_times_priors.values())
+    if evidence_px == 0:
+        num_classes = len(summaries)
+        return 1.0 / num_classes if num_classes > 0 else 0.0 
+    posterior_prob_positive = prob_positive_numerator / evidence_px
+    return posterior_prob_positive
+
 # ==================== STREAMLIT APP ====================
 st.title("🩺 Prediksi Diabetes Tipe 2")
 st.subheader("Dengan Naive Bayes Manual")
@@ -54,100 +70,186 @@ if uploaded_file:
     st.write("### Data Awal")
     st.dataframe(data.head())
 
-    X = data[['gdp', 'tekanan_darah', 'imt', 'umur']]
-    y = data['hasil']
+    required_columns = ['gdp', 'tekanan_darah', 'imt', 'umur', 'hasil']
+    if not all(col in data.columns for col in required_columns):
+        st.error(f"Dataset harus memiliki kolom: {', '.join(required_columns)}")
+    else:
+        X = data[['gdp', 'tekanan_darah', 'imt', 'umur']]
+        y = data['hasil'] # Asumsi kelas 1 adalah positif (Diabetes)
 
-    st.write("### Distribusi Kelas")
-    st.bar_chart(y.value_counts())
+        st.write("### Distribusi Kelas")
+        st.bar_chart(y.value_counts())
 
-    st.write("### Korelasi Fitur")
-    fig, ax = plt.subplots()
-    sns.heatmap(X.corr(), annot=True, cmap='coolwarm', ax=ax)
-    st.pyplot(fig)
+        st.write("### Korelasi Fitur")
+        fig_corr, ax_corr = plt.subplots()
+        sns.heatmap(X.corr(), annot=True, cmap='coolwarm', ax=ax_corr)
+        st.pyplot(fig_corr)
 
-    st.write("### Distribusi Fitur per Kelas Diabetes")
+        st.write("### Distribusi Fitur per Kelas Diabetes")
+        for fitur in X.columns:
+            fig_box, ax_box = plt.subplots(figsize=(7, 5))
+            sns.boxplot(x=y, y=data[fitur], ax=ax_box, palette=['#4c72b0', '#dd8452'])
+            ax_box.set_xticklabels(['Tidak Diabetes (0)', 'Diabetes (1)'])
+            ax_box.set_title(f'Distribusi {fitur.capitalize()} berdasarkan Kelas Diabetes', fontsize=14)
+            ax_box.set_xlabel('Kelas Diabetes', fontsize=12)
+            ax_box.set_ylabel(f'{fitur.capitalize()}', fontsize=12)
+            ax_box.grid(True, linestyle='--', alpha=0.7)
+            st.pyplot(fig_box)
 
-    for fitur in X.columns:
-        fig, ax = plt.subplots(figsize=(7, 5))  # buat ukuran figure lebih besar
-        sns.boxplot(x=y, y=data[fitur], ax=ax, palette=['#4c72b0', '#dd8452'])
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+
+        st.write("---")
+        st.write("### 💾 Unduh Data Hasil Pembagian (Split)")
+        training_data_to_download = pd.concat([X_train, y_train], axis=1)
+        csv_training = training_data_to_download.to_csv(index=False).encode('utf-8')
+        st.download_button(
+            label="📥 Unduh Data Training (80%)",
+            data=csv_training,
+            file_name='data_training_diabetes.csv',
+            mime='text/csv',
+        )
+        testing_data_to_download = pd.concat([X_test, y_test], axis=1)
+        csv_testing = testing_data_to_download.to_csv(index=False).encode('utf-8')
+        st.download_button(
+            label="📥 Unduh Data Testing (20%)",
+            data=csv_testing,
+            file_name='data_testing_diabetes.csv',
+            mime='text/csv',
+        )
+        st.write("---")
+
+        summaries = summarize_by_class(X_train, y_train)
+
+        st.write("### Statistik Mean & Std per Kelas (dari Data Training)")
+        for label, stats in summaries.items():
+            st.write(f"**Kelas {label}**")
+            st.write("Mean:", stats['mean'])
+            st.write("Std:", stats['std'])
+
+        model_filename = 'naive_bayes_modelGG.pkl'
+        joblib.dump({'summaries': summaries, 'feature_columns': X.columns.tolist()}, model_filename)
+        st.success(f"Model berhasil disimpan sebagai `{model_filename}`")
+
+        y_pred = [predict(summaries, row.values) for _, row in X_test.iterrows()]
+        # Dapatkan probabilitas untuk kelas positif (1) untuk AUC
+        y_pred_proba_test = [predict_proba(summaries, row.values, positive_class_label=1) for _, row in X_test.iterrows()]
+
+
+        st.write("### Confusion Matrix (pada Data Testing)")
+        conf_matrix = confusion_matrix(y_test, y_pred)
+        fig_cm, ax_cm = plt.subplots()
+        sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues',
+                    xticklabels=['Tidak Diabetes', 'Diabetes'],
+                    yticklabels=['Tidak Diabetes', 'Diabetes'], ax=ax_cm)
+        ax_cm.set_xlabel("Prediksi")
+        ax_cm.set_ylabel("Aktual")
+        st.pyplot(fig_cm)
+
+        st.write("### Evaluasi Model (pada Data Testing)")
+        accuracy_val = accuracy_score(y_test, y_pred)
+        precision_val = precision_score(y_test, y_pred, zero_division=0)
+        recall_val = recall_score(y_test, y_pred, zero_division=0)
+        f1_val = f1_score(y_test, y_pred, zero_division=0)
+        try:
+            auc_val_test = roc_auc_score(y_test, y_pred_proba_test)
+        except ValueError: # Jika y_test hanya berisi satu kelas (sangat jarang dengan stratify)
+            auc_val_test = 0.0 # Atau np.nan
+            st.warning("AUC tidak dapat dihitung karena data test hanya memiliki satu kelas.")
+
+
+        st.write(f"- Akurasi: **{accuracy_val:.2f}**")
+        st.write(f"- Precision: **{precision_val:.2f}**")
+        st.write(f"- Recall: **{recall_val:.2f}**")
+        st.write(f"- F1 Score: **{f1_val:.2f}**")
+        st.write(f"- AUC: **{auc_val_test:.2f}**") # Tampilkan AUC
+
+        # Plot ROC Curve
+        st.write("### ROC Curve (pada Data Testing)")
+        fpr, tpr, thresholds = roc_curve(y_test, y_pred_proba_test)
         
-        ax.set_xticklabels(['Tidak Diabetes (0)', 'Diabetes (1)'])
-        ax.set_title(f'Distribusi {fitur.capitalize()} berdasarkan Kelas Diabetes', fontsize=14)
-        ax.set_xlabel('Kelas Diabetes', fontsize=12)
-        ax.set_ylabel(f'{fitur.capitalize()}', fontsize=12)
-        
-        # Optional: beri grid untuk membantu pembacaan nilai
-        ax.grid(True, linestyle='--', alpha=0.7)
-        
-        st.pyplot(fig)
+        fig_roc, ax_roc = plt.subplots()
+        ax_roc.plot(fpr, tpr, color='blue', lw=2, label=f'ROC curve (AUC = {auc_val_test:.2f})')
+        ax_roc.plot([0, 1], [0, 1], color='red', lw=2, linestyle='--', label='Garis Acak (AUC = 0.50)')
+        ax_roc.set_xlim([0.0, 1.0])
+        ax_roc.set_ylim([0.0, 1.05])
+        ax_roc.set_xlabel('False Positive Rate (FPR)')
+        ax_roc.set_ylabel('True Positive Rate (TPR)')
+        ax_roc.set_title('Receiver Operating Characteristic (ROC) Curve')
+        ax_roc.legend(loc="lower right")
+        ax_roc.grid(alpha=0.3)
+        st.pyplot(fig_roc)
 
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-    summaries = summarize_by_class(X_train, y_train)
+        st.write("### K-Fold Cross Validation (5 Fold)")
+        kfold = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+        kfold_metrics = []
 
-    st.write("### Statistik Mean & Std per Kelas")
-    for label, stats in summaries.items():
-        st.write(f"**Kelas {label}**")
-        st.write("Mean:", stats['mean'])
-        st.write("Std:", stats['std'])
+        for fold, (train_idx, test_idx) in enumerate(kfold.split(X, y), 1):
+            X_tr, X_te = X.iloc[train_idx], X.iloc[test_idx]
+            y_tr, y_te = y.iloc[train_idx], y.iloc[test_idx]
+            
+            summ_kf = summarize_by_class(X_tr, y_tr)
+            y_pred_kf_labels = [predict(summ_kf, row.values) for _, row in X_te.iterrows()]
+            y_pred_kf_proba = [predict_proba(summ_kf, row.values, positive_class_label=1) for _, row in X_te.iterrows()]
+            
+            acc_kf = accuracy_score(y_te, y_pred_kf_labels) * 100
+            prec_kf = precision_score(y_te, y_pred_kf_labels, zero_division=0) * 100
+            rec_kf = recall_score(y_te, y_pred_kf_labels, zero_division=0) * 100
+            f1_kf = f1_score(y_te, y_pred_kf_labels, zero_division=0) * 100
+            try:
+                auc_kf = roc_auc_score(y_te, y_pred_kf_proba) * 100
+            except ValueError: # Menangani kasus jika y_te hanya memiliki satu kelas
+                auc_kf = 0.0 # Atau np.nan jika Anda ingin menghitung mean dengan skipna
 
-    joblib.dump({'summaries': summaries, 'dataset': data}, 'naive_bayes_modelGG.pkl')
-    st.success("Model berhasil disimpan sebagai `naive_bayes_modelGG.pkl`")
+            kfold_metrics.append({
+                "Fold": fold,
+                "Akurasi (%)": acc_kf,
+                "Precision (%)": prec_kf,
+                "Recall (%)": rec_kf,
+                "F1-Score (%)": f1_kf,
+                "AUC (%)": auc_kf # Tambahkan AUC ke metrik K-Fold
+            })
 
-    y_pred = [predict(summaries, row.values) for _, row in X_test.iterrows()]
+        df_kfold = pd.DataFrame(kfold_metrics)
+        st.dataframe(df_kfold.style.format("{:.2f}"))
+        st.write("#### Rata-rata K-Fold")
+        st.write(f"- Akurasi: **{df_kfold['Akurasi (%)'].mean():.2f}%**")
+        st.write(f"- Precision: **{df_kfold['Precision (%)'].mean():.2f}%**")
+        st.write(f"- Recall: **{df_kfold['Recall (%)'].mean():.2f}%**")
+        st.write(f"- F1 Score: **{df_kfold['F1-Score (%)'].mean():.2f}%**")
+        st.write(f"- AUC: **{df_kfold['AUC (%)'].mean():.2f}%**") # Tampilkan rata-rata AUC K-Fold
 
-    st.write("### Confusion Matrix")
-    conf_matrix = confusion_matrix(y_test, y_pred)
-    fig, ax = plt.subplots()
-    sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues',
-                xticklabels=['Tidak Diabetes', 'Diabetes'],
-                yticklabels=['Tidak Diabetes', 'Diabetes'])
-    ax.set_xlabel("Prediksi")
-    ax.set_ylabel("Aktual")
-    st.pyplot(fig)
+        st.write("---")
+        st.write("### Prediksi Data Baru")
+        if 'feature_columns' in joblib.load(model_filename):
+            feature_order = joblib.load(model_filename)['feature_columns']
+        else:
+            feature_order = X.columns.tolist()
 
-    st.write("### Evaluasi Model")
-    st.write(f"- Akurasi: **{accuracy_score(y_test, y_pred):.2f}**")
-    st.write(f"- Precision: **{precision_score(y_test, y_pred):.2f}**")
-    st.write(f"- Recall: **{recall_score(y_test, y_pred):.2f}**")
-    st.write(f"- F1 Score: **{f1_score(y_test, y_pred):.2f}**")
+        form_key_prefix = "pred_input_" 
+        with st.form(key="prediction_form"):
+            col1, col2 = st.columns(2)
+            with col1:
+                gdp_val = st.number_input(f"{feature_order[0].replace('_',' ').capitalize()} (mg/dL)", min_value=0, max_value=400, value=100, key=form_key_prefix + feature_order[0])
+                tekanan_val = st.number_input(f"{feature_order[1].replace('_',' ').capitalize()} (mmHg)", min_value=0, max_value=250, value=120, key=form_key_prefix + feature_order[1])
+            with col2:
+                imt_val = st.number_input(f"{feature_order[2].upper()} (kg/m²)", min_value=10.0, max_value=70.0, value=25.0, step=0.1, format="%.1f", key=form_key_prefix + feature_order[2])
+                umur_val = st.number_input(f"{feature_order[3].capitalize()} (tahun)", min_value=1, max_value=120, value=35, key=form_key_prefix + feature_order[3])
+            
+            input_map = {feature_order[0]: gdp_val, feature_order[1]: tekanan_val, feature_order[2]: imt_val, feature_order[3]: umur_val}
+            input_data_new = [input_map[feature] for feature in feature_order]
+            submitted = st.form_submit_button("Prediksi")
 
-    st.write("### K-Fold Cross Validation (5 Fold)")
-    kfold = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
-    kfold_metrics = []
-
-    for fold, (train_idx, test_idx) in enumerate(kfold.split(X, y), 1):
-        X_tr, X_te = X.iloc[train_idx], X.iloc[test_idx]
-        y_tr, y_te = y.iloc[train_idx], y.iloc[test_idx]
-        summ_kf = summarize_by_class(X_tr, y_tr)
-        y_pred_kf = [predict(summ_kf, row.values) for _, row in X_te.iterrows()]
-        kfold_metrics.append({
-            "Fold": fold,
-            "Akurasi (%)": accuracy_score(y_te, y_pred_kf) * 100,
-            "Precision (%)": precision_score(y_te, y_pred_kf, zero_division=0) * 100,
-            "Recall (%)": recall_score(y_te, y_pred_kf, zero_division=0) * 100,
-            "F1-Score (%)": f1_score(y_te, y_pred_kf, zero_division=0) * 100
-        })
-
-    df_kfold = pd.DataFrame(kfold_metrics)
-    st.dataframe(df_kfold.style.format("{:.2f}"))
-    st.write("#### Rata-rata K-Fold")
-    st.write(f"- Akurasi: **{df_kfold['Akurasi (%)'].mean():.2f}%**")
-    st.write(f"- Precision: **{df_kfold['Precision (%)'].mean():.2f}%**")
-    st.write(f"- Recall: **{df_kfold['Recall (%)'].mean():.2f}%**")
-    st.write(f"- F1 Score: **{df_kfold['F1-Score (%)'].mean():.2f}%**")
-
-    # Form input data baru
-    st.write("---")
-    st.write("### Prediksi Data Baru")
-    gdp = st.number_input("GDP (mg/dL)", 50, 300, 90)
-    tekanan = st.number_input("Tekanan Darah (mmHg)", 60, 200, 120)
-    imt = st.number_input("IMT", 10.0, 50.0, 22.0)
-    umur = st.number_input("Umur (tahun)", 0, 120, 30)
-
-    if st.button("Prediksi"):
-        hasil = predict(summaries, [gdp, tekanan, imt, umur])
-        st.success("Hasil: **Tidak Diabetes**" if hasil == 0 else "Hasil: **Diabetes**")
-
+        if submitted:
+            try:
+                current_summaries = summaries 
+                hasil_label = predict(current_summaries, input_data_new)
+                if hasil_label == 0:
+                    st.success("Hasil Prediksi: **Tidak Berisiko Diabetes Tipe 2** 👍")
+                else:
+                    st.error("Hasil Prediksi: **Berisiko Diabetes Tipe 2** ⚠️")
+            except Exception as e:
+                st.error(f"Terjadi kesalahan saat prediksi: {e}")
+                st.error("Pastikan model sudah dilatih dan file model ada.")
 else:
-    st.info("Silakan upload dataset CSV terlebih dahulu.")
+    st.info("Silakan upload dataset CSV terlebih dahulu untuk memulai.")
