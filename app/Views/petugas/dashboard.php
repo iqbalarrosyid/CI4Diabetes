@@ -239,19 +239,20 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="<?= base_url('petugas/import/upload') ?>" method="post" enctype="multipart/form-data">
-                    <?= csrf_field() ?>
+                <form action="/petugas/import/upload" method="post" enctype="multipart/form-data">
                     <div class="mb-3">
-                        <label for="excelFilePetugasImport" class="form-label">Pilih File Excel (.xlsx, .xls)</label>
-                        <input type="file" name="excel_file" accept=".xlsx,.xls" required class="form-control" id="excelFilePetugasImport">
+                        <label for="excel" class="form-label">Pilih File Excel (.xlsx, .xls)</label>
+                        <input type="file" name="excel" accept=".xlsx,.xls" required class="form-control" id="excel">
                     </div>
-                    <button type="submit" class="btn btn-primary w-100"><i class="fas fa-upload me-2"></i> Upload dan Import</button>
+                    <button type="submit" class="btn btn-primary w-100"><i class="fa-solid fa-upload"></i> Upload</button>
                 </form>
                 <hr>
                 <p class="text-muted small">
-                    Pastikan format file Excel sesuai template. Kolom: <strong>Nama</strong>, <strong>Alamat</strong>, <strong>Tanggal Lahir (YYYY-MM-DD)</strong>, <strong>Jenis Kelamin (Laki-laki/Perempuan)</strong>. Baris pertama (header) diabaikan.
+                    Pastikan format file Excel Anda sesuai dengan template yang dibutuhkan.
+                    Kolom yang diharapkan: <strong>Nama</strong>, <strong>Alamat</strong>, <strong>Tanggal Lahir (YYYY-MM-DD)</strong>, <strong>Jenis Kelamin (Laki-laki/Perempuan)</strong>.
+                    Baris pertama (header) akan diabaikan.
                 </p>
-                <a href="<?= base_url('templates/template_import_pasien.xlsx') ?>" class="btn btn-sm btn-outline-secondary" download="template_import_pasien.xlsx">
+                <a href="<?= base_url('template/template_import_pasien.xlsx') ?>" class="btn btn-sm btn-outline-secondary" download>
                     <i class="fas fa-file-excel me-1"></i> Unduh Template Excel
                 </a>
             </div>
