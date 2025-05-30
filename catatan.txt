@@ -2,6 +2,19 @@ public string $baseURL = 'http://192.168.1.103:8080/';
 
 php -S 0.0.0.0:8080 -t public
 
-testing ./vendor/bin/phpunit --testdox
+Menjalankan Streamlit
+streamlit run streamlit_app.py
 
+Menjalankan seluruh testing controller
+./vendor/bin/phpunit --testdox
+
+Menjalankan 1 testing controller
 ./vendor/bin/phpunit --testdox tests/app/Controllers/AdminControllerTest.php
+
+Menjalankan seluruh testing python
+cd flask_api
+python -m pytest -v
+
+Menjalankan 1 testing python
+cd flask_api
+python -m pytest test_flask_api.py -v
