@@ -163,10 +163,10 @@ class Database extends Config
     public array $tests = [
         'DSN'      => '',
         'hostname' => 'localhost',
-        'username' => 'root',
-        'password' => '',
-        'database' => 'diabetes_test', // Pastikan ini benar
-        'DBDriver' => 'MySQLi', // Atau driver lain yang Anda gunakan
+        'username' => 'root', // sesuaikan dengan username DB Anda
+        'password' => '', // sesuaikan dengan password DB Anda
+        'database' => 'diabetes_test',
+        'DBDriver' => 'MySQLi',
         'DBPrefix' => '',
         'pConnect' => false,
         'DBDebug'  => true,

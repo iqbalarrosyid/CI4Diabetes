@@ -80,10 +80,6 @@ class PasienController extends BaseController
         return redirect()->to('/petugas/pasien');
     }
 
-    public function import()
-    {
-        return view('petugas/pasien/import');
-    }
 
     public function upload()
     {
