@@ -138,7 +138,7 @@
                         <i class="fas fa-user-shield me-2"></i>Tambah Petugas Baru
                     </a>
                     <a href="<?= base_url('admin/pasien/create') ?>" class="btn btn-outline-info">
-                        <i class="fas fa-user-plus me-2"></i>Tambah Pasien (Admin)
+                        <i class="fas fa-user-plus me-2"></i>Tambah Pasien Baru
                     </a>
                     <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#importModal">
                         <i class="fas fa-file-import me-2"></i>Import Data Pasien
@@ -198,28 +198,36 @@
 </div>
 
 <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
             <div class="modal-header">
-                <h5 class="modal-title" id="importModalLabel">Import Data Pasien</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title" id="importModalLabel"><i class="fas fa-file-import me-2"></i>Import Data Pasien</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="/admin/import/upload" method="post" enctype="multipart/form-data">
-                    <div class="mb-3">
-                        <label for="excel" class="form-label">Pilih File Excel (.xlsx, .xls)</label>
-                        <input type="file" name="excel" accept=".xlsx,.xls" required class="form-control" id="excel">
+                <form action="/admin/import/upload" method="post" enctype="multipart/form-data" id="importForm">
+                    <div class="mb-4">
+                        <label for="excel" class="form-label fw-bold">Pilih File Excel</label>
+                        <div class="file-upload-wrapper">
+                            <input type="file" name="excel" accept=".xlsx,.xls" required class="form-control" id="excel">
+                            <div class="form-text">Format file harus .xlsx atau .xls</div>
+                        </div>
                     </div>
-                    <button type="submit" class="btn btn-primary w-100"><i class="fa-solid fa-upload"></i> Upload</button>
+                    <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">
+                        <i class="fas fa-upload me-2"></i> Upload & Import
+                    </button>
                 </form>
-                <hr>
-                <p class="text-muted small">
-                    Pastikan format file Excel Anda sesuai dengan template yang dibutuhkan.
-                    Kolom yang diharapkan: <strong>Nama</strong>, <strong>Alamat</strong>, <strong>Tanggal Lahir (YYYY-MM-DD)</strong>, <strong>Jenis Kelamin (Laki-laki/Perempuan)</strong>.
-                    Baris pertama (header) akan diabaikan.
-                </p>
-                <a href="<?= base_url('template/template_import_pasien.xlsx') ?>" class="btn btn-sm btn-outline-secondary" download>
-                    <i class="fas fa-file-excel me-1"></i> Unduh Template Excel
+                <hr class="my-4">
+                <div class="alert alert-info">
+                    <h6 class="alert-heading fw-bold"><i class="fas fa-info-circle me-2"></i>Panduan Import</h6>
+                    <ul class="mb-0 ps-3">
+                        <li>Gunakan template kami untuk memastikan format benar</li>
+                        <li>Kolom wajib: Nama, Alamat, Tanggal Lahir, Jenis Kelamin</li>
+                        <li>Baris pertama akan diabaikan (header)</li>
+                    </ul>
+                </div>
+                <a href="<?= base_url('template/template_import_pasien.xlsx') ?>" class="btn btn-outline-secondary w-100 mt-2" download>
+                    <i class="fas fa-file-excel me-2"></i> Unduh Template
                 </a>
             </div>
         </div>
