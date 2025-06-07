@@ -1,3 +1,5 @@
 public string $baseURL = 'http://192.168.1.103:8080/';
 
 php -S 0.0.0.0:8080 -t public
+
+python -m streamlit run streamlit_app.py
