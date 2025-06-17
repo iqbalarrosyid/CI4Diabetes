@@ -1,5 +1,4 @@
-<?= $this->extend('layout/templateAdmin') // Pastikan ini adalah layout yang benar untuk admin 
-?>
+<?= $this->extend('layout/templateAdmin') ?>
 
 <?= $this->section('pageStyles') ?>
 <style>
@@ -12,7 +11,6 @@
     .dashboard-card {
         transition: transform .2s;
         border: none;
-        /* box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, .075); */
         background-color: #fff;
         margin-bottom: 1.5rem;
     }
@@ -85,8 +83,16 @@
 <?= $this->section('content') ?>
 <div class="container-fluid mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="mb-0">Dashboard Admin</h2>
-        <span class="text-muted" id="currentDateTimeAdmin"></span>
+        <div class="mb-3">
+            <h2 class="mb-0">Dashboard</h2>
+            <small class="text-muted" id="currentDateTimeAdmin"></small>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+            <div class="d-flex align-items-center bg-light border rounded-pill px-3 py-1">
+                <i class="fa-solid fa-user-shield me-2 text-success"></i>
+                <span class="fw-bold" style="font-size: 0.9rem;"><?= esc(session()->get('nama')) ?></span>
+            </div>
+        </div>
     </div>
 
     <div class="row mb-4">
@@ -153,8 +159,8 @@
                     Petugas Baru Ditambahkan
                 </div>
                 <div class="list-group list-group-flush" id="listPetugasBaru">
-                    <?php if (!empty($petugasBaru) && is_array($petugasBaru)): ?>
-                        <?php foreach ($petugasBaru as $petugas): ?>
+                    <?php if (!empty($petugasBaru) && is_array($petugasBaru)) : ?>
+                        <?php foreach ($petugasBaru as $petugas) : ?>
                             <a href="<?= base_url('admin/petugas/edit/' . esc($petugas['id'], 'url')) ?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                                 <div>
                                     <div class="fw-bold"><?= esc($petugas['nama']) ?></div>
@@ -163,7 +169,7 @@
                                 <span class="badge bg-primary rounded-pill">Baru</span>
                             </a>
                         <?php endforeach; ?>
-                    <?php else: ?>
+                    <?php else : ?>
                         <p class="list-group-item">Tidak ada petugas baru.</p>
                     <?php endif; ?>
                     <a href="<?= base_url('admin/petugas?sort=newest') ?>" class="list-group-item list-group-item-action text-center text-primary fw-bold">Lihat semua...</a>
@@ -177,8 +183,8 @@
                     Pasien Baru Ditambahkan
                 </div>
                 <div class="list-group list-group-flush" id="listPasienBaruAdmin">
-                    <?php if (!empty($pasienBaru) && is_array($pasienBaru)): ?>
-                        <?php foreach ($pasienBaru as $pasien): ?>
+                    <?php if (!empty($pasienBaru) && is_array($pasienBaru)) : ?>
+                        <?php foreach ($pasienBaru as $pasien) : ?>
                             <a href="<?= base_url('admin/pasien/edit/' . esc($pasien['id'], 'url')) ?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                                 <div>
                                     <div class="fw-bold"><?= esc($pasien['nama']) ?></div>
@@ -187,7 +193,7 @@
                                 <span class="badge bg-primary rounded-pill">Baru</span>
                             </a>
                         <?php endforeach; ?>
-                    <?php else: ?>
+                    <?php else : ?>
                         <p class="list-group-item">Tidak ada pasien baru.</p>
                     <?php endif; ?>
                     <a href="<?= base_url('admin/pasien?sort=newest') ?>" class="list-group-item list-group-item-action text-center text-primary fw-bold">Lihat semua...</a>
@@ -233,11 +239,29 @@
         </div>
     </div>
 </div>
+
+<?php if (session()->getFlashdata('successLogin')) : ?>
+    <div class="modal fade" id="successModalLogin" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content text-center p-4">
+                <div class="mx-auto mb-3" style="font-size: 40px; color: #198754;">
+                    <i class="fa-solid fa-check-circle fa-beat"></i>
+                </div>
+                <h5 class="modal-title mb-2" id="successModalLabel"><?= session()->getFlashdata('successLogin') ?></h5>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
+
 <?= $this->endSection() ?>
 
 <?= $this->section('pageScripts') ?>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    $(document).ready(function() {
+
+        // --- Fungsi untuk update tanggal dan waktu ---
         function updateDateTimeAdmin() {
             const now = new Date();
             const options = {
@@ -255,6 +279,17 @@
         }
         updateDateTimeAdmin();
         setInterval(updateDateTimeAdmin, 60000);
+
+
+        <?php if (session()->getFlashdata('successLogin')) : ?>
+            $('#successModalLogin').modal('show');
+
+            // Atur timer untuk menyembunyikan modal setelah 3 detik
+            setTimeout(() => {
+                $('#successModalLogin').modal('hide');
+            }, 3000);
+        <?php endif; ?>
+
     });
 </script>
 <?= $this->endSection() ?>

@@ -84,8 +84,16 @@
 <?= $this->section('content') ?>
 <div class="container-fluid mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="mb-0">Dashboard Petugas</h2>
-        <span class="text-muted" id="currentDateTime"></span>
+        <div class="mb-3">
+            <h2 class="mb-0">Dashboard</h2>
+            <small class="text-muted" id="currentDateTime"></small>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+            <div class="d-flex align-items-center bg-light border rounded-pill px-3 py-1">
+                <i class="fa-solid fa-user-shield me-2 text-success"></i>
+                <span class="fw-bold" style="font-size: 0.9rem;"><?= esc(session()->get('nama')) ?></span>
+            </div>
+        </div>
     </div>
 
     <div class="row mb-4">
@@ -267,11 +275,28 @@
         </div>
     </div>
 </div>
+
+
+<?php if (session()->getFlashdata('successLogin')) : ?>
+    <div class="modal fade" id="successModalLogin" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content text-center p-4">
+                <div class="mx-auto mb-3" style="font-size: 40px; color: #198754;">
+                    <i class="fa-solid fa-check-circle fa-beat"></i>
+                </div>
+                <h5 class="modal-title mb-2" id="successModalLabel"><?= session()->getFlashdata('successLogin') ?></h5>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
 <?= $this->endSection() ?>
 
 <?= $this->section('pageScripts') ?>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    $(document).ready(function() {
+
         function updateDateTime() {
             const now = new Date();
             const options = {
@@ -282,13 +307,19 @@
                 hour: '2-digit',
                 minute: '2-digit'
             };
-            const currentDateTimeEl = document.getElementById('currentDateTime');
-            if (currentDateTimeEl) {
-                currentDateTimeEl.textContent = now.toLocaleDateString('id-ID', options);
-            }
+            $('#currentDateTime').text(now.toLocaleDateString('id-ID', options));
         }
         updateDateTime();
         setInterval(updateDateTime, 60000);
+
+
+        <?php if (session()->getFlashdata('successLogin')) : ?>
+            $('#successModalLogin').modal('show');
+            setTimeout(() => {
+                $('#successModalLogin').modal('hide');
+            }, 3000);
+        <?php endif; ?>
+
     });
 </script>
 <?= $this->endSection() ?>
