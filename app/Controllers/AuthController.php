@@ -51,7 +51,7 @@ class AuthController extends Controller
                     'logged_in' => true
                 ]);
                 $session->setFlashdata('successLogin', 'Login berhasil, Selamat datang ' . $admin['nama']);
-                return redirect()->to('/admin/');
+                return redirect()->to('/admin');
             } else {
                 // Password salah untuk admin
                 $session->setFlashdata('error', 'Password yang anda masukkan salah');
@@ -76,7 +76,7 @@ class AuthController extends Controller
                     'logged_in' => true
                 ]);
                 $session->setFlashdata('successLogin', 'Login berhasil, Selamat datang ' . $petugas['nama']);
-                return redirect()->to('/petugas/');
+                return redirect()->to('/petugas');
             } else {
                 // Password salah untuk petugas
                 $session->setFlashdata('error', 'Password yang anda masukkan salah');

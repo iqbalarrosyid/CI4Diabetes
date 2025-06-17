@@ -253,6 +253,9 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
+                        <a class="nav-link" href="/petugas"><i class="fas fa-home"></i> Dashboard</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="/petugas/pasien"><i class="fas fa-users"></i> Daftar Pasien</a>
                     </li>
                     <li class="nav-item">
@@ -304,7 +307,7 @@
             </div>
         </div>
     </div>
-
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -323,6 +326,7 @@
             });
         });
     </script>
+    <?= $this->renderSection('pageScripts') ?>
 </body>
 
 </html>

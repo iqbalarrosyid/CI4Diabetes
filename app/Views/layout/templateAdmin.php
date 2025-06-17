@@ -246,6 +246,9 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
+                        <a class="nav-link" href="/admin"><i class="fas fa-home"></i> Dashboard</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="/admin/pasien"><i class="fas fa-users"></i> Daftar Pasien</a>
                     </li>
                     <li class="nav-item">
@@ -316,6 +319,7 @@
             });
         });
     </script>
+    <?= $this->renderSection('pageScripts') ?>
 </body>
 
 </html>

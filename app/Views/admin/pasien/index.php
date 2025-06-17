@@ -142,18 +142,6 @@
     </div>
 <?php endif; ?>
 
-<?php if (session()->getFlashdata('successLogin')) : ?>
-    <div class="modal fade" id="successModalLogin" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content text-center p-4">
-                <div class="mx-auto mb-3" style="font-size: 40px; color: #198754;">
-                    <i class="fa-solid fa-check-circle fa-beat"></i>
-                </div>
-                <h5 class="modal-title mb-2" id="successModalLabel"><?= session()->getFlashdata('successLogin') ?></h5>
-            </div>
-        </div>
-    </div>
-<?php endif; ?>
 
 <script>
     $(document).ready(function() {
@@ -214,12 +202,6 @@
             }, 3000); // hilang dalam 3 detik
         <?php endif; ?>
 
-        <?php if (session()->getFlashdata('successLogin')) : ?>
-            $('#successModalLogin').modal('show');
-            setTimeout(() => {
-                $('#successModalLogin').modal('hide');
-            }, 3000); // hilang dalam 3 detik
-        <?php endif; ?>
     });
 </script>
 
