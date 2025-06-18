@@ -195,7 +195,7 @@
                 <div class="list-group list-group-flush" id="listPasienBaru">
                     <?php if (!empty($pasienBaru) && is_array($pasienBaru)): ?>
                         <?php foreach ($pasienBaru as $pasien): ?>
-                            <a href="<?= base_url('petugas/riwayat/pasien/' . esc($pasien['id'], 'url')) ?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                            <a href="<?= base_url('petugas/riwayat/' . esc($pasien['id'], 'url')) ?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                                 <div>
                                     <div class="fw-bold"><?= esc($pasien['nama']) ?></div>
                                     <small class="text-muted">Ditambahkan: <?= esc(date('d M Y', strtotime($pasien['created_at'] ?? $pasien['id']))) ?></small>
@@ -219,7 +219,7 @@
                 <div class="list-group list-group-flush" id="listPrediksiTerbaru">
                     <?php if (!empty($prediksiTerbaru) && is_array($prediksiTerbaru)): ?>
                         <?php foreach ($prediksiTerbaru as $prediksi): ?>
-                            <a href="<?= base_url('petugas/riwayat/pasien/' . esc($prediksi['pasien_id'], 'url') . '#riwayat-' . esc($prediksi['id'], 'attr')) ?>" class="list-group-item list-group-item-action">
+                            <a href="<?= base_url('petugas/riwayat/' . esc($prediksi['pasien_id'], 'url') . '#riwayat-' . esc($prediksi['id'], 'attr')) ?>" class="list-group-item list-group-item-action">
                                 <div class="fw-bold">Prediksi untuk <?= esc($prediksi['nama_pasien'] ?? 'N/A') ?></div>
                                 <small class="text-muted">
                                     Hasil: <span class="fw-bold <?= ($prediksi['hasil'] == 1 || strtolower($prediksi['hasil']) === 'diabetes') ? 'text-danger' : 'text-success' ?>">
