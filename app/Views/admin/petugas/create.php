@@ -47,7 +47,7 @@
         <hr class="my-4">
 
         <div class="d-flex justify-content-end">
-            <a href="<?= site_url('/admin/petugas') ?>" class="btn btn-outline-secondary me-2">
+            <a href="javascript:history.back()" class="btn btn-outline-secondary me-2">
                 <i class="fas fa-arrow-left me-2"></i>Kembali
             </a>
             <button type="submit" class="btn btn-primary me-2">

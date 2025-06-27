@@ -72,7 +72,7 @@
     </div>
 
     <div class="d-flex justify-content-end mt-2">
-        <a href="/petugas/pasien" class="btn btn-outline-secondary me-2">Kembali</a>
+        <a href="/petugas" class="btn btn-outline-secondary me-2"><i class="fas fa-arrow-left me-2"></i>Kembali</a>
         <div class="btn-group me-2">
             <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" title="Pilih Jenis Export PDF">
                 <i class="fa-solid fa-file-pdf"></i>

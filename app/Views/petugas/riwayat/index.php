@@ -40,7 +40,7 @@
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Riwayat Pasien: <?= esc($pasien['nama']) ?></h2>
-        <a href="/petugas/riwayat/create/<?= esc($pasien['id'], 'attr') ?>" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Tambah Riwayat Baru">
+        <a href="/petugas/riwayat/create/<?= esc($pasien['id'], 'attr') ?>" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Tambah Pemeriksaan Baru">
             <i class="fa-solid fa-plus"></i>
         </a>
     </div>
@@ -153,7 +153,7 @@
     </div>
 
     <div class="d-flex justify-content-end mt-3">
-        <a href="/petugas/pasien" class="btn btn-outline-secondary me-2">Kembali</a>
+        <a href="javascript:history.back()" class="btn btn-outline-secondary me-2">Kembali</a>
         <button class="btn btn-primary me-2" onclick="toggleChart()" data-bs-toggle="tooltip" data-bs-placement="top" title="Tampilkan/Sembunyikan Grafik">
             <i class="fa-solid fa-square-poll-vertical"></i>
         </button>

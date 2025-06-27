@@ -28,14 +28,14 @@ class ExportController extends BaseController
     {
         $pasien = $this->pasienModel->find($pasien_id);
         if (!$pasien) {
-            return redirect()->to('/petugas/pasien')->with('error', 'Data pasien tidak ditemukan.');
+            return redirect()->back()->with('error', 'Data pasien tidak ditemukan.');
         }
 
         // Menggunakan metode yang telah diganti namanya dan fungsinya sesuai
         $riwayat = $this->riwayatModel->getRiwayatForPasien($pasien_id, 'ASC');
 
         if (empty($riwayat)) {
-            return redirect()->to('/petugas/riwayat/' . $pasien_id)->with('warning', 'Tidak ada data riwayat untuk pasien ini.');
+            return redirect()->back()->with('warning', 'Tidak ada data riwayat untuk pasien ini.');
         }
 
         $html = view('petugas/riwayat/pdf_template_pasien_all_riwayat', compact('pasien', 'riwayat')); // View spesifik jika perlu
@@ -60,13 +60,13 @@ class ExportController extends BaseController
     {
         $pasien = $this->pasienModel->find($pasien_id);
         if (!$pasien) {
-            return redirect()->to('/petugas/pasien')->with('error', 'Data pasien tidak ditemukan.');
+            return redirect()->back()->with('error', 'Data pasien tidak ditemukan.');
         }
 
         $riwayat = $this->riwayatModel->getRiwayatForPasien($pasien_id, 'ASC');
 
         if (empty($riwayat)) {
-            return redirect()->to('/petugas/riwayat/' . $pasien_id)->with('warning', 'Tidak ada data riwayat untuk pasien ini.');
+            return redirect()->back()->with('warning', 'Tidak ada data riwayat untuk pasien ini.');
         }
 
         $spreadsheet = new Spreadsheet();
@@ -130,7 +130,7 @@ class ExportController extends BaseController
         $data['riwayat'] = $this->riwayatModel->getLatestRiwayatPerPasienWithDetails('ASC');
 
         if (empty($data['riwayat'])) {
-            return redirect()->to('/petugas/riwayat/all')->with('warning', 'Tidak ada data riwayat terbaru untuk diekspor.');
+            return redirect()->back()->with('warning', 'Tidak ada data riwayat terbaru untuk diekspor.');
         }
 
         // View ini (pdf_template_latest_all_pasien) perlu disesuaikan
@@ -158,7 +158,7 @@ class ExportController extends BaseController
         $riwayat = $this->riwayatModel->getLatestRiwayatPerPasienWithDetails('ASC');
 
         if (empty($riwayat)) {
-            return redirect()->to('/petugas/riwayat/all')->with('warning', 'Tidak ada data riwayat terbaru untuk diekspor.');
+            return redirect()->back()->with('warning', 'Tidak ada data riwayat terbaru untuk diekspor.');
         }
 
         $spreadsheet = new Spreadsheet();
@@ -229,7 +229,7 @@ class ExportController extends BaseController
         $data['riwayat_all'] = $this->riwayatModel->getAllRiwayatAllPasienWithDetails('ASC');
 
         if (empty($data['riwayat_all'])) {
-            return redirect()->to('/petugas/riwayat/all')->with('warning', 'Tidak ada data riwayat sama sekali untuk diekspor.');
+            return redirect()->back()->with('warning', 'Tidak ada data riwayat sama sekali untuk diekspor.');
         }
 
         // Anda perlu membuat atau menyesuaikan view ini: 'petugas/riwayat/pdf_template_all_historical'
@@ -257,7 +257,7 @@ class ExportController extends BaseController
         $all_riwayat = $this->riwayatModel->getAllRiwayatAllPasienWithDetails('ASC');
 
         if (empty($all_riwayat)) {
-            return redirect()->to('/petugas/riwayat/all')->with('warning', 'Tidak ada data riwayat sama sekali untuk diekspor.');
+            return redirect()->back()->with('warning', 'Tidak ada data riwayat sama sekali untuk diekspor.');
         }
 
         $spreadsheet = new Spreadsheet();

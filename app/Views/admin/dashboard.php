@@ -151,6 +151,46 @@
                     <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#importModal">
                         <i class="fas fa-file-import me-2"></i>Import Data Pasien
                     </button>
+                    <!-- Tombol Export -->
+                    <div class="d-flex justify-content-between gap-2">
+                        <!-- Export PDF -->
+                        <div class="btn-group w-100">
+                            <button type="button" class="btn btn-sm btn-outline-dark dropdown-toggle w-100" data-bs-toggle="dropdown" aria-expanded="false" title="Export PDF">
+                                <i class="fa-solid fa-file-pdf me-1"></i>Export PDF
+                            </button>
+                            <ul class="dropdown-menu w-100">
+                                <li>
+                                    <a class="dropdown-item" href="<?= base_url('/riwayat-terbaru/all/pdf') ?>" target="_blank">
+                                        Riwayat Terbaru
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="<?= base_url('/riwayat-historis/all/pdf') ?>" target="_blank">
+                                        Seluruh Riwayat
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Export Excel -->
+                        <div class="btn-group w-100">
+                            <button type="button" class="btn btn-sm btn-outline-dark dropdown-toggle w-100" data-bs-toggle="dropdown" aria-expanded="false" title="Export Excel">
+                                <i class="fa-solid fa-file-excel me-1"></i>Export Excel
+                            </button>
+                            <ul class="dropdown-menu w-100">
+                                <li>
+                                    <a class="dropdown-item" href="<?= base_url('/riwayat-terbaru/all/excel') ?>" target="_blank">
+                                        Riwayat Terbaru
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="<?= base_url('/riwayat-historis/all/excel') ?>" target="_blank">
+                                        Seluruh Riwayat
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

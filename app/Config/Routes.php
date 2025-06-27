@@ -15,6 +15,14 @@ $routes->get('/logout', 'AuthController::logout');
 $routes->get('profile/edit', 'AuthController::editProfile', ['filter' => 'auth']);
 $routes->post('profile/update', 'AuthController::updateProfile', ['filter' => 'auth']);
 
+// Export Riwayat terbaru semua pasien
+$routes->get('riwayat-terbaru/all/pdf', 'ExportController::exportLatestRiwayatAllPasienToPdf');
+$routes->get('riwayat-terbaru/all/excel', 'ExportController::exportLatestRiwayatAllPasienToExcel');
+
+// Export Riwayat historis semua pasien
+$routes->get('riwayat-historis/all/pdf', 'ExportController::exportAllHistoricalRiwayatToPdf');
+$routes->get('riwayat-historis/all/excel', 'ExportController::exportAllHistoricalRiwayatToExcel');
+
 
 
 // Rute khusus petugas
@@ -41,13 +49,6 @@ $routes->group('petugas', ['filter' => 'role:petugas'], function ($routes) {
     $routes->get('riwayat/pdf/(:num)', 'ExportController::exportPasienRiwayatToPdf/$1');
     $routes->get('riwayat/excel/(:num)', 'ExportController::exportPasienRiwayatToExcel/$1');
 
-    // Riwayat terbaru semua pasien
-    $routes->get('riwayat-terbaru/all/pdf', 'ExportController::exportLatestRiwayatAllPasienToPdf');
-    $routes->get('riwayat-terbaru/all/excel', 'ExportController::exportLatestRiwayatAllPasienToExcel');
-
-    // SEMUA riwayat SEMUA pasien (historis)
-    $routes->get('riwayat-historis/all/pdf', 'ExportController::exportAllHistoricalRiwayatToPdf');
-    $routes->get('riwayat-historis/all/excel', 'ExportController::exportAllHistoricalRiwayatToExcel');
 
     $routes->get('import', 'PasienController::import');
     $routes->post('import/upload', 'PasienController::upload');

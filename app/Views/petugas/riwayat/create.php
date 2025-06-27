@@ -42,7 +42,7 @@
         </div>
 
         <div class="mt-4 d-flex flex-column flex-sm-row justify-content-sm-end align-items-stretch">
-            <a href="/petugas/riwayat/<?= esc($pasien_id, 'attr') ?>" class="btn btn-outline-secondary me-2 mb-2">
+            <a href="javascript:history.back()" class="btn btn-outline-secondary me-2 mb-2">
                 <i class="fas fa-arrow-left me-2"></i>Kembali
             </a>
             <button type="button" id="predictBtn" class="btn btn-primary mb-2 me-2">

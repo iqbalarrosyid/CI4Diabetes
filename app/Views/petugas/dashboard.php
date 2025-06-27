@@ -199,12 +199,12 @@
                             </button>
                             <ul class="dropdown-menu w-100">
                                 <li>
-                                    <a class="dropdown-item" href="<?= base_url('/petugas/riwayat-terbaru/all/pdf') ?>" target="_blank">
+                                    <a class="dropdown-item" href="<?= base_url('/riwayat-terbaru/all/pdf') ?>" target="_blank">
                                         Riwayat Terbaru
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="<?= base_url('/petugas/riwayat-historis/all/pdf') ?>" target="_blank">
+                                    <a class="dropdown-item" href="<?= base_url('/riwayat-historis/all/pdf') ?>" target="_blank">
                                         Seluruh Riwayat
                                     </a>
                                 </li>
@@ -218,12 +218,12 @@
                             </button>
                             <ul class="dropdown-menu w-100">
                                 <li>
-                                    <a class="dropdown-item" href="<?= base_url('/petugas/riwayat-terbaru/all/excel') ?>" target="_blank">
+                                    <a class="dropdown-item" href="<?= base_url('/riwayat-terbaru/all/excel') ?>" target="_blank">
                                         Riwayat Terbaru
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="<?= base_url('/petugas/riwayat-historis/all/excel') ?>" target="_blank">
+                                    <a class="dropdown-item" href="<?= base_url('/riwayat-historis/all/excel') ?>" target="_blank">
                                         Seluruh Riwayat
                                     </a>
                                 </li>
