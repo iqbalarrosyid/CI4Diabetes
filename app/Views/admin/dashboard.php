@@ -88,10 +88,12 @@
             <small class="text-muted" id="currentDateTimeAdmin"></small>
         </div>
         <div class="d-flex align-items-center gap-3">
-            <div class="d-flex align-items-center bg-light border rounded-pill px-3 py-1">
-                <i class="fa-solid fa-user-shield me-2 text-success"></i>
-                <span class="fw-bold" style="font-size: 0.9rem;"><?= esc(session()->get('nama')) ?></span>
-            </div>
+            <a href="/profile/edit" class="text-decoration-none">
+                <div class="d-flex align-items-center bg-light border rounded-pill px-3 py-1">
+                    <i class="fa-solid fa-user-shield me-2 text-success"></i>
+                    <span class="fw-bold text-dark" style="font-size: 0.9rem;"><?= esc(session()->get('nama')) ?></span>
+                </div>
+            </a>
         </div>
     </div>
 
@@ -140,13 +142,13 @@
                     Manajemen Sistem
                 </div>
                 <div class="card-body d-grid gap-2">
-                    <a href="<?= base_url('admin/petugas/create') ?>" class="btn btn-outline-primary">
+                    <a href="<?= base_url('admin/petugas/create') ?>" class="btn btn-outline-dark">
                         <i class="fas fa-user-shield me-2"></i>Tambah Petugas Baru
                     </a>
-                    <a href="<?= base_url('admin/pasien/create') ?>" class="btn btn-outline-info">
+                    <a href="<?= base_url('admin/pasien/create') ?>" class="btn btn-outline-dark">
                         <i class="fas fa-user-plus me-2"></i>Tambah Pasien Baru
                     </a>
-                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#importModal">
+                    <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#importModal">
                         <i class="fas fa-file-import me-2"></i>Import Data Pasien
                     </button>
                 </div>
