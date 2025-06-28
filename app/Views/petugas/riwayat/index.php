@@ -38,11 +38,13 @@
 
 
 <div class="container">
+    <div class="d-flex justify-content-end py-2">
+        <a href="/petugas/riwayat/create/<?= esc($pasien['id'], 'attr') ?>" class="btn btn-success me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Tambah Pemeriksaan Baru">
+            <i class="fa-solid fa-plus"></i> Tambah Pemeriksaan
+        </a>
+    </div>
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Riwayat Pasien: <?= esc($pasien['nama']) ?></h2>
-        <a href="/petugas/riwayat/create/<?= esc($pasien['id'], 'attr') ?>" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Tambah Pemeriksaan Baru">
-            <i class="fa-solid fa-plus"></i>
-        </a>
     </div>
 
     <?php
@@ -108,6 +110,34 @@
         <div id="riwayatTable_length"></div>
     </div>
 
+    <?php
+    // Array bulan Indonesia
+    $bulanIndo = [
+        '01' => 'Jan',
+        '02' => 'Feb',
+        '03' => 'Mar',
+        '04' => 'Apr',
+        '05' => 'Mei',
+        '06' => 'Jun',
+        '07' => 'Jul',
+        '08' => 'Ags',
+        '09' => 'Sep',
+        '10' => 'Okt',
+        '11' => 'Nov',
+        '12' => 'Des',
+    ];
+
+    // Fungsi format tanggal
+    function formatTanggalIndoLengkap($timestamp, $bulanIndo)
+    {
+        $tanggal = date('d', strtotime($timestamp));
+        $bulan = $bulanIndo[date('m', strtotime($timestamp))];
+        $tahun = date('Y', strtotime($timestamp));
+        $jam = date('H:i:s', strtotime($timestamp));
+        return "$tanggal $bulan $tahun $jam";
+    }
+    ?>
+
     <div class="table-responsive">
         <table class="table table-bordered table-striped" id="riwayatTable">
             <thead class="table-dark">
@@ -124,15 +154,17 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($riwayat as $data) : ?>
+                <?php $no = 1;
+                foreach ($riwayat as $data) : ?>
                     <tr>
-                        <td></td>
+                        <td><?= $no++ ?></td>
                         <td><?= esc($data['gdp']) ?></td>
                         <td><?= esc($data['tekanan_darah']) ?></td>
                         <td><?= esc($data['berat']) ?></td>
                         <td><?= esc($data['tinggi']) ?></td>
                         <td><?= number_format($data['imt'], 2) ?></td>
-                        <td><?php if ($data['hasil'] == 1): ?>
+                        <td>
+                            <?php if ($data['hasil'] == 1): ?>
                                 <span class="badge bg-danger">Diabetes</span>
                             <?php elseif ($data['hasil'] == 0 && $data['hasil'] !== null && $data['hasil'] !== ''): ?>
                                 <span class="badge bg-success">Tidak Diabetes</span>
@@ -140,7 +172,7 @@
                                 <span class="badge bg-secondary">N/A</span>
                             <?php endif; ?>
                         </td>
-                        <td><?= esc(date('d-m-Y H:i:s', strtotime($data['created_at']))) ?></td>
+                        <td><?= esc(formatTanggalIndoLengkap($data['created_at'], $bulanIndo)) ?></td>
                         <td><?= esc($data['nama_petugas'] ?? 'Tidak Diketahui') ?></td>
                     </tr>
                 <?php endforeach; ?>
@@ -149,8 +181,8 @@
         <p class="text-muted justify-text px-2 mt-2">
             <i>(*) Jika sebelumnya hasil prediksi menunjukan pasien Diabetes, kemudian prediksi berubah menjadi Tidak Diabetes, ini menunjukkan bahwa pasien dapat mengendalikan kadar gula darahnya. Bukan berarti sembuh dari diabetes.</i>
         </p>
-
     </div>
+
 
     <div class="d-flex justify-content-end mt-3">
         <a href="javascript:history.back()" class="btn btn-outline-secondary me-2">Kembali</a>

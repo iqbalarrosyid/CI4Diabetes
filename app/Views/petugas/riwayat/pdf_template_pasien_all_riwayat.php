@@ -12,6 +12,38 @@ if (file_exists($path)) {
 } else {
     $base64 = ''; // Jika file tidak ditemukan
 }
+
+// Array bulan Indonesia
+$bulanIndo = [
+    '01' => 'Januari',
+    '02' => 'Februari',
+    '03' => 'Maret',
+    '04' => 'April',
+    '05' => 'Mei',
+    '06' => 'Juni',
+    '07' => 'Juli',
+    '08' => 'Agustus',
+    '09' => 'September',
+    '10' => 'Oktober',
+    '11' => 'November',
+    '12' => 'Desember',
+];
+
+// Ambil tanggal sekarang dalam format Indonesia
+$tgl = date('d');
+$bln = $bulanIndo[date('m')];
+$thn = date('Y');
+$jam = date('H:i:s');
+
+// Fungsi untuk konversi tanggal ke format "10 Februari 2025"
+function formatTanggalIndo($tanggal, $bulanIndo)
+{
+    $dateObj = date_create($tanggal);
+    $tgl = date_format($dateObj, 'd');
+    $bln = $bulanIndo[date_format($dateObj, 'm')];
+    $thn = date_format($dateObj, 'Y');
+    return "$tgl $bln $thn";
+}
 ?>
 
 <head>
@@ -100,7 +132,7 @@ if (file_exists($path)) {
     $umur = $sekarang->diff($tanggalLahir);
     ?>
     <p><b>Riwayat Pasien: <?= esc($pasien['nama']) ?></b></p>
-    <p>Tanggal Lahir : <?= date('d-m-Y', strtotime($pasien['tanggal_lahir'])) ?> / <?= $umur->y; ?> tahun</p>
+    <p>Tanggal Lahir : <?= formatTanggalIndo($pasien['tanggal_lahir'], $bulanIndo) ?> / <?= $umur->y; ?> tahun</p>
     <p>Jenis Kelamin : <?= esc($pasien['jenis_kelamin']) ?></p>
     <p>Alamat : <?= esc($pasien['alamat']) ?></p>
 
@@ -121,6 +153,13 @@ if (file_exists($path)) {
         <tbody>
             <?php $no = 1;
             foreach ($riwayat as $data): ?>
+                <?php
+                $tanggalFormat = date_create($data['created_at']);
+                $tanggalCetak = date_format($tanggalFormat, 'd');
+                $bulanCetak = $bulanIndo[date_format($tanggalFormat, 'm')];
+                $tahunCetak = date_format($tanggalFormat, 'Y');
+                $jamCetak = date_format($tanggalFormat, 'H:i:s');
+                ?>
                 <tr>
                     <td><?= $no++ ?></td>
                     <td><?= esc($data['gdp']) ?></td>
@@ -129,7 +168,7 @@ if (file_exists($path)) {
                     <td><?= esc($data['tinggi']) ?></td>
                     <td><?= number_format($data['imt'], 2) ?></td>
                     <td><?= $data['hasil'] == 1 ? 'Diabetes' : 'Tidak Diabetes' ?></td>
-                    <td><?= date('d-m-Y H:i:s', strtotime($data['created_at'])) ?></td>
+                    <td><?= "$tanggalCetak $bulanCetak $tahunCetak $jamCetak" ?></td>
                     <td><?= esc($data['nama_petugas'] ?? 'Tidak Diketahui') ?></td>
                 </tr>
             <?php endforeach; ?>
@@ -137,7 +176,8 @@ if (file_exists($path)) {
     </table>
 
     <p class="text-muted justify-text"><i>(*) Jika sebelumnya hasil prediksi menunjukan pasien Diabetes, kemudian prediksi berubah menjadi Tidak Diabetes, ini menunjukkan bahwa pasien dapat mengendalikan kadar gula darahnya. Bukan berarti sembuh dari diabetes.</i></p>
-    <p>Dicetak pada <?= date('d-m-Y H:i:s') ?></p>
+
+    <p>Dicetak pada <?= "$tgl $bln $thn Pukul $jam" ?></p>
 </body>
 
 </html>

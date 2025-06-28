@@ -15,6 +15,34 @@
         <input type="text" id="searchBox" class="form-control" placeholder="Cari">
     </div>
 
+    <?php
+    // Array bulan Indonesia
+    $bulanIndo = [
+        '01' => 'Jan',
+        '02' => 'Feb',
+        '03' => 'Mar',
+        '04' => 'Apr',
+        '05' => 'Mei',
+        '06' => 'Jun',
+        '07' => 'Jul',
+        '08' => 'Ags',
+        '09' => 'Sep',
+        '10' => 'Okt',
+        '11' => 'Nov',
+        '12' => 'Des',
+    ];
+
+    // Fungsi format tanggal
+    function formatTanggalIndoLengkap($timestamp, $bulanIndo)
+    {
+        $tanggal = date('d', strtotime($timestamp));
+        $bulan = $bulanIndo[date('m', strtotime($timestamp))];
+        $tahun = date('Y', strtotime($timestamp));
+        $jam = date('H:i:s', strtotime($timestamp));
+        return "$tanggal $bulan $tahun $jam";
+    }
+    ?>
+
     <div class="table-responsive">
         <table class="table table-bordered table-striped" id="riwayatTable">
             <thead class="table-dark">
@@ -58,7 +86,7 @@
                                 <span class="badge bg-secondary">N/A</span>
                             <?php endif; ?>
                         </td>
-                        <td><?= date('d-m-Y H:i:s', strtotime($data['created_at'])) ?></td>
+                        <td><?= esc(formatTanggalIndoLengkap($data['created_at'], $bulanIndo)) ?></td>
                         <td><?= $data['nama_petugas'] ?? '<span class="text-muted">Tidak Diketahui</span>' ?></td>
                     </tr>
                 <?php endforeach; ?>

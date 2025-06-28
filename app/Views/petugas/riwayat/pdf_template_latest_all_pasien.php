@@ -65,7 +65,57 @@ if (file_exists($path)) {
         </tr>
     </table>
     <hr>
-    <h4>DataSeluruh Riwayat Pasien Terbaru Tanggal <?= date('d-m-Y') ?></h4>
+    <?php
+    $bulan = [
+        '01' => 'Januari',
+        '02' => 'Februari',
+        '03' => 'Maret',
+        '04' => 'April',
+        '05' => 'Mei',
+        '06' => 'Juni',
+        '07' => 'Juli',
+        '08' => 'Agustus',
+        '09' => 'September',
+        '10' => 'Oktober',
+        '11' => 'November',
+        '12' => 'Desember',
+    ];
+
+    $tgl = date('d');
+    $bln = $bulan[date('m')];
+    $thn = date('Y');
+
+    echo "<h4>Seluruh Data Riwayat Pemeriksaan Diabetes Pasien Terbaru Tanggal {$tgl} {$bln} {$thn}</h4>";
+    ?>
+
+<?php
+    // Array bulan Indonesia
+    $bulanIndo = [
+        '01' => 'Jan',
+        '02' => 'Feb',
+        '03' => 'Mar',
+        '04' => 'Apr',
+        '05' => 'Mei',
+        '06' => 'Jun',
+        '07' => 'Jul',
+        '08' => 'Ags',
+        '09' => 'Sep',
+        '10' => 'Okt',
+        '11' => 'Nov',
+        '12' => 'Des',
+    ];
+
+    // Fungsi format tanggal
+    function formatTanggalIndoLengkap($timestamp, $bulanIndo)
+    {
+        $tanggal = date('d', strtotime($timestamp));
+        $bulan = $bulanIndo[date('m', strtotime($timestamp))];
+        $tahun = date('Y', strtotime($timestamp));
+        $jam = date('H:i:s', strtotime($timestamp));
+        return "$tanggal $bulan $tahun $jam";
+    }
+    ?>
+
     <table style="font-size: 12px;">
         <thead>
             <tr>
@@ -101,7 +151,7 @@ if (file_exists($path)) {
                     <td><?= $data['tinggi'] ?></td>
                     <td><?= number_format($data['imt'], 2) ?></td>
                     <td><?= $data['hasil'] == 1 ? 'Diabetes' : 'Tidak Diabetes' ?></td>
-                    <td><?= date('d-m-Y H:i:s', strtotime($data['created_at'])) ?></td>
+                    <td><?= formatTanggalIndoLengkap($data['created_at'], $bulanIndo) ?></td>
                     <td><?= $data['nama_petugas'] ?? '<span class="text-muted">Tidak Diketahui</span>' ?></td>
                 </tr>
             <?php endforeach; ?>
@@ -112,7 +162,10 @@ if (file_exists($path)) {
             <?php endif; ?>
         </tbody>
     </table>
-    <p>Dicetak pada <?= date('d-m-Y H:i:s') ?></p>
+    <?php
+    $jam = date('H:i:s');
+    echo "<p>Dicetak pada {$tgl} {$bln} {$thn} Pukul {$jam}</p>";
+    ?>
 </body>
 
 </html>
