@@ -11,11 +11,7 @@ from sklearn.metrics import (
 import joblib
 
 # ==================== FUNGSI NAIVE BAYES ====================
-def calculate_probability(x, mean, std):
-    std = 1e-6 if std == 0 else std
-    exponent = np.exp(-((x - mean) ** 2) / (2 * std ** 2))
-    return (1 / (np.sqrt(2 * np.pi) * std)) * exponent
-
+# menghitung rata-rata, standar deviasi, dan probabilitas prior
 def summarize_by_class(X, y):
     summaries = {}
     if not isinstance(X, pd.DataFrame):
@@ -29,6 +25,13 @@ def summarize_by_class(X, y):
         }
     return summaries
 
+# menghitung likelihood
+def calculate_probability(x, mean, std):
+    std = 1e-6 if std == 0 else std
+    exponent = np.exp(-((x - mean) ** 2) / (2 * std ** 2))
+    return (1 / (np.sqrt(2 * np.pi) * std)) * exponent
+
+# posterior probability untuk setiap kelas
 def calculate_class_probabilities(summaries, input_data):
     probabilities = {}
     for class_value, stats in summaries.items():
@@ -44,10 +47,7 @@ def predict(summaries, input_data):
     probabilities = calculate_class_probabilities(summaries, input_data)
     return max(probabilities, key=probabilities.get)
 
-# Fungsi baru untuk mendapatkan probabilitas kelas positif (misal kelas 1)
-# Fungsi yang sudah ada: calculate_class_probabilities(summaries, input_data)
-# Mengembalikan dictionary seperti: {0: P(X|C=0)P(C=0), 1: P(X|C=1)P(C=1)}
-
+# menghitung probabilitas kelas positif
 def predict_proba(summaries, input_data, positive_class_label=1):
     class_likelihood_times_priors = calculate_class_probabilities(summaries, input_data)
     prob_positive_numerator = class_likelihood_times_priors.get(positive_class_label, 0.0)
