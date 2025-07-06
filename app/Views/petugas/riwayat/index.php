@@ -172,7 +172,10 @@
                                 <span class="badge bg-secondary">N/A</span>
                             <?php endif; ?>
                         </td>
-                        <td><?= esc(formatTanggalIndoLengkap($data['created_at'], $bulanIndo)) ?></td>
+                        <td data-order="<?= esc(date('Y-m-d H:i:s', strtotime($data['created_at']))) ?>">
+                            <?= esc(formatTanggalIndoLengkap($data['created_at'], $bulanIndo)) ?>
+                        </td>
+
                         <td><?= esc($data['nama_petugas'] ?? 'Tidak Diketahui') ?></td>
                     </tr>
                 <?php endforeach; ?>

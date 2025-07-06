@@ -6,12 +6,12 @@ import seaborn as sns
 from sklearn.model_selection import train_test_split, StratifiedKFold
 from sklearn.metrics import (
     confusion_matrix, accuracy_score, precision_score,
-    recall_score, f1_score, roc_auc_score, roc_curve # Ditambahkan roc_auc_score, roc_curve
+    recall_score, f1_score, roc_auc_score, roc_curve
 )
 import joblib
+from io import BytesIO  # Untuk menyimpan Excel ke memori
 
-# ==================== FUNGSI NAIVE BAYES ====================
-# menghitung rata-rata, standar deviasi, dan probabilitas prior
+# Fungsi menghitung rata-rata, standar deviasi, dan prior
 def summarize_by_class(X, y):
     summaries = {}
     if not isinstance(X, pd.DataFrame):
@@ -25,13 +25,13 @@ def summarize_by_class(X, y):
         }
     return summaries
 
-# menghitung likelihood
+# Fungsi likelihood
 def calculate_probability(x, mean, std):
     std = 1e-6 if std == 0 else std
     exponent = np.exp(-((x - mean) ** 2) / (2 * std ** 2))
     return (1 / (np.sqrt(2 * np.pi) * std)) * exponent
 
-# posterior probability untuk setiap kelas
+# Posterior
 def calculate_class_probabilities(summaries, input_data):
     probabilities = {}
     for class_value, stats in summaries.items():
@@ -47,7 +47,6 @@ def predict(summaries, input_data):
     probabilities = calculate_class_probabilities(summaries, input_data)
     return max(probabilities, key=probabilities.get)
 
-# menghitung probabilitas kelas positif
 def predict_proba(summaries, input_data, positive_class_label=1):
     class_likelihood_times_priors = calculate_class_probabilities(summaries, input_data)
     prob_positive_numerator = class_likelihood_times_priors.get(positive_class_label, 0.0)
@@ -75,7 +74,7 @@ if uploaded_file:
         st.error(f"Dataset harus memiliki kolom: {', '.join(required_columns)}")
     else:
         X = data[['gdp', 'tekanan_darah', 'imt', 'umur']]
-        y = data['hasil'] # Asumsi kelas 1 adalah positif (Diabetes)
+        y = data['hasil'] 
 
         st.write("### Distribusi Kelas")
         st.bar_chart(y.value_counts())
@@ -100,22 +99,29 @@ if uploaded_file:
 
         st.write("---")
         st.write("### 💾 Unduh Data Hasil Pembagian (Split)")
+
+        # Ekspor Excel Training
         training_data_to_download = pd.concat([X_train, y_train], axis=1)
-        csv_training = training_data_to_download.to_csv(index=False).encode('utf-8')
+        excel_training = BytesIO()
+        training_data_to_download.to_excel(excel_training, index=False, engine='openpyxl')
         st.download_button(
             label="📥 Unduh Data Training (80%)",
-            data=csv_training,
-            file_name='data_training_diabetes.csv',
-            mime='text/csv',
+            data=excel_training.getvalue(),
+            file_name='data_training_diabetes.xlsx',
+            mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         )
+
+        # Ekspor Excel Testing
         testing_data_to_download = pd.concat([X_test, y_test], axis=1)
-        csv_testing = testing_data_to_download.to_csv(index=False).encode('utf-8')
+        excel_testing = BytesIO()
+        testing_data_to_download.to_excel(excel_testing, index=False, engine='openpyxl')
         st.download_button(
             label="📥 Unduh Data Testing (20%)",
-            data=csv_testing,
-            file_name='data_testing_diabetes.csv',
-            mime='text/csv',
+            data=excel_testing.getvalue(),
+            file_name='data_testing_diabetes.xlsx',
+            mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         )
+
         st.write("---")
 
         summaries = summarize_by_class(X_train, y_train)
@@ -131,9 +137,7 @@ if uploaded_file:
         st.success(f"Model berhasil disimpan sebagai `{model_filename}`")
 
         y_pred = [predict(summaries, row.values) for _, row in X_test.iterrows()]
-        # Dapatkan probabilitas untuk kelas positif (1) untuk AUC
         y_pred_proba_test = [predict_proba(summaries, row.values, positive_class_label=1) for _, row in X_test.iterrows()]
-
 
         st.write("### Confusion Matrix (pada Data Testing)")
         conf_matrix = confusion_matrix(y_test, y_pred)
@@ -152,21 +156,18 @@ if uploaded_file:
         f1_val = f1_score(y_test, y_pred, zero_division=0)
         try:
             auc_val_test = roc_auc_score(y_test, y_pred_proba_test)
-        except ValueError: # Jika y_test hanya berisi satu kelas (sangat jarang dengan stratify)
-            auc_val_test = 0.0 # Atau np.nan
+        except ValueError:
+            auc_val_test = 0.0
             st.warning("AUC tidak dapat dihitung karena data test hanya memiliki satu kelas.")
-
 
         st.write(f"- Akurasi: **{accuracy_val:.2f}**")
         st.write(f"- Precision: **{precision_val:.2f}**")
         st.write(f"- Recall: **{recall_val:.2f}**")
         st.write(f"- F1 Score: **{f1_val:.2f}**")
-        st.write(f"- AUC: **{auc_val_test:.2f}**") # Tampilkan AUC
+        st.write(f"- AUC: **{auc_val_test:.2f}**")
 
-        # Plot ROC Curve
         st.write("### ROC Curve (pada Data Testing)")
         fpr, tpr, thresholds = roc_curve(y_test, y_pred_proba_test)
-        
         fig_roc, ax_roc = plt.subplots()
         ax_roc.plot(fpr, tpr, color='blue', lw=2, label=f'ROC curve (AUC = {auc_val_test:.2f})')
         ax_roc.plot([0, 1], [0, 1], color='red', lw=2, linestyle='--', label='Garis Acak (AUC = 0.50)')
@@ -178,7 +179,6 @@ if uploaded_file:
         ax_roc.legend(loc="lower right")
         ax_roc.grid(alpha=0.3)
         st.pyplot(fig_roc)
-
 
         st.write("### K-Fold Cross Validation (5 Fold)")
         kfold = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
@@ -198,8 +198,8 @@ if uploaded_file:
             f1_kf = f1_score(y_te, y_pred_kf_labels, zero_division=0) * 100
             try:
                 auc_kf = roc_auc_score(y_te, y_pred_kf_proba) * 100
-            except ValueError: # Menangani kasus jika y_te hanya memiliki satu kelas
-                auc_kf = 0.0 # Atau np.nan jika Anda ingin menghitung mean dengan skipna
+            except ValueError:
+                auc_kf = 0.0
 
             kfold_metrics.append({
                 "Fold": fold,
@@ -207,7 +207,7 @@ if uploaded_file:
                 "Precision (%)": prec_kf,
                 "Recall (%)": rec_kf,
                 "F1-Score (%)": f1_kf,
-                "AUC (%)": auc_kf # Tambahkan AUC ke metrik K-Fold
+                "AUC (%)": auc_kf
             })
 
         df_kfold = pd.DataFrame(kfold_metrics)
@@ -217,14 +217,12 @@ if uploaded_file:
         st.write(f"- Precision: **{df_kfold['Precision (%)'].mean():.2f}%**")
         st.write(f"- Recall: **{df_kfold['Recall (%)'].mean():.2f}%**")
         st.write(f"- F1 Score: **{df_kfold['F1-Score (%)'].mean():.2f}%**")
-        st.write(f"- AUC: **{df_kfold['AUC (%)'].mean():.2f}%**") # Tampilkan rata-rata AUC K-Fold
+        st.write(f"- AUC: **{df_kfold['AUC (%)'].mean():.2f}%**")
 
+        # ========= Prediksi Data Baru =========
         st.write("---")
         st.write("### Prediksi Data Baru")
-        if 'feature_columns' in joblib.load(model_filename):
-            feature_order = joblib.load(model_filename)['feature_columns']
-        else:
-            feature_order = X.columns.tolist()
+        feature_order = X.columns.tolist()
 
         form_key_prefix = "pred_input_" 
         with st.form(key="prediction_form"):
@@ -244,10 +242,18 @@ if uploaded_file:
             try:
                 current_summaries = summaries 
                 hasil_label = predict(current_summaries, input_data_new)
-                if hasil_label == 0:
-                    st.success("Hasil Prediksi: **Tidak Berisiko Diabetes Tipe 2** 👍")
+                prob_result = predict_proba(current_summaries, input_data_new, positive_class_label=1)
+
+                if hasil_label == 1:
+                    st.error(
+                        f"Hasil: **Berisiko Diabetes Tipe 2** ⚠️\n\n"
+                        f"Probabilitas: **{prob_result:.2%}**"
+                    )
                 else:
-                    st.error("Hasil Prediksi: **Berisiko Diabetes Tipe 2** ⚠️")
+                    st.success(
+                        f"Hasil: **Tidak Berisiko Diabetes Tipe 2** 👍\n\n"
+                        f"Probabilitas: **{prob_result:.2%}**"
+                    )
             except Exception as e:
                 st.error(f"Terjadi kesalahan saat prediksi: {e}")
                 st.error("Pastikan model sudah dilatih dan file model ada.")
