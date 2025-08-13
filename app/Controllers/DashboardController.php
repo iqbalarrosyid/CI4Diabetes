@@ -22,7 +22,7 @@ class DashboardController extends BaseController
     {
         // Data untuk Kartu Statistik Ringkas
         $totalPasien = $this->pasienModel->countAllResults();
-        // $totalPrediksi = $this->riwayatModel->countAllResults(); // Ini tidak akan ditampilkan lagi di kartu
+        // $totalKlasifikasi = $this->riwayatModel->countAllResults(); // Ini tidak akan ditampilkan lagi di kartu
 
         $latestRiwayatPerPasien = $this->riwayatModel->getLatestRiwayatPerPasienWithDetails();
 
@@ -49,7 +49,7 @@ class DashboardController extends BaseController
 
         // Data untuk Daftar Aktivitas Terbaru
         $pasienBaru = $this->pasienModel->orderBy('created_at', 'DESC')->findAll(8);
-        $prediksiTerbaru = $this->riwayatModel
+        $KlasifikasiTerbaru = $this->riwayatModel
             ->select('riwayat.*, pasien.nama as nama_pasien, riwayat.nama_petugas as nama_petugas_pemeriksa')
             ->join('pasien', 'pasien.id = riwayat.pasien_id', 'left')
             ->orderBy('riwayat.created_at', 'DESC')
@@ -58,12 +58,12 @@ class DashboardController extends BaseController
         $data = [
             'title'                   => 'Dashboard Petugas',
             'totalPasien'             => $totalPasien,
-            // 'totalPrediksi'           => $totalPrediksi, // Dihapus dari data yang dikirim ke view kartu ini
+            // 'totalKlasifikasi'           => $totalKlasifikasi, // Dihapus dari data yang dikirim ke view kartu ini
             'pasienDiabetes'          => $pasienDiabetesCount,
             'pasienNonDiabetes'       => $pasienNonDiabetesCount,
             'pasienBelumAdaRiwayat'   => $pasienBelumAdaRiwayatCount, // Data baru untuk kartu
             'pasienBaru'              => $pasienBaru,
-            'prediksiTerbaru'         => $prediksiTerbaru,
+            'KlasifikasiTerbaru'         => $KlasifikasiTerbaru,
         ];
 
         return view('petugas/dashboard', $data);

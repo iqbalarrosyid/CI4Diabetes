@@ -182,7 +182,7 @@
             </tbody>
         </table>
         <p class="text-muted justify-text px-2 mt-2">
-            <i>(*) Jika sebelumnya hasil prediksi menunjukan pasien Diabetes, kemudian prediksi berubah menjadi Tidak Diabetes, ini menunjukkan bahwa pasien dapat mengendalikan kadar gula darahnya. Bukan berarti sembuh dari diabetes.</i>
+            <i>(*) Jika sebelumnya hasil Klasifikasi menunjukan pasien Diabetes, kemudian Klasifikasi berubah menjadi Tidak Diabetes, ini menunjukkan bahwa pasien dapat mengendalikan kadar gula darahnya. Bukan berarti sembuh dari diabetes.</i>
         </p>
     </div>
 
@@ -221,7 +221,7 @@
             <div class="mx-auto mb-3" style="font-size: 40px; color: #198754;">
                 <i class="fa-solid fa-check-circle fa-beat"></i>
             </div>
-            <h5 class="modal-title mb-2" id="successModalLabel">Data prediksi berhasil disimpan.</h5>
+            <h5 class="modal-title mb-2" id="successModalLabel">Data Klasifikasi berhasil disimpan.</h5>
         </div>
     </div>
 </div>

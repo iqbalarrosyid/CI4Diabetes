@@ -51,7 +51,7 @@ def predict_proba(summaries, input_data, positive_class_label=1):
     return posterior_prob_positive
 
 # ==================== STREAMLIT APP (Lebih Ringkas) ====================
-st.title("🩺 Prediksi Diabetes Tipe 2 (Manual Naive Bayes)")
+st.title("🩺 Klasifikasi Diabetes Tipe 2 (Manual Naive Bayes)")
 
 uploaded_file = st.sidebar.file_uploader("Upload file CSV", type="csv")
 
@@ -79,10 +79,10 @@ if uploaded_file:
     st.caption("Mean, Std Dev, dan Prior per kelas telah dihitung.")
 
 
-    # 3. Prediksi pada Data Testing
-    # Prediksi label kelas
+    # 3. Klasifikasi pada Data Testing
+    # Klasifikasi label kelas
     y_pred_labels = [predict(summaries, row.values) for _, row in X_test.iterrows()]
-    # Prediksi probabilitas untuk kelas positif (untuk AUC)
+    # Klasifikasi probabilitas untuk kelas positif (untuk AUC)
     y_pred_probabilities = [predict_proba(summaries, row.values, positive_class_label=1) for _, row in X_test.iterrows()]
 
     # 4. Evaluasi Model
@@ -108,25 +108,25 @@ if uploaded_file:
         st.warning(f"Tidak dapat menghitung AUC: {e}")
 
 
-    # (Bagian K-Fold Cross Validation dan Prediksi Data Baru bisa ditambahkan kembali jika diperlukan,
+    # (Bagian K-Fold Cross Validation dan Klasifikasi Data Baru bisa ditambahkan kembali jika diperlukan,
     #  namun untuk fokus pada alur dasar Naive Bayes, sengaja diringkas)
 
-    # 5. Prediksi Data Baru (Contoh Sederhana)
+    # 5. Klasifikasi Data Baru (Contoh Sederhana)
     st.write("---")
-    st.write("### 🚀 Prediksi Data Baru (Contoh Input):")
+    st.write("### 🚀 Klasifikasi Data Baru (Contoh Input):")
     # Gunakan nilai default atau biarkan user input sederhana
     gdp_input = st.number_input("GDP (mg/dL)", value=100)
     td_input = st.number_input("Tekanan Darah (mmHg)", value=120)
     imt_input = st.number_input("IMT (kg/m²)", value=25.0, format="%.1f")
     umur_input = st.number_input("Umur (tahun)", value=35)
 
-    if st.button("Prediksi Data Baru"):
+    if st.button("Klasifikasi Data Baru"):
         input_baru = [gdp_input, td_input, imt_input, umur_input]
-        hasil_prediksi_label = predict(summaries, input_baru)
-        hasil_prediksi_proba = predict_proba(summaries, input_baru, positive_class_label=1)
+        hasil_Klasifikasi_label = predict(summaries, input_baru)
+        hasil_Klasifikasi_proba = predict_proba(summaries, input_baru, positive_class_label=1)
 
-        st.write(f"Prediksi Kelas: **{'Diabetes' if hasil_prediksi_label == 1 else 'Tidak Diabetes'}**")
-        st.write(f"Probabilitas Diabetes: **{hasil_prediksi_proba:.2f}**")
+        st.write(f"Klasifikasi Kelas: **{'Diabetes' if hasil_Klasifikasi_label == 1 else 'Tidak Diabetes'}**")
+        st.write(f"Probabilitas Diabetes: **{hasil_Klasifikasi_proba:.2f}**")
 
 else:
     st.info("Silakan unggah dataset CSV untuk memulai.")

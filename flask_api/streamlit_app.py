@@ -58,7 +58,7 @@ def predict_proba(summaries, input_data, positive_class_label=1):
     return posterior_prob_positive
 
 # ==================== STREAMLIT APP ====================
-st.title("🩺 Prediksi Diabetes Tipe 2")
+st.title("🩺 Klasifikasi Diabetes Tipe 2")
 st.subheader("Dengan Naive Bayes Manual")
 
 st.sidebar.header("📤 Upload Dataset")
@@ -145,7 +145,7 @@ if uploaded_file:
         sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues',
                     xticklabels=['Tidak Diabetes', 'Diabetes'],
                     yticklabels=['Tidak Diabetes', 'Diabetes'], ax=ax_cm)
-        ax_cm.set_xlabel("Prediksi")
+        ax_cm.set_xlabel("Klasifikasi")
         ax_cm.set_ylabel("Aktual")
         st.pyplot(fig_cm)
 
@@ -219,9 +219,9 @@ if uploaded_file:
         st.write(f"- F1 Score: **{df_kfold['F1-Score (%)'].mean():.2f}%**")
         st.write(f"- AUC: **{df_kfold['AUC (%)'].mean():.2f}%**")
 
-        # ========= Prediksi Data Baru =========
+        # ========= Klasifikasi Data Baru =========
         st.write("---")
-        st.write("### Prediksi Data Baru")
+        st.write("### Klasifikasi Data Baru")
         feature_order = X.columns.tolist()
 
         form_key_prefix = "pred_input_" 
@@ -236,7 +236,7 @@ if uploaded_file:
             
             input_map = {feature_order[0]: gdp_val, feature_order[1]: tekanan_val, feature_order[2]: imt_val, feature_order[3]: umur_val}
             input_data_new = [input_map[feature] for feature in feature_order]
-            submitted = st.form_submit_button("Prediksi")
+            submitted = st.form_submit_button("Klasifikasi")
 
         if submitted:
             try:
@@ -255,7 +255,7 @@ if uploaded_file:
                         f"Probabilitas: **{prob_result:.2%}**"
                     )
             except Exception as e:
-                st.error(f"Terjadi kesalahan saat prediksi: {e}")
+                st.error(f"Terjadi kesalahan saat Klasifikasi: {e}")
                 st.error("Pastikan model sudah dilatih dan file model ada.")
 else:
     st.info("Silakan upload dataset CSV terlebih dahulu untuk memulai.")

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - Sistem Prediksi Diabetes</title>
+    <title>Register - Sistem Klasifikasi Diabetes</title>
 
     <!-- Bootstrap & Google Fonts -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -97,7 +97,7 @@
                     <div class="col-md-6 d-flex align-items-center">
                         <div class="card-body p-4 ">
                             <h3 class="mb-3 text-center"><i class="fa-solid fa-registered"></i> Register</h3>
-                            <p class="text-center">Daftarkan akun Anda untuk masuk ke <b>Sistem Prediksi Diabetes</b>.</p>
+                            <p class="text-center">Daftarkan akun Anda untuk masuk ke <b>Sistem Klasifikasi Diabetes</b>.</p>
 
                             <!-- Notifikasi Error -->
                             <?php if (session()->getFlashdata('error')): ?>

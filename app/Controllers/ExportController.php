@@ -273,7 +273,7 @@ class ExportController extends BaseController
             ->setCellValue('G1', 'Berat (kg)')
             ->setCellValue('H1', 'Tinggi (cm)')
             ->setCellValue('I1', 'IMT')
-            ->setCellValue('J1', 'Hasil Prediksi')
+            ->setCellValue('J1', 'Hasil Klasifikasi')
             ->setCellValue('K1', 'Waktu Pemeriksaan')
             ->setCellValue('L1', 'Petugas Pemeriksa');
 

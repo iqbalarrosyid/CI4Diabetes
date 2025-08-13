@@ -262,23 +262,23 @@
             <div class="card dashboard-card quick-link-card border-0 shadow">
                 <div class="card-header bg-dark text-white">
                     <i class="fas fa-file-signature me-1"></i>
-                    Prediksi Terbaru Dilakukan
+                    Klasifikasi Terbaru Dilakukan
                 </div>
-                <div class="list-group list-group-flush" id="listPrediksiTerbaru">
-                    <?php if (!empty($prediksiTerbaru) && is_array($prediksiTerbaru)): ?>
-                        <?php foreach ($prediksiTerbaru as $prediksi): ?>
-                            <a href="<?= base_url('petugas/riwayat/' . esc($prediksi['pasien_id'], 'url') . '#riwayat-' . esc($prediksi['id'], 'attr')) ?>" class="list-group-item list-group-item-action">
-                                <div class="fw-bold">Prediksi untuk <?= esc($prediksi['nama_pasien'] ?? 'N/A') ?></div>
+                <div class="list-group list-group-flush" id="listKlasifikasiTerbaru">
+                    <?php if (!empty($KlasifikasiTerbaru) && is_array($KlasifikasiTerbaru)): ?>
+                        <?php foreach ($KlasifikasiTerbaru as $Klasifikasi): ?>
+                            <a href="<?= base_url('petugas/riwayat/' . esc($Klasifikasi['pasien_id'], 'url') . '#riwayat-' . esc($Klasifikasi['id'], 'attr')) ?>" class="list-group-item list-group-item-action">
+                                <div class="fw-bold">Klasifikasi untuk <?= esc($Klasifikasi['nama_pasien'] ?? 'N/A') ?></div>
                                 <small class="text-muted">
-                                    Hasil: <span class="fw-bold <?= ($prediksi['hasil'] == 1 || strtolower($prediksi['hasil']) === 'diabetes') ? 'text-danger' : 'text-success' ?>">
-                                        <?= ($prediksi['hasil'] == 1 || strtolower($prediksi['hasil']) === 'diabetes') ? 'Diabetes' : 'Tidak Diabetes' ?>
+                                    Hasil: <span class="fw-bold <?= ($Klasifikasi['hasil'] == 1 || strtolower($Klasifikasi['hasil']) === 'diabetes') ? 'text-danger' : 'text-success' ?>">
+                                        <?= ($Klasifikasi['hasil'] == 1 || strtolower($Klasifikasi['hasil']) === 'diabetes') ? 'Diabetes' : 'Tidak Diabetes' ?>
                                     </span>
-                                    | Oleh: <?= esc($prediksi['nama_petugas_pemeriksa'] ?? 'Sistem') ?> | <?= esc(date('d M Y, H:i', strtotime($prediksi['created_at']))) ?>
+                                    | Oleh: <?= esc($Klasifikasi['nama_petugas_pemeriksa'] ?? 'Sistem') ?> | <?= esc(date('d M Y, H:i', strtotime($Klasifikasi['created_at']))) ?>
                                 </small>
                             </a>
                         <?php endforeach; ?>
                     <?php else: ?>
-                        <p class="list-group-item">Tidak ada prediksi baru.</p>
+                        <p class="list-group-item">Tidak ada Klasifikasi baru.</p>
                     <?php endif; ?>
                     <a href="<?= base_url('petugas/riwayat/all') ?>" class="list-group-item list-group-item-action text-center text-primary fw-bold">Lihat semua...</a>
                 </div>

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Sistem Prediksi Diabetes</title>
+    <title>Login - Sistem Klasifikasi Diabetes</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -201,7 +201,7 @@
                         <div class="text-center mb-4">
                             <i class="fa-solid fa-shield-heart brand-logo"></i>
                             <h3>Login Akun</h3>
-                            <p class="sub-text mt-3">Selamat datang! Masuk untuk mengakses Sistem Prediksi Diabetes Melitus Tipe 2.</p>
+                            <p class="sub-text mt-3">Selamat datang! Masuk untuk mengakses Sistem Klasifikasi Diabetes Melitus Tipe 2.</p>
                         </div>
 
                         <form action="/login" method="POST">

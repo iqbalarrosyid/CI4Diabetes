@@ -175,7 +175,7 @@ function formatTanggalIndo($tanggal, $bulanIndo)
         </tbody>
     </table>
 
-    <p class="text-muted justify-text"><i>(*) Jika sebelumnya hasil prediksi menunjukan pasien Diabetes, kemudian prediksi berubah menjadi Tidak Diabetes, ini menunjukkan bahwa pasien dapat mengendalikan kadar gula darahnya. Bukan berarti sembuh dari diabetes.</i></p>
+    <p class="text-muted justify-text"><i>(*) Jika sebelumnya hasil Klasifikasi menunjukan pasien Diabetes, kemudian Klasifikasi berubah menjadi Tidak Diabetes, ini menunjukkan bahwa pasien dapat mengendalikan kadar gula darahnya. Bukan berarti sembuh dari diabetes.</i></p>
 
     <p>Dicetak pada <?= "$tgl $bln $thn Pukul $jam" ?></p>
 </body>

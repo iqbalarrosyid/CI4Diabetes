@@ -3,13 +3,13 @@
 <?= $this->section('content') ?>
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="mb-0">Tambah Data Prediksi Diabetes</h2>
+        <h2 class="mb-0">Tambah Data Klasifikasi Diabetes</h2>
 
     </div>
 
     <form id="riwayatForm" method="post" action="<?= site_url('/petugas/riwayat/store') ?>">
         <?= csrf_field() ?> <input type="hidden" name="pasien_id" value="<?= esc($pasien_id, 'attr') ?>">
-        <input type="hidden" name="hasil_prediksi_value" id="hasil_prediksi_value_input">
+        <input type="hidden" name="hasil_Klasifikasi_value" id="hasil_Klasifikasi_value_input">
         <div class="row g-3">
             <div class="col-md-6">
                 <label for="tinggi" class="form-label">Tinggi Badan (cm)</label>
@@ -46,7 +46,7 @@
                 <i class="fas fa-arrow-left me-2"></i>Kembali
             </a>
             <button type="button" id="predictBtn" class="btn btn-primary mb-2 me-2">
-                <i class="fas fa-magic me-2"></i>Prediksi
+                <i class="fas fa-magic me-2"></i>Klasifikasi
             </button>
             <button type="submit" id="saveBtn" class="btn btn-success mb-2 me-2" disabled>
                 <i class="fas fa-save me-2"></i>Simpan
@@ -67,7 +67,7 @@
         const riwayatForm = document.getElementById('riwayatForm');
         const predictionResultArea = document.getElementById('predictionResultArea');
         const predictionResultContentDiv = document.getElementById('predictionResultContent');
-        const hasilPrediksiValueInput = document.getElementById('hasil_prediksi_value_input');
+        const hasilKlasifikasiValueInput = document.getElementById('hasil_Klasifikasi_value_input');
 
         predictBtn.addEventListener('click', function() {
             // Validasi form sederhana sebelum fetch (opsional, karena server-side tetap utama)
@@ -84,11 +84,11 @@
                 data[key] = value;
             });
 
-            // UI Update: Tombol Prediksi
+            // UI Update: Tombol Klasifikasi
             predictBtn.disabled = true;
-            predictBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Memprediksi...';
+            predictBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> MemKlasifikasi...';
             predictionResultArea.style.display = 'none'; // Sembunyikan hasil lama
-            saveBtn.disabled = true; // Nonaktifkan tombol simpan selama prediksi baru
+            saveBtn.disabled = true; // Nonaktifkan tombol simpan selama Klasifikasi baru
 
             fetch('<?= site_url('/petugas/riwayat/predict') ?>', {
                     method: 'POST',
@@ -131,22 +131,22 @@
                     // Skrip asli Anda menggunakan 'result.hasil'.
                     if (result.hasOwnProperty('hasil')) { // Pastikan properti 'hasil' ada
                         if (result.hasil === 1) {
-                            resultMessageHTML = '<strong>Hasil Prediksi:</strong> <span class="fw-bold text-danger">Berpotensi Diabetes</span>';
+                            resultMessageHTML = '<strong>Hasil Klasifikasi:</strong> <span class="fw-bold text-danger">Berpotensi Diabetes</span>';
                             alertClass = 'alert-danger';
                             iconClass = 'fa-triangle-exclamation';
                             predictionValueForInput = 1;
                         } else if (result.hasil === 0) {
-                            resultMessageHTML = '<strong>Hasil Prediksi:</strong> <span class="fw-bold text-success">Tidak Berpotensi Diabetes</span>';
+                            resultMessageHTML = '<strong>Hasil Klasifikasi:</strong> <span class="fw-bold text-success">Tidak Berpotensi Diabetes</span>';
                             alertClass = 'alert-success';
                             iconClass = 'fa-check-circle';
                             predictionValueForInput = 0;
                         } else {
-                            resultMessageHTML = '<strong>Hasil Prediksi:</strong> Respons tidak dikenali.';
+                            resultMessageHTML = '<strong>Hasil Klasifikasi:</strong> Respons tidak dikenali.';
                             alertClass = 'alert-warning';
                             iconClass = 'fa-question-circle';
                         }
                     } else {
-                        resultMessageHTML = '<strong>Hasil Prediksi:</strong> Format respons dari server tidak sesuai.';
+                        resultMessageHTML = '<strong>Hasil Klasifikasi:</strong> Format respons dari server tidak sesuai.';
                         alertClass = 'alert-warning';
                         iconClass = 'fa-exclamation-circle';
                     }
@@ -158,10 +158,10 @@
                         </div>`;
 
                     if (predictionValueForInput !== null) {
-                        hasilPrediksiValueInput.value = predictionValueForInput;
+                        hasilKlasifikasiValueInput.value = predictionValueForInput;
                         saveBtn.disabled = false; // Aktifkan tombol Simpan jika hasil valid
                     } else {
-                        hasilPrediksiValueInput.value = ''; // Kosongkan jika hasil tidak valid
+                        hasilKlasifikasiValueInput.value = ''; // Kosongkan jika hasil tidak valid
                         saveBtn.disabled = true;
                     }
                 })
@@ -178,32 +178,32 @@
                     predictionResultContentDiv.innerHTML = `
                         <div class="alert alert-danger d-flex align-items-center" role="alert">
                             <i class="fas fa-arrow-left-circle fa-2x me-3"></i>
-                            <div><strong>Gagal Memprediksi:</strong> ${errorMessage}</div>
+                            <div><strong>Gagal MemKlasifikasi:</strong> ${errorMessage}</div>
                         </div>`;
                     saveBtn.disabled = true;
-                    hasilPrediksiValueInput.value = '';
+                    hasilKlasifikasiValueInput.value = '';
                 })
                 .finally(() => {
-                    // UI Update: Kembalikan tombol Prediksi ke state normal
+                    // UI Update: Kembalikan tombol Klasifikasi ke state normal
                     predictBtn.disabled = false;
-                    predictBtn.innerHTML = '<i class="fas fa-magic me-2"></i>Prediksi';
+                    predictBtn.innerHTML = '<i class="fas fa-magic me-2"></i>Klasifikasi';
                 });
         });
 
         // Mencegah submit form utama jika tombol Simpan masih disabled atau belum ada hasil
         riwayatForm.addEventListener('submit', function(event) {
-            if (saveBtn.disabled || hasilPrediksiValueInput.value === '') {
+            if (saveBtn.disabled || hasilKlasifikasiValueInput.value === '') {
                 event.preventDefault();
                 // Tampilkan alert atau pesan lain jika diperlukan
                 const alertPlaceholder = document.createElement('div');
                 alertPlaceholder.innerHTML = `
                     <div class="alert alert-warning alert-dismissible fade show mt-3" role="alert">
-                        Harap lakukan prediksi dan dapatkan hasil yang valid sebelum menyimpan.
+                        Harap lakukan Klasifikasi dan dapatkan hasil yang valid sebelum menyimpan.
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>`;
                 // Sisipkan di atas tombol atau di tempat yang sesuai
                 // Misalnya, di atas elemen dengan id predictionResultArea
-                if (predictionResultArea.style.display === 'none' || hasilPrediksiValueInput.value === '') {
+                if (predictionResultArea.style.display === 'none' || hasilKlasifikasiValueInput.value === '') {
                     predictionResultArea.parentNode.insertBefore(alertPlaceholder, predictionResultArea);
                 } else {
                     predictionResultArea.insertBefore(alertPlaceholder, predictionResultArea.firstChild);

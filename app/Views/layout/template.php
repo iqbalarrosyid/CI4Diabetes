@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title><?= $title ?? 'Aplikasi Prediksi Diabetes' ?></title>
+    <title><?= $title ?? 'Aplikasi Klasifikasi Diabetes' ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <script src="https://kit.fontawesome.com/6bb49a14fa.js" crossorigin="anonymous"></script>
@@ -245,7 +245,7 @@
 <body>
     <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container"> <a class="navbar-brand" href="/petugas/">
-                <i class="fas fa-heart-pulse"></i> Prediksi Diabetes T2 </a>
+                <i class="fas fa-heart-pulse"></i> Klasifikasi Diabetes T2 </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <i class="fa-solid fa-sliders" style="color: #000000;"></i>
@@ -259,7 +259,7 @@
                         <a class="nav-link" href="/petugas/pasien"><i class="fas fa-users"></i> Daftar Pasien</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/petugas/riwayat/all"><i class="fas fa-history"></i> Riwayat Prediksi</a>
+                        <a class="nav-link" href="/petugas/riwayat/all"><i class="fas fa-history"></i> Riwayat Klasifikasi</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button"
@@ -289,7 +289,7 @@
 
 
     <footer class="text-center py-3 mt-auto">
-        <p class="mb-0">© <?= date('Y') ?> Sistem Prediksi Diabetes Melitus Tipe 2. Hak Cipta Dilindungi.</p>
+        <p class="mb-0">© <?= date('Y') ?> Sistem Klasifikasi Diabetes Melitus Tipe 2. Hak Cipta Dilindungi.</p>
     </footer>
 
     <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">

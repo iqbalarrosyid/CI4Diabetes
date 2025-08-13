@@ -27,12 +27,12 @@ def calculate_class_probabilities(summaries, input_data):
             probabilities[class_value] *= calculate_probability(input_data[i], mean, std)
     return probabilities
 
-# Fungsi prediksi
+# Fungsi Klasifikasi
 def predict(summaries, input_data):
     probabilities = calculate_class_probabilities(summaries, input_data)
     return max(probabilities, key=probabilities.get)
 
-# Endpoint prediksi
+# Endpoint Klasifikasi
 @app.route('/predict', methods=['POST'])
 def predict_diabetes():
     try:
@@ -54,7 +54,7 @@ def predict_diabetes():
         return jsonify({'success': True, 'outcome': int(prediction)})
 
     except Exception as e:
-        print("Error dalam prediksi:", e)
+        print("Error dalam Klasifikasi:", e)
         return jsonify({'success': False, 'message': str(e)})
 
 if __name__ == '__main__':
