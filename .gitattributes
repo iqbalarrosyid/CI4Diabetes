@@ -1,0 +1,7 @@
+/.gitattributes export-ignore
+/.gitignore export-ignore
+/tests export-ignore
+/writable/cache/* export-ignore
+/writable/logs/* export-ignore
+/writable/session/* export-ignore
+/vendor/* export-ignore
